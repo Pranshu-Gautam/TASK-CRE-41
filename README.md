@@ -12,13 +12,21 @@ PostgreSQL 16 / PostGIS 3.4 — **writing only to `iris_staging`**.
 > particular: a building footprint is not usable PV area, proximity is not
 > ownership, and the official target DDL was not supplied (see
 > [`docs/SCHEMA_MAPPING.md`](docs/SCHEMA_MAPPING.md)).
+>
+> **Read the right area column.** `building_footprint_area_sqm` is the area of
+> the matched *OSM feature*. The operator-specific figure is
+> `building_operator_attributable_area_sqm`, which is `NULL` wherever the
+> evidence does not support attributing the polygon to the operator — 57 of
+> 81 building matches, and **all** parking matches. See §2.5.
 
 ---
 
 ## 1. Quick start (Docker — nothing but Docker required)
 
 ```bash
-git clone <repo> && cd iris-cre41
+unzip TASK-CRE-41_submission.zip && cd TASK-CRE-41
+# (or: git clone "$REPO_URL" && cd iris-cre41)
+
 cp .env.example .env            # local throwaway credentials; edit IRIS_USER_AGENT
 docker compose up -d db         # PostgreSQL 16 + PostGIS 3.4
 docker compose build pipeline
@@ -42,10 +50,11 @@ docker compose run --rm pipeline samples
 
 ### Local Python instead of Docker
 
-Python 3.12+ is needed for the pinned lock (`pyproj==3.8.0` declares
-`Requires-Python >= 3.12`). The package itself supports 3.11 — pin
-`pyproj==3.7.2` if a 3.11 runtime is mandatory. The Docker image uses 3.13;
-this submission was executed on 3.14.
+Python **3.11+**, as the task requires. `requirements.txt` uses environment
+markers so one lock works across interpreters: `pyproj` 3.8 / `shapely` 2.2
+declare `Requires-Python >= 3.12`, so 3.11 installs `pyproj` 3.7.2 /
+`shapely` 2.0.7 instead. Both configurations are verified (248 unit tests pass
+on 3.11.18 and on 3.13); the full live run was executed on 3.14.
 
 ```bash
 python3 -m venv .venv && . .venv/bin/activate
@@ -69,7 +78,18 @@ pytest -q -m "not integration"               # explicitly exclude them
 ```
 
 Integration tests **skip with a stated reason** when `DB_URI` is missing or
-unreachable — an unexecuted integration test can never look like a pass.
+unreachable — an unexecuted integration test can never look like a pass. The
+database-level isolation tests additionally need `LOADER_DB_URI` (the
+restricted role from `sql/002_least_privilege_role.sql`) and skip with
+`"LOADER_DB_URI not set — database-level isolation test NOT executed"`.
+
+To reproduce the Python 3.11 verification:
+
+```bash
+docker build -f Dockerfile.py311 -t iris-cre41-py311 .
+docker run --rm iris-cre41-py311 python -m pytest -q -m "not integration"
+docker run --rm iris-cre41-py311 python -m iris_cre41.cli smoke-test --skip-load
+```
 
 ---
 
@@ -169,11 +189,12 @@ against an allow-list (`EPSG:4326`, `EPSG:25832`); anything else raises
 the projected value is envelope-checked. Areas and distances are computed only
 after confirming the target CRS is metric.
 
-### 2.5 Spatial matching rules
+### 2.5 Spatial matching, and the three assertions it keeps apart
 
-Deterministic, ordered, first hit wins. All distances in EPSG:25832 metres.
+Matching is deterministic, ordered, first hit wins. All distances in
+EPSG:25832 metres.
 
-| Rule | Condition | Method | Confidence |
+| Rule | Condition | Method | Geometric confidence |
 |---|---|---|---|
 | B1 | point inside a `building` polygon | `point_in_building` | `high` |
 | B2 | nearest `building` ≤ 30 m | `nearest_building_le_30m` | `medium` |
@@ -182,8 +203,33 @@ Deterministic, ordered, first hit wins. All distances in EPSG:25832 metres.
 | P2 | nearest parking ≤ 15 m | `adjacent_parking_le_15m` | `medium` |
 | P3 | nearest parking ≤ 120 m (radius) | `nearby_parking_le_120m` | `low` |
 
-* **Confidence describes geometry, not business reality.** `high` means the
-  point falls inside that polygon — nothing about ownership or tenancy.
+A polygon match carries three claims of very different strength, so they live
+in three different columns. Collapsing them is how a shopping mall's roof ends
+up credited to a car-wash operator:
+
+| # | Assertion | Column | Best value reached in the executed run |
+|---|---|---|---|
+| 1 | the geocoded point lies inside this polygon | `*_geometric_match_confidence` | `high` — 64 of 81 building matches |
+| 2 | this polygon plausibly contains the operator's facility | `*_operator_attribution_status` | `operator_tagged` — 24 of 81 |
+| 3 | this polygon is demonstrably controlled by the operator | `operator_usable_area_verified` | **never — always `false`** |
+
+Attribution statuses and what each licenses you to say:
+
+| Status | Evidence | Operator-specific area |
+|---|---|---|
+| `operator_tagged` | an OSM `name`/`operator`/`brand` tag names *this* operator | asserted, if ≤ 10 000 m² |
+| `car_wash_tagged` | tagged `amenity`/`shop=car_wash` but not naming the operator — corroborates the **use**, not the operator | **NULL** |
+| `third_party_named` | OSM names a different occupant | **NULL** |
+| `unverified` | no corroborating tag either way | **NULL** |
+| `no_match` | no polygon matched | **NULL** |
+
+Two CHECK constraints enforce this in the **database**, not just in Python:
+an operator-specific area cannot exist without `operator_tagged` attribution,
+and `operator_usable_area_verified` cannot be set true.
+
+* **Geometric confidence describes geometry, not business reality.** `high`
+  means the point falls inside that polygon — nothing about ownership or
+  tenancy.
 * Confidence is **capped at `low`** when the geocode precision is not
   `address`, and polygon matching is **skipped entirely** for `locality`
   precision: attributing a footprint to a town centroid would invent a fact.
@@ -211,9 +257,28 @@ Three independent layers keep writes inside `iris_staging`:
    outright; string literals and comments are stripped first so SQL cannot be
    smuggled through them. Reads anywhere are allowed (upstream data is
    read-only by design).
-3. **Least-privilege role** — [`sql/002_least_privilege_role.sql`](sql/002_least_privilege_role.sql)
-   creates a loader role that owns `iris_staging`, has `USAGE` but **not**
-   `CREATE` on `public`, and no rights on `iris_core`-style schemas.
+3. **Least-privilege role — the control that actually matters.**
+   [`sql/002_least_privilege_role.sql`](sql/002_least_privilege_role.sql)
+   creates a loader role with `USAGE, CREATE` on `iris_staging` only, `USAGE`
+   but **not** `CREATE` on `public`, and no rights at all on `iris_core`-style
+   schemas. Layers 1 and 2 catch programming mistakes; this one is what
+   constrains the connection. **A guard that inspects SQL text is not
+   something to bet a production database on — create the role.**
+
+   Verify it independently, through a raw engine with the guard removed:
+
+   ```bash
+   psql "$ADMIN_DB_URI" -v ON_ERROR_STOP=1 \
+        -v loader_password="'<secret>'" -f sql/002_least_privilege_role.sql
+
+   LOADER_DB_URI=postgresql+psycopg://iris_cre41_loader:<pw>@localhost:55432/iris \
+   ADMIN_DB_URI=$DB_URI \
+   ISOLATION_EVIDENCE_OUT=samples/role_isolation_evidence.txt \
+     python tools/verify_role_isolation.py
+   ```
+
+   Recorded output: [`samples/role_isolation_evidence.txt`](samples/role_isolation_evidence.txt)
+   — 10/10 forbidden writes refused by PostgreSQL, canary row untouched.
 
 The pipeline deliberately **never** installs PostGIS: `CREATE EXTENSION` is a
 privileged cross-schema operation, so a missing extension fails loudly with
@@ -265,10 +330,11 @@ All configuration is environment-driven; see [`.env.example`](.env.example).
 │   └── db/                    schema.py, guard.py, engine.py, loader.py
 ├── sql/                       001_init_staging.sql, 002_least_privilege_role.sql
 ├── tests/                     unit + integration + offline smoke; fixtures/
-├── tools/capture_fixtures.py  reproducible fixture capture with provenance
+├── tools/capture_fixtures.py     reproducible fixture capture with provenance
+├── tools/verify_role_isolation.py  database-level isolation evidence
 ├── samples/                   output samples and execution evidence
 ├── docs/                      SCHEMA_MAPPING.md, EXECUTION_EVIDENCE.md
-├── Dockerfile  compose.yaml  .env.example
+├── Dockerfile  Dockerfile.py311  compose.yaml  .env.example  Makefile
 └── LIMITATIONS.md
 ```
 

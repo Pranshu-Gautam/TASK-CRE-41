@@ -67,6 +67,14 @@ def test_row_contains_mandated_fields():
     assert row["country"] == "DE"
 
 
+def test_no_building_match_defaults_to_no_match_attribution():
+    row = build_poi_row(poi(), "c", "l")
+    assert row["building_operator_attribution_status"] == "no_match"
+    assert row["building_operator_attributable_area_sqm"] is None
+    assert row["parking_operator_attribution_status"] == "no_match"
+    assert row["operator_usable_area_verified"] is False
+
+
 def test_missing_geocode_leaves_geometry_null_not_zero():
     record = poi(geocode=None, x_25832=None, y_25832=None, point_wkt_25832=None)
     row = build_poi_row(record, "c", "l")
@@ -79,8 +87,11 @@ def test_missing_geocode_leaves_geometry_null_not_zero():
 def test_building_match_maps_onto_columns():
     match = SpatialMatch(
         feature_kind="building", feature_id="way/1", geometry_type="MultiPolygon",
-        match_method="point_in_building", match_confidence="high", distance_m=0.0,
-        area_sqm=5381.7, validity_status="valid",
+        match_method="point_in_building", geometric_match_confidence="high",
+        distance_m=0.0, area_sqm=5381.7, validity_status="valid",
+        operator_attribution_status="operator_tagged",
+        operator_attribution_evidence="OSM tag names the operator (name=Mr. Wash)",
+        operator_attributable_area_sqm=5381.7,
         wkt_25832="MULTIPOLYGON (((296560 5627960, 296570 5627960, "
                   "296570 5627970, 296560 5627970, 296560 5627960)))",
         tags={"building": "yes"}, source_url="https://www.openstreetmap.org/way/1",
@@ -88,9 +99,13 @@ def test_building_match_maps_onto_columns():
     row = build_poi_row(poi(building=match), "c", "l")
     assert row["building_feature_id"] == "way/1"
     assert row["building_footprint_area_sqm"] == pytest.approx(5381.7)
-    assert row["building_match_confidence"] == "high"
+    assert row["building_geometric_match_confidence"] == "high"
+    assert row["building_operator_attribution_status"] == "operator_tagged"
+    assert row["building_operator_attributable_area_sqm"] == pytest.approx(5381.7)
     assert row["building_geom"].srid == 25832
     assert row["building_source"] == "openstreetmap"
+    # Assertion 3 is never asserted, whatever the match looks like.
+    assert row["operator_usable_area_verified"] is False
 
 
 def test_row_hash_is_deterministic():
@@ -139,3 +154,26 @@ def test_page_hash_is_stored_but_excluded_from_the_content_hash():
     assert row_a["source_html_sha256"] == "a" * 64
     assert row_b["source_html_sha256"] == "b" * 64
     assert row_a["row_hash"] == row_b["row_hash"]
+
+
+def test_jsonb_columns_use_sql_null_not_json_null():
+    """An absent JSONB value must be SQL NULL, not the JSON value `null`.
+
+    SQLAlchemy's default renders Python None as JSON null, which would make
+    `IS NULL` false and count() over-count in a staging table whose contract
+    is that unavailable data is NULL.
+    """
+    from iris_cre41.db.schema import build_metadata
+
+    metadata = build_metadata("iris_staging")
+    table = metadata.tables["iris_staging.commercial_poi_staging"]
+    jsonb_columns = [
+        column
+        for column in table.columns
+        if column.type.__class__.__name__ == "JSONB"
+    ]
+    assert jsonb_columns, "expected JSONB columns in the staging table"
+    for column in jsonb_columns:
+        assert column.type.none_as_null is True, (
+            f"{column.name} would store Python None as JSON null"
+        )

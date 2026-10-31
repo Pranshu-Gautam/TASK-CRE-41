@@ -9,6 +9,7 @@ from .schema import (
     RAW_OBSERVATION_TABLE,
     build_metadata,
     create_staging_objects,
+    ensure_schema,
     sync_staging_columns,
 )
 
@@ -19,6 +20,7 @@ __all__ = [
     "StagingIsolationError",
     "build_metadata",
     "create_staging_objects",
+    "ensure_schema",
     "sync_staging_columns",
     "COMMERCIAL_POI_TABLE",
     "RAW_OBSERVATION_TABLE",

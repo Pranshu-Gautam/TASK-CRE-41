@@ -1,0 +1,32 @@
+TASK-CRE-41 — DATABASE-LEVEL STAGING ISOLATION EVIDENCE
+==============================================================
+role under test        : iris_cre41_loader
+role default search_path: iris_staging, public
+connection             : raw SQLAlchemy engine — the application's
+                         search_path hook and statement guard are
+                         NOT attached, so only PostgreSQL privileges
+                         can refuse anything below.
+
+A. writes that must be refused (iris_core = production-like schema)
+   REFUSED  INSERT into iris_core.portfolio            permission denied for schema iris_core
+   REFUSED  UPDATE iris_core.portfolio                 permission denied for schema iris_core
+   REFUSED  DELETE FROM iris_core.portfolio            permission denied for schema iris_core
+   REFUSED  SELECT from iris_core.portfolio            permission denied for schema iris_core
+   REFUSED  CREATE TABLE in iris_core                  permission denied for schema iris_core
+   REFUSED  DROP TABLE iris_core.portfolio             permission denied for schema iris_core
+   REFUSED  CREATE TABLE in public                     permission denied for schema public
+   REFUSED  DELETE FROM public.spatial_ref_sys         permission denied for table spatial_ref_sys
+   REFUSED  CREATE EXTENSION                           permission denied to create extension "pg_trgm"
+   REFUSED  CREATE SCHEMA                              permission denied for database iris
+   -> 10/10 refused by PostgreSQL privileges
+
+B. the work the loader legitimately must be able to do
+   PERMITTED SELECT on iris_staging.commercial_poi_staging (84 rows)
+   PERMITTED UPDATE on iris_staging.commercial_poi_staging
+   PERMITTED PostGIS function calls (3.4)
+
+C. the production-like schema afterwards
+   canary rows   : [(1, 'untouched')]
+   tables present: 1 (unchanged => nothing was created)
+
+VERDICT: PASS

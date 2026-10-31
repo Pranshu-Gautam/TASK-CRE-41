@@ -62,13 +62,16 @@ def make_poi(index: int, city: str = "Aachen", with_building: bool = True) -> En
             feature_id=f"way/{index}",
             geometry_type="MultiPolygon",
             match_method="point_in_building",
-            match_confidence="high",
+            geometric_match_confidence="high",
             distance_m=0.0,
             area_sqm=1600.0,
+            operator_attribution_status="operator_tagged",
+            operator_attribution_evidence="OSM tag names the operator (name=Mr. Wash)",
+            operator_attributable_area_sqm=1600.0,
             validity_status="valid",
             wkt_25832=SQUARE,
             source_url=f"https://www.openstreetmap.org/way/{index}",
-            tags={"building": "commercial"},
+            tags={"building": "commercial", "name": "Mr. Wash"},
         )
         if with_building
         else None
@@ -398,3 +401,239 @@ def test_full_load_creates_nothing_outside_staging(staging):
     assert TEST_SCHEMA in schemas
     assert all(schema.startswith("iris_staging") for schema in schemas), schemas
     assert not {s for s in schemas if s.startswith(("iris_core", "public", "iris_prod"))}
+
+
+# -- operator attribution enforced by the database --------------------------
+
+def test_operator_area_cannot_be_asserted_without_attribution(staging):
+    """The database itself refuses an operator area on an unattributed polygon."""
+    engine, _, _, _ = staging
+    with pytest.raises(Exception) as excinfo:
+        with engine.begin() as connection:
+            connection.execute(
+                text(
+                    f"INSERT INTO {TEST_SCHEMA}.commercial_poi_staging "
+                    "(poi_uid, source_uid, dedup_key, operator, operator_slug, "
+                    " country, source_system, source_record_id, source_url, "
+                    " retrieved_at, geocode_status, enrichment_status, row_hash, "
+                    " building_operator_attribution_status, "
+                    " building_operator_attributable_area_sqm) "
+                    "VALUES ('attr1','attr1','attr1','X','x','DE','s','r','u',"
+                    " now(),'ok','point_only','h','third_party_named', 47136.0)"
+                )
+            )
+    assert "ck_poi_building_attributable_area_requires_attribution" in str(excinfo.value)
+
+
+def test_parking_operator_area_cannot_be_asserted_without_attribution(staging):
+    engine, _, _, _ = staging
+    with pytest.raises(Exception) as excinfo:
+        with engine.begin() as connection:
+            connection.execute(
+                text(
+                    f"INSERT INTO {TEST_SCHEMA}.commercial_poi_staging "
+                    "(poi_uid, source_uid, dedup_key, operator, operator_slug, "
+                    " country, source_system, source_record_id, source_url, "
+                    " retrieved_at, geocode_status, enrichment_status, row_hash, "
+                    " parking_operator_attribution_status, "
+                    " parking_operator_attributable_area_sqm) "
+                    "VALUES ('attr2','attr2','attr2','X','x','DE','s','r','u',"
+                    " now(),'ok','point_only','h','unverified', 21901.0)"
+                )
+            )
+    assert "ck_poi_parking_attributable_area_requires_attribution" in str(excinfo.value)
+
+
+def test_operator_usable_area_verified_cannot_be_set_true(staging):
+    """Assertion 3 is not assertable by this pipeline, and the DB enforces it."""
+    engine, _, _, _ = staging
+    with pytest.raises(Exception) as excinfo:
+        with engine.begin() as connection:
+            connection.execute(
+                text(
+                    f"INSERT INTO {TEST_SCHEMA}.commercial_poi_staging "
+                    "(poi_uid, source_uid, dedup_key, operator, operator_slug, "
+                    " country, source_system, source_record_id, source_url, "
+                    " retrieved_at, geocode_status, enrichment_status, row_hash, "
+                    " operator_usable_area_verified) "
+                    "VALUES ('attr3','attr3','attr3','X','x','DE','s','r','u',"
+                    " now(),'ok','point_only','h', true)"
+                )
+            )
+    assert "ck_poi_operator_usable_area_unverified" in str(excinfo.value)
+
+
+def test_invalid_attribution_status_is_rejected(staging):
+    engine, _, _, _ = staging
+    with pytest.raises(Exception) as excinfo:
+        with engine.begin() as connection:
+            connection.execute(
+                text(
+                    f"INSERT INTO {TEST_SCHEMA}.commercial_poi_staging "
+                    "(poi_uid, source_uid, dedup_key, operator, operator_slug, "
+                    " country, source_system, source_record_id, source_url, "
+                    " retrieved_at, geocode_status, enrichment_status, row_hash, "
+                    " building_operator_attribution_status) "
+                    "VALUES ('attr4','attr4','attr4','X','x','DE','s','r','u',"
+                    " now(),'ok','point_only','h','definitely_owned')"
+                )
+            )
+    assert "ck_poi_building_attribution_status" in str(excinfo.value)
+
+
+def test_absent_jsonb_is_sql_null_not_json_null(staging):
+    """A row with no parking must have SQL NULL parking_tags, not JSON null."""
+    engine, _, metadata, _ = staging
+    load_pois(engine, metadata, [make_poi(5, with_building=False)], "c", "l")
+    with engine.connect() as connection:
+        row = connection.execute(
+            text(
+                f"SELECT parking_tags IS NULL, building_tags IS NULL, "
+                f"count(*) FILTER (WHERE parking_tags = 'null'::jsonb) "
+                f"FROM {TEST_SCHEMA}.commercial_poi_staging "
+                f"GROUP BY 1, 2"
+            )
+        ).fetchone()
+    assert row[0] is True
+    assert row[1] is True
+    assert row[2] == 0
+
+
+def test_column_rename_migration_preserves_data(staging, db_uri):
+    """sync_staging_columns renames rather than duplicating a renamed column."""
+    from sqlalchemy import inspect
+
+    from iris_cre41.db.schema import COLUMN_RENAMES, build_metadata, sync_staging_columns
+
+    engine, _, metadata, admin = staging
+    renames = COLUMN_RENAMES["commercial_poi_staging"]
+    old_name, new_name = next(iter(renames.items()))
+
+    # Simulate the pre-rename state and put a value in the old column.
+    with admin.begin() as connection:
+        connection.execute(
+            text(
+                f'ALTER TABLE {TEST_SCHEMA}.commercial_poi_staging '
+                f'RENAME COLUMN "{new_name}" TO "{old_name}"'
+            )
+        )
+    load_pois(engine, metadata, [], "c", "l")  # no-op, just proves the engine works
+    with admin.begin() as connection:
+        connection.execute(
+            text(
+                f"INSERT INTO {TEST_SCHEMA}.commercial_poi_staging "
+                "(poi_uid, source_uid, dedup_key, operator, operator_slug, country, "
+                " source_system, source_record_id, source_url, retrieved_at, "
+                f" geocode_status, enrichment_status, row_hash, \"{old_name}\") "
+                "VALUES ('ren1','ren1','ren1','X','x','DE','s','r','u',now(),"
+                "'ok','point_only','h','medium')"
+            )
+        )
+
+    report = sync_staging_columns(engine, build_metadata(TEST_SCHEMA))
+    assert f"commercial_poi_staging.{old_name} -> {new_name}" in report["renamed"]
+
+    columns = {
+        column["name"]
+        for column in inspect(engine).get_columns(
+            "commercial_poi_staging", schema=TEST_SCHEMA
+        )
+    }
+    assert new_name in columns
+    assert old_name not in columns
+    with engine.connect() as connection:
+        value = connection.execute(
+            text(
+                f'SELECT "{new_name}" FROM {TEST_SCHEMA}.commercial_poi_staging '
+                "WHERE poi_uid = 'ren1'"
+            )
+        ).scalar()
+    assert value == "medium", "the rename must preserve the stored value"
+
+
+# -- database-level isolation (least-privilege role) ------------------------
+
+@pytest.fixture
+def loader_uri():
+    """A DB_URI for the restricted loader role, or skip with a clear reason."""
+    import os
+
+    uri = os.environ.get("LOADER_DB_URI")
+    if not uri:
+        pytest.skip(
+            "LOADER_DB_URI not set — database-level isolation test NOT executed "
+            "(apply sql/002_least_privilege_role.sql first)"
+        )
+    try:
+        engine = create_engine(uri)
+        with engine.connect() as connection:
+            connection.execute(text("SELECT 1"))
+        engine.dispose()
+    except Exception as exc:  # pragma: no cover - environment dependent
+        pytest.skip(f"LOADER_DB_URI unreachable ({type(exc).__name__}) — NOT executed")
+    return uri
+
+
+def test_restricted_role_cannot_write_outside_staging_even_unguarded(loader_uri, db_uri):
+    """PostgreSQL itself must refuse the write, with no application guard present."""
+    admin = create_engine(db_uri)
+    with admin.begin() as connection:
+        connection.execute(text(f"CREATE SCHEMA IF NOT EXISTS {CANARY_SCHEMA}"))
+        connection.execute(
+            text(
+                f"CREATE TABLE IF NOT EXISTS {CANARY_SCHEMA}.protected "
+                "(id INT PRIMARY KEY, label TEXT)"
+            )
+        )
+        connection.execute(
+            text(
+                f"INSERT INTO {CANARY_SCHEMA}.protected VALUES (1, 'untouched') "
+                "ON CONFLICT (id) DO NOTHING"
+            )
+        )
+        connection.execute(
+            text(f"REVOKE ALL ON SCHEMA {CANARY_SCHEMA} FROM iris_cre41_loader")
+        )
+
+    # Raw engine: no attach_search_path, no SchemaWriteGuard.
+    raw = create_engine(loader_uri)
+    for statement in (
+        f"INSERT INTO {CANARY_SCHEMA}.protected VALUES (2, 'injected')",
+        f"UPDATE {CANARY_SCHEMA}.protected SET label = 'tampered'",
+        f"CREATE TABLE {CANARY_SCHEMA}.sneaky (a int)",
+        "CREATE TABLE public.sneaky (a int)",
+        "CREATE EXTENSION IF NOT EXISTS pg_trgm",
+    ):
+        with pytest.raises(Exception) as excinfo:
+            with raw.begin() as connection:
+                connection.execute(text(statement))
+        assert "permission denied" in str(excinfo.value).lower(), statement
+    raw.dispose()
+
+    with admin.connect() as connection:
+        rows = connection.execute(
+            text(f"SELECT id, label FROM {CANARY_SCHEMA}.protected ORDER BY id")
+        ).fetchall()
+    assert [tuple(row) for row in rows] == [(1, "untouched")]
+    with admin.begin() as connection:
+        connection.execute(text(f"DROP SCHEMA IF EXISTS {CANARY_SCHEMA} CASCADE"))
+    admin.dispose()
+
+
+def test_restricted_role_can_still_do_its_job(loader_uri):
+    raw = create_engine(loader_uri)
+    with raw.connect() as connection:
+        assert connection.execute(text("SELECT postgis_version()")).scalar()
+        search_path = connection.execute(text("SHOW search_path")).scalar()
+    assert "iris_staging" in search_path
+    assert "iris_core" not in search_path
+    raw.dispose()
+
+
+def test_schema_creation_does_not_require_database_create_privilege(loader_uri):
+    """ensure_schema must be a no-op (not a failure) for an existing schema."""
+    from iris_cre41.db import create_staging_engine, ensure_schema
+
+    engine, _ = create_staging_engine(loader_uri, "iris_staging")
+    assert ensure_schema(engine, "iris_staging") is False
+    engine.dispose()

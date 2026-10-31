@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-CRE-41",
   "pipeline_version": "1.0.0",
-  "generated_at": "2026-10-31T06:12:42.525238+00:00",
+  "generated_at": "2026-10-31T18:29:34.671711+00:00",
   "queries": [
     {
       "name": "search_path",
@@ -141,21 +141,15 @@
       "sql": "SELECT poi_uid, building_footprint_area_sqm AS stored_sqm, round(ST_Area(building_geom)::numeric, 1) AS postgis_sqm, abs(building_footprint_area_sqm - round(ST_Area(building_geom)::numeric, 1)) AS delta FROM iris_staging.commercial_poi_staging WHERE building_geom IS NOT NULL ORDER BY delta DESC LIMIT 5",
       "rows": [
         {
-          "poi_uid": "cre41-5f4cad0ce86c713ae6d3",
-          "stored_sqm": "416.6",
-          "postgis_sqm": "416.6",
-          "delta": "0.0"
-        },
-        {
           "poi_uid": "cre41-4b7e51ba6e0ccb110c86",
           "stored_sqm": "175.9",
           "postgis_sqm": "175.9",
           "delta": "0.0"
         },
         {
-          "poi_uid": "cre41-c0e99b9673679b85e3d1",
-          "stored_sqm": "1216.2",
-          "postgis_sqm": "1216.2",
+          "poi_uid": "cre41-e548c59b3b145f2e7c51",
+          "stored_sqm": "232.7",
+          "postgis_sqm": "232.7",
           "delta": "0.0"
         },
         {
@@ -165,41 +159,124 @@
           "delta": "0.0"
         },
         {
-          "poi_uid": "cre41-e548c59b3b145f2e7c51",
-          "stored_sqm": "232.7",
-          "postgis_sqm": "232.7",
+          "poi_uid": "cre41-aee450bfc563dce813d2",
+          "stored_sqm": "476.8",
+          "postgis_sqm": "476.8",
+          "delta": "0.0"
+        },
+        {
+          "poi_uid": "cre41-5f4cad0ce86c713ae6d3",
+          "stored_sqm": "416.6",
+          "postgis_sqm": "416.6",
           "delta": "0.0"
         }
       ]
     },
     {
       "name": "match_method_distribution",
-      "sql": "SELECT building_match_method, building_match_confidence, count(*) AS rows FROM iris_staging.commercial_poi_staging GROUP BY 1, 2 ORDER BY rows DESC",
+      "sql": "SELECT building_match_method, building_geometric_match_confidence, count(*) AS rows FROM iris_staging.commercial_poi_staging GROUP BY 1, 2 ORDER BY rows DESC",
       "rows": [
         {
           "building_match_method": "point_in_building",
-          "building_match_confidence": "high",
+          "building_geometric_match_confidence": "high",
           "rows": 64
         },
         {
           "building_match_method": "nearest_building_le_30m",
-          "building_match_confidence": "low",
+          "building_geometric_match_confidence": "low",
           "rows": 9
         },
         {
           "building_match_method": "nearest_building_le_30m",
-          "building_match_confidence": "medium",
+          "building_geometric_match_confidence": "medium",
           "rows": 7
         },
         {
           "building_match_method": null,
-          "building_match_confidence": "none",
+          "building_geometric_match_confidence": "none",
           "rows": 3
         },
         {
           "building_match_method": "nearest_building_le_80m",
-          "building_match_confidence": "low",
+          "building_geometric_match_confidence": "low",
           "rows": 1
+        }
+      ]
+    },
+    {
+      "name": "operator_attribution_audit",
+      "sql": "SELECT building_operator_attribution_status AS attribution, count(*) AS rows, count(building_footprint_area_sqm) AS raw_osm_areas, count(building_operator_attributable_area_sqm) AS operator_areas, round(max(building_footprint_area_sqm)) AS max_raw_sqm FROM iris_staging.commercial_poi_staging GROUP BY 1 ORDER BY rows DESC",
+      "rows": [
+        {
+          "attribution": "unverified",
+          "rows": 42,
+          "raw_osm_areas": 42,
+          "operator_areas": 0,
+          "max_raw_sqm": "15284"
+        },
+        {
+          "attribution": "operator_tagged",
+          "rows": 24,
+          "raw_osm_areas": 24,
+          "operator_areas": 24,
+          "max_raw_sqm": "5432"
+        },
+        {
+          "attribution": "third_party_named",
+          "rows": 12,
+          "raw_osm_areas": 12,
+          "operator_areas": 0,
+          "max_raw_sqm": "47136"
+        },
+        {
+          "attribution": "no_match",
+          "rows": 3,
+          "raw_osm_areas": 0,
+          "operator_areas": 0,
+          "max_raw_sqm": null
+        },
+        {
+          "attribution": "car_wash_tagged",
+          "rows": 3,
+          "raw_osm_areas": 3,
+          "operator_areas": 0,
+          "max_raw_sqm": "1216"
+        }
+      ]
+    },
+    {
+      "name": "parking_attribution_audit",
+      "sql": "SELECT parking_operator_attribution_status AS attribution, count(*) AS rows, count(parking_area_sqm) AS raw_osm_areas, count(parking_operator_attributable_area_sqm) AS operator_areas, round(max(parking_area_sqm)) AS max_raw_sqm FROM iris_staging.commercial_poi_staging GROUP BY 1 ORDER BY rows DESC",
+      "rows": [
+        {
+          "attribution": "unverified",
+          "rows": 57,
+          "raw_osm_areas": 57,
+          "operator_areas": 0,
+          "max_raw_sqm": "21901"
+        },
+        {
+          "attribution": "third_party_named",
+          "rows": 15,
+          "raw_osm_areas": 15,
+          "operator_areas": 0,
+          "max_raw_sqm": "14554"
+        },
+        {
+          "attribution": "no_match",
+          "rows": 12,
+          "raw_osm_areas": 0,
+          "operator_areas": 0,
+          "max_raw_sqm": null
+        }
+      ]
+    },
+    {
+      "name": "operator_area_never_asserted_without_attribution",
+      "sql": "SELECT count(*) AS violating_rows FROM iris_staging.commercial_poi_staging WHERE (building_operator_attributable_area_sqm IS NOT NULL        AND building_operator_attribution_status <> 'operator_tagged')    OR (parking_operator_attributable_area_sqm IS NOT NULL        AND parking_operator_attribution_status <> 'operator_tagged')    OR operator_usable_area_verified IS TRUE",
+      "rows": [
+        {
+          "violating_rows": 0
         }
       ]
     },
@@ -325,12 +402,67 @@
           "rows_failed": 0,
           "duplicates_prevented": 0,
           "started_at": "2026-10-31 06:12:07.695330+00:00"
+        },
+        {
+          "run_id": "load-20261031T182300Z-382a257c",
+          "stage": "load",
+          "locations_processed": 84,
+          "rows_inserted": 0,
+          "rows_updated": 84,
+          "rows_unchanged": 0,
+          "rows_failed": 0,
+          "duplicates_prevented": 0,
+          "started_at": "2026-10-31 18:23:00.654838+00:00"
+        },
+        {
+          "run_id": "load-20261031T182302Z-dceb44cc",
+          "stage": "load",
+          "locations_processed": 84,
+          "rows_inserted": 0,
+          "rows_updated": 0,
+          "rows_unchanged": 84,
+          "rows_failed": 0,
+          "duplicates_prevented": 0,
+          "started_at": "2026-10-31 18:23:02.130737+00:00"
+        },
+        {
+          "run_id": "load-20261031T182352Z-5cdd815c",
+          "stage": "load",
+          "locations_processed": 84,
+          "rows_inserted": 0,
+          "rows_updated": 0,
+          "rows_unchanged": 84,
+          "rows_failed": 0,
+          "duplicates_prevented": 0,
+          "started_at": "2026-10-31 18:23:52.111368+00:00"
+        },
+        {
+          "run_id": "load-20261031T182802Z-957c6d0a",
+          "stage": "load",
+          "locations_processed": 84,
+          "rows_inserted": 0,
+          "rows_updated": 0,
+          "rows_unchanged": 84,
+          "rows_failed": 0,
+          "duplicates_prevented": 0,
+          "started_at": "2026-10-31 18:28:02.674612+00:00"
+        },
+        {
+          "run_id": "load-20261031T182804Z-2a1daa4a",
+          "stage": "load",
+          "locations_processed": 84,
+          "rows_inserted": 0,
+          "rows_updated": 0,
+          "rows_unchanged": 84,
+          "rows_failed": 0,
+          "duplicates_prevented": 0,
+          "started_at": "2026-10-31 18:28:04.099804+00:00"
         }
       ]
     }
   ],
   "schema_guard": {
-    "statements_checked": 14,
+    "statements_checked": 17,
     "write_statements_allowed": 0,
     "violations": 0
   }

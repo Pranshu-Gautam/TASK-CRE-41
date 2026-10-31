@@ -1,5 +1,5 @@
 TASK: TASK-CRE-41  pipeline 1.0.0
-generated_at: 2026-10-31T06:12:42.525238+00:00
+generated_at: 2026-10-31T18:29:34.671711+00:00
 
 ### search_path
 -- SHOW search_path
@@ -55,20 +55,41 @@ Mr. Wash | 35 | 43 | 2159 | 5611
 ### area_recomputed_in_db
 -- SELECT poi_uid, building_footprint_area_sqm AS stored_sqm, round(ST_Area(building_geom)::numeric, 1) AS postgis_sqm, abs(building_footprint_area_sqm - round(ST_Area(building_geom)::numeric, 1)) AS delta FROM iris_staging.commercial_poi_staging WHERE building_geom IS NOT NULL ORDER BY delta DESC LIMIT 5
 poi_uid | stored_sqm | postgis_sqm | delta
-cre41-5f4cad0ce86c713ae6d3 | 416.6 | 416.6 | 0.0
 cre41-4b7e51ba6e0ccb110c86 | 175.9 | 175.9 | 0.0
-cre41-c0e99b9673679b85e3d1 | 1216.2 | 1216.2 | 0.0
-cre41-86b259b6d3a52dee6140 | 117.9 | 117.9 | 0.0
 cre41-e548c59b3b145f2e7c51 | 232.7 | 232.7 | 0.0
+cre41-86b259b6d3a52dee6140 | 117.9 | 117.9 | 0.0
+cre41-aee450bfc563dce813d2 | 476.8 | 476.8 | 0.0
+cre41-5f4cad0ce86c713ae6d3 | 416.6 | 416.6 | 0.0
 
 ### match_method_distribution
--- SELECT building_match_method, building_match_confidence, count(*) AS rows FROM iris_staging.commercial_poi_staging GROUP BY 1, 2 ORDER BY rows DESC
-building_match_method | building_match_confidence | rows
+-- SELECT building_match_method, building_geometric_match_confidence, count(*) AS rows FROM iris_staging.commercial_poi_staging GROUP BY 1, 2 ORDER BY rows DESC
+building_match_method | building_geometric_match_confidence | rows
 point_in_building | high | 64
 nearest_building_le_30m | low | 9
 nearest_building_le_30m | medium | 7
  | none | 3
 nearest_building_le_80m | low | 1
+
+### operator_attribution_audit
+-- SELECT building_operator_attribution_status AS attribution, count(*) AS rows, count(building_footprint_area_sqm) AS raw_osm_areas, count(building_operator_attributable_area_sqm) AS operator_areas, round(max(building_footprint_area_sqm)) AS max_raw_sqm FROM iris_staging.commercial_poi_staging GROUP BY 1 ORDER BY rows DESC
+attribution | rows | raw_osm_areas | operator_areas | max_raw_sqm
+unverified | 42 | 42 | 0 | 15284
+operator_tagged | 24 | 24 | 24 | 5432
+third_party_named | 12 | 12 | 0 | 47136
+no_match | 3 | 0 | 0 | 
+car_wash_tagged | 3 | 3 | 0 | 1216
+
+### parking_attribution_audit
+-- SELECT parking_operator_attribution_status AS attribution, count(*) AS rows, count(parking_area_sqm) AS raw_osm_areas, count(parking_operator_attributable_area_sqm) AS operator_areas, round(max(parking_area_sqm)) AS max_raw_sqm FROM iris_staging.commercial_poi_staging GROUP BY 1 ORDER BY rows DESC
+attribution | rows | raw_osm_areas | operator_areas | max_raw_sqm
+unverified | 57 | 57 | 0 | 21901
+third_party_named | 15 | 15 | 0 | 14554
+no_match | 12 | 0 | 0 | 
+
+### operator_area_never_asserted_without_attribution
+-- SELECT count(*) AS violating_rows FROM iris_staging.commercial_poi_staging WHERE (building_operator_attributable_area_sqm IS NOT NULL        AND building_operator_attribution_status <> 'operator_tagged')    OR (parking_operator_attributable_area_sqm IS NOT NULL        AND parking_operator_attribution_status <> 'operator_tagged')    OR operator_usable_area_verified IS TRUE
+violating_rows
+0
 
 ### objects_in_staging_schema
 -- SELECT table_name FROM information_schema.tables WHERE table_schema = 'iris_staging' ORDER BY table_name
@@ -93,5 +114,10 @@ load-20261031T060218Z-c14ec7a5 | load | 84 | 0 | 0 | 84 | 0 | 0 | 2026-10-31 06:
 load-20261031T061118Z-b8a25bd9 | load | 84 | 0 | 84 | 0 | 0 | 0 | 2026-10-31 06:11:18.634011+00:00
 load-20261031T061206Z-4179aff8 | load | 84 | 0 | 0 | 84 | 0 | 0 | 2026-10-31 06:12:06.315987+00:00
 load-20261031T061207Z-95d4d506 | load | 84 | 0 | 0 | 84 | 0 | 0 | 2026-10-31 06:12:07.695330+00:00
+load-20261031T182300Z-382a257c | load | 84 | 0 | 84 | 0 | 0 | 0 | 2026-10-31 18:23:00.654838+00:00
+load-20261031T182302Z-dceb44cc | load | 84 | 0 | 0 | 84 | 0 | 0 | 2026-10-31 18:23:02.130737+00:00
+load-20261031T182352Z-5cdd815c | load | 84 | 0 | 0 | 84 | 0 | 0 | 2026-10-31 18:23:52.111368+00:00
+load-20261031T182802Z-957c6d0a | load | 84 | 0 | 0 | 84 | 0 | 0 | 2026-10-31 18:28:02.674612+00:00
+load-20261031T182804Z-2a1daa4a | load | 84 | 0 | 0 | 84 | 0 | 0 | 2026-10-31 18:28:04.099804+00:00
 
-schema_guard: {'statements_checked': 14, 'write_statements_allowed': 0, 'violations': 0}
+schema_guard: {'statements_checked': 17, 'write_statements_allowed': 0, 'violations': 0}

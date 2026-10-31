@@ -167,9 +167,21 @@ class SpatialMatch:
     feature_id: str | None = None          # e.g. "way/123456"
     geometry_type: str | None = None       # Polygon | MultiPolygon
     match_method: str | None = None
-    match_confidence: str = "none"         # high | medium | low | none
+    # ASSERTION 1 — geometry only: how strongly the geocoded point is tied to
+    # this polygon. Says nothing about who occupies or controls it.
+    geometric_match_confidence: str = "none"   # high | medium | low | none
     distance_m: float | None = None
+    # Raw metric of the matched OSM feature, kept for provenance.
     area_sqm: float | None = None
+    # ASSERTION 2 — how far the evidence supports attributing this polygon to
+    # the operator. See enrich/matching.py::classify_operator_attribution.
+    operator_attribution_status: str = "no_match"
+    operator_attribution_evidence: str | None = None
+    # Operator-specific area. NULL unless the polygon is positively linked to
+    # the operator and is of plausible single-site size.
+    operator_attributable_area_sqm: float | None = None
+    # ASSERTION 3 — always False: no property/tenancy source was consulted.
+    operator_usable_area_verified: bool = False
     validity_status: str | None = None     # valid | repaired | rejected_*
     wkt_25832: str | None = None
     tags: dict[str, Any] = field(default_factory=dict)

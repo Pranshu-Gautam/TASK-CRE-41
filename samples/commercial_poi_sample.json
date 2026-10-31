@@ -25,8 +25,8 @@
         "source_system": "clean-car.com",
         "source_record_id": "bad-oldesloe",
         "source_url": "https://www.clean-car.com/standorte/bad-oldesloe/",
-        "retrieved_at": "2026-10-31T06:06:44.392584+00:00",
-        "html_sha256": "18733abf6da70b6735a633d705f796d42728566f0314fac99f0acfe63085f534",
+        "retrieved_at": "2026-10-31T18:18:27.272253+00:00",
+        "html_sha256": "6c07052246c40606f6bdd3820e7d2a499eacd76a12d0577ae14a78740ee6d304",
         "source_attributes": {
           "slug": "bad-oldesloe",
           "poi_category": "car_wash",
@@ -64,7 +64,7 @@
         "returned_city": "Bad Oldesloe",
         "alternatives_rejected": 0,
         "error": null,
-        "geocoded_at": "2026-10-31T06:11:18.446561+00:00",
+        "geocoded_at": "2026-10-31T18:22:41.921587+00:00",
         "from_cache": false
       },
       "x_25832": 592444.273,
@@ -77,9 +77,13 @@
         "feature_id": "way/211905385",
         "geometry_type": "MultiPolygon",
         "match_method": "point_in_building",
-        "match_confidence": "high",
+        "geometric_match_confidence": "high",
         "distance_m": 0.0,
         "area_sqm": 225.2,
+        "operator_attribution_status": "operator_tagged",
+        "operator_attribution_evidence": "OSM tag names the operator (name=Clean Car)",
+        "operator_attributable_area_sqm": 225.2,
+        "operator_usable_area_verified": false,
         "validity_status": "valid",
         "wkt_25832": "MULTIPOLYGON (((592429.9390822669 5962424.151182309, 592431.3464831611 5962421.608204755, 592432.6107530125 5962419.307236091, 592440.5942849761 5962423.694119307, 592442.0084972631 5962421.1401504455, 592458.6142911764 5962430.260466844, 592457.0630841216 5962433.078818102, 592459.5068618484 5962434.429245152, 592458.2428022781 5962436.7190820165, 592456.9787438991 5962439.008919218, 592429.9390822669 5962424.151182309)))",
         "tags": {
@@ -109,9 +113,13 @@
         "feature_id": "way/211891902",
         "geometry_type": "MultiPolygon",
         "match_method": "nearby_parking_le_120m",
-        "match_confidence": "low",
+        "geometric_match_confidence": "low",
         "distance_m": 79.08,
         "area_sqm": 938.2,
+        "operator_attribution_status": "unverified",
+        "operator_attribution_evidence": "no corroborating OSM tag either way",
+        "operator_attributable_area_sqm": null,
+        "operator_usable_area_verified": false,
         "validity_status": "valid",
         "wkt_25832": "MULTIPOLYGON (((592418.6550272371 5962344.44464275, 592412.9667663951 5962354.582024715, 592370.5986939064 5962330.251371907, 592372.5136391923 5962326.694535846, 592385.6956685458 5962304.396494483, 592403.0970527296 5962314.622961605, 592393.9977619026 5962330.012618848, 592412.9160839741 5962341.1482982, 592418.6550272371 5962344.44464275)))",
         "tags": {
@@ -138,7 +146,7 @@
           "status": "ok",
           "source_epsg": 4326,
           "stored_epsg": 25832,
-          "geocoded_at": "2026-10-31T06:11:18.446561+00:00"
+          "geocoded_at": "2026-10-31T18:22:41.921587+00:00"
         },
         "osm_query": {
           "provider": "overpass-api.de",
@@ -149,7 +157,7 @@
           "building_candidates": 7,
           "parking_candidates": 1,
           "geometries_rejected": 0,
-          "queried_at": "2026-10-31T06:11:18.475010+00:00"
+          "queried_at": "2026-10-31T18:22:42.328545+00:00"
         },
         "building": {
           "kind": "osm_building_footprint",
@@ -157,7 +165,10 @@
           "source_url": "https://www.openstreetmap.org/way/211905385",
           "licence": "© OpenStreetMap contributors, ODbL 1.0",
           "match_method": "point_in_building",
-          "match_confidence": "high",
+          "geometric_match_confidence": "high",
+          "operator_attribution_status": "operator_tagged",
+          "operator_attribution_evidence": "OSM tag names the operator (name=Clean Car)",
+          "operator_usable_area_verified": false,
           "validity": "valid",
           "area_crs": "EPSG:25832",
           "ownership_verified": false
@@ -168,13 +179,18 @@
           "source_url": "https://www.openstreetmap.org/way/211891902",
           "licence": "© OpenStreetMap contributors, ODbL 1.0",
           "match_method": "nearby_parking_le_120m",
-          "match_confidence": "low",
+          "geometric_match_confidence": "low",
+          "operator_attribution_status": "unverified",
+          "operator_attribution_evidence": "no corroborating OSM tag either way",
+          "operator_usable_area_verified": false,
           "validity": "valid",
           "area_crs": "EPSG:25832",
           "ownership_verified": false
         }
       },
-      "data_quality_flags": [],
+      "data_quality_flags": [
+        "parking_operator_area_not_attributable"
+      ],
       "notes": []
     },
     {
@@ -199,8 +215,8 @@
         "source_system": "clean-car.com",
         "source_record_id": "bad-oldesloe-2",
         "source_url": "https://www.clean-car.com/standorte/bad-oldesloe-2/",
-        "retrieved_at": "2026-10-31T06:06:47.786129+00:00",
-        "html_sha256": "2ba16a01936d4c286584ccf34cedbf360a5ab6f3c6d80df09c4bd41220c741a1",
+        "retrieved_at": "2026-10-31T18:18:30.355594+00:00",
+        "html_sha256": "2e026038e9cc60d5c5baaa04dbb25b416ea561e18f5191291ef3ef0fa01bd436",
         "source_attributes": {
           "slug": "bad-oldesloe-2",
           "poi_category": "car_wash",
@@ -238,7 +254,7 @@
         "returned_city": "Bad Oldesloe",
         "alternatives_rejected": 1,
         "error": null,
-        "geocoded_at": "2026-10-31T06:11:18.455902+00:00",
+        "geocoded_at": "2026-10-31T18:22:41.931876+00:00",
         "from_cache": false
       },
       "x_25832": 592567.086,
@@ -251,9 +267,13 @@
         "feature_id": "way/29986068",
         "geometry_type": "MultiPolygon",
         "match_method": "point_in_building",
-        "match_confidence": "high",
+        "geometric_match_confidence": "high",
         "distance_m": 0.0,
         "area_sqm": 175.9,
+        "operator_attribution_status": "unverified",
+        "operator_attribution_evidence": "no corroborating OSM tag either way",
+        "operator_attributable_area_sqm": null,
+        "operator_usable_area_verified": false,
         "validity_status": "valid",
         "wkt_25832": "MULTIPOLYGON (((592574.0979082017 5961919.353060513, 592552.0564493323 5961906.819474464, 592555.502898882 5961900.8001205735, 592577.5443781767 5961913.333722559, 592574.0979082017 5961919.353060513)))",
         "tags": {
@@ -268,9 +288,13 @@
         "feature_id": "way/211890546",
         "geometry_type": "MultiPolygon",
         "match_method": "nearby_parking_le_120m",
-        "match_confidence": "low",
+        "geometric_match_confidence": "low",
         "distance_m": 94.35,
         "area_sqm": 3485.7,
+        "operator_attribution_status": "unverified",
+        "operator_attribution_evidence": "no corroborating OSM tag either way",
+        "operator_attributable_area_sqm": null,
+        "operator_usable_area_verified": false,
         "validity_status": "valid",
         "wkt_25832": "MULTIPOLYGON (((592486.5587672752 5962133.946555198, 592495.1384527965 5962118.212912104, 592488.2200026264 5962114.247665874, 592476.8803933242 5962106.967565905, 592476.4549771494 5962101.494803662, 592478.0174814606 5962094.113782728, 592479.928601412 5962086.76191579, 592483.6291540327 5962078.543994493, 592489.2483679579 5962071.254351077, 592496.0571120242 5962066.447759437, 592499.492721942 5962071.623947189, 592504.9497571166 5962068.204011981, 592510.4068003348 5962064.784083076, 592508.0418739556 5962059.106007156, 592542.0471400832 5962000.08287193, 592554.1206277802 5962006.910231961, 592527.3336359548 5962054.079040534, 592522.1436188736 5962071.638090674, 592516.5352720496 5962128.652376847, 592506.1628042053 5962145.752767452, 592486.5587672752 5962133.946555198)))",
         "tags": {
@@ -297,7 +321,7 @@
           "status": "ok",
           "source_epsg": 4326,
           "stored_epsg": 25832,
-          "geocoded_at": "2026-10-31T06:11:18.455902+00:00"
+          "geocoded_at": "2026-10-31T18:22:41.931876+00:00"
         },
         "osm_query": {
           "provider": "overpass-api.de",
@@ -308,7 +332,7 @@
           "building_candidates": 11,
           "parking_candidates": 1,
           "geometries_rejected": 0,
-          "queried_at": "2026-10-31T06:11:18.475854+00:00"
+          "queried_at": "2026-10-31T18:22:42.329503+00:00"
         },
         "building": {
           "kind": "osm_building_footprint",
@@ -316,7 +340,10 @@
           "source_url": "https://www.openstreetmap.org/way/29986068",
           "licence": "© OpenStreetMap contributors, ODbL 1.0",
           "match_method": "point_in_building",
-          "match_confidence": "high",
+          "geometric_match_confidence": "high",
+          "operator_attribution_status": "unverified",
+          "operator_attribution_evidence": "no corroborating OSM tag either way",
+          "operator_usable_area_verified": false,
           "validity": "valid",
           "area_crs": "EPSG:25832",
           "ownership_verified": false
@@ -327,14 +354,20 @@
           "source_url": "https://www.openstreetmap.org/way/211890546",
           "licence": "© OpenStreetMap contributors, ODbL 1.0",
           "match_method": "nearby_parking_le_120m",
-          "match_confidence": "low",
+          "geometric_match_confidence": "low",
+          "operator_attribution_status": "unverified",
+          "operator_attribution_evidence": "no corroborating OSM tag either way",
+          "operator_usable_area_verified": false,
           "validity": "valid",
           "area_crs": "EPSG:25832",
           "ownership_verified": false
         }
       },
       "data_quality_flags": [
-        "geocode_name_not_operator"
+        "geocode_name_not_operator",
+        "building_operator_attribution_unverified",
+        "building_operator_area_not_attributable",
+        "parking_operator_area_not_attributable"
       ],
       "notes": []
     },
@@ -360,8 +393,8 @@
         "source_system": "clean-car.com",
         "source_record_id": "bad-segeberg",
         "source_url": "https://www.clean-car.com/standorte/bad-segeberg/",
-        "retrieved_at": "2026-10-31T06:06:52.590807+00:00",
-        "html_sha256": "9585affe3cdc08899dc3a2f0f1e519c2350a29b06aa739c78eff69c7231fc8a3",
+        "retrieved_at": "2026-10-31T18:18:33.453913+00:00",
+        "html_sha256": "da791ba0c99592bfa555fce2f4239cb156e0fc6d44bb2d99d997fe52a6e4fdde",
         "source_attributes": {
           "slug": "bad-segeberg",
           "poi_category": "car_wash",
@@ -399,7 +432,7 @@
         "returned_city": "Bad Segeberg",
         "alternatives_rejected": 0,
         "error": null,
-        "geocoded_at": "2026-10-31T06:11:18.456145+00:00",
+        "geocoded_at": "2026-10-31T18:22:41.932162+00:00",
         "from_cache": false
       },
       "x_25832": 585987.906,
@@ -412,9 +445,13 @@
         "feature_id": "way/483236147",
         "geometry_type": "MultiPolygon",
         "match_method": "point_in_building",
-        "match_confidence": "high",
+        "geometric_match_confidence": "high",
         "distance_m": 0.0,
         "area_sqm": 232.7,
+        "operator_attribution_status": "operator_tagged",
+        "operator_attribution_evidence": "OSM tag names the operator (name=Clean Car)",
+        "operator_attributable_area_sqm": 232.7,
+        "operator_usable_area_verified": false,
         "validity_status": "valid",
         "wkt_25832": "MULTIPOLYGON (((585979.5162146606 5976903.930557277, 585977.2729539427 5976901.652208247, 585975.4098248533 5976899.770393764, 585977.7039336888 5976897.520246382, 585975.9891233179 5976895.785847327, 585989.9085163912 5976882.08752142, 585991.6040434716 5976883.799311508, 585997.944793942 5976877.573069327, 586002.0706738153 5976881.744741673, 585979.5162146606 5976903.930557277)))",
         "tags": {
@@ -440,9 +477,13 @@
         "feature_id": "way/149742358",
         "geometry_type": "MultiPolygon",
         "match_method": "nearby_parking_le_120m",
-        "match_confidence": "low",
+        "geometric_match_confidence": "low",
         "distance_m": 32.11,
         "area_sqm": 1716.5,
+        "operator_attribution_status": "unverified",
+        "operator_attribution_evidence": "no corroborating OSM tag either way",
+        "operator_attributable_area_sqm": null,
+        "operator_usable_area_verified": false,
         "validity_status": "valid",
         "wkt_25832": "MULTIPOLYGON (((585984.4344092613 5976813.699837888, 585991.3380820376 5976820.371175781, 586001.6519171194 5976830.143727199, 585951.3488365088 5976881.230365755, 585937.4438962349 5976867.84149835, 585934.0392491036 5976864.439966422, 585936.5959623011 5976861.838526582, 585984.4344092613 5976813.699837888)))",
         "tags": {
@@ -469,7 +510,7 @@
           "status": "ok",
           "source_epsg": 4326,
           "stored_epsg": 25832,
-          "geocoded_at": "2026-10-31T06:11:18.456145+00:00"
+          "geocoded_at": "2026-10-31T18:22:41.932162+00:00"
         },
         "osm_query": {
           "provider": "overpass-api.de",
@@ -480,7 +521,7 @@
           "building_candidates": 6,
           "parking_candidates": 4,
           "geometries_rejected": 0,
-          "queried_at": "2026-10-31T06:11:18.476688+00:00"
+          "queried_at": "2026-10-31T18:22:42.330388+00:00"
         },
         "building": {
           "kind": "osm_building_footprint",
@@ -488,7 +529,10 @@
           "source_url": "https://www.openstreetmap.org/way/483236147",
           "licence": "© OpenStreetMap contributors, ODbL 1.0",
           "match_method": "point_in_building",
-          "match_confidence": "high",
+          "geometric_match_confidence": "high",
+          "operator_attribution_status": "operator_tagged",
+          "operator_attribution_evidence": "OSM tag names the operator (name=Clean Car)",
+          "operator_usable_area_verified": false,
           "validity": "valid",
           "area_crs": "EPSG:25832",
           "ownership_verified": false
@@ -499,13 +543,18 @@
           "source_url": "https://www.openstreetmap.org/way/149742358",
           "licence": "© OpenStreetMap contributors, ODbL 1.0",
           "match_method": "nearby_parking_le_120m",
-          "match_confidence": "low",
+          "geometric_match_confidence": "low",
+          "operator_attribution_status": "unverified",
+          "operator_attribution_evidence": "no corroborating OSM tag either way",
+          "operator_usable_area_verified": false,
           "validity": "valid",
           "area_crs": "EPSG:25832",
           "ownership_verified": false
         }
       },
-      "data_quality_flags": [],
+      "data_quality_flags": [
+        "parking_operator_area_not_attributable"
+      ],
       "notes": []
     },
     {
@@ -530,8 +579,8 @@
         "source_system": "clean-car.com",
         "source_record_id": "bremen",
         "source_url": "https://www.clean-car.com/standorte/bremen/",
-        "retrieved_at": "2026-10-31T06:06:57.661216+00:00",
-        "html_sha256": "64826b8cdd71656c2e5a48cfe4ef42ffd1014685daa7c1001f056f8e8ab9a461",
+        "retrieved_at": "2026-10-31T18:18:36.270397+00:00",
+        "html_sha256": "2af5c4332dfaeaf71db5ffe8f1e11a5bdd4b4488455a3f5b6c5ede6ebbcbc496",
         "source_attributes": {
           "slug": "bremen",
           "poi_category": "car_wash",
@@ -569,7 +618,7 @@
         "returned_city": "Bremen",
         "alternatives_rejected": 1,
         "error": null,
-        "geocoded_at": "2026-10-31T06:11:18.456336+00:00",
+        "geocoded_at": "2026-10-31T18:22:41.932375+00:00",
         "from_cache": false
       },
       "x_25832": 486420.367,
@@ -582,9 +631,13 @@
         "feature_id": "way/186007774",
         "geometry_type": "MultiPolygon",
         "match_method": "point_in_building",
-        "match_confidence": "high",
+        "geometric_match_confidence": "high",
         "distance_m": 0.0,
         "area_sqm": 416.6,
+        "operator_attribution_status": "unverified",
+        "operator_attribution_evidence": "no corroborating OSM tag either way",
+        "operator_attributable_area_sqm": null,
+        "operator_usable_area_verified": false,
         "validity_status": "valid",
         "wkt_25832": "MULTIPOLYGON (((486437.07870413363 5878462.737143381, 486446.9999639118 5878472.810058042, 486439.71443623997 5878479.950197226, 486436.14519634587 5878476.322609232, 486414.6563664495 5878497.386091209, 486408.3043130819 5878490.929683415, 486437.07870413363 5878462.737143381)))",
         "tags": {
@@ -605,9 +658,13 @@
         "feature_id": "way/1463665304",
         "geometry_type": "MultiPolygon",
         "match_method": "nearby_parking_le_120m",
-        "match_confidence": "low",
+        "geometric_match_confidence": "low",
         "distance_m": 69.06,
         "area_sqm": 626.8,
+        "operator_attribution_status": "unverified",
+        "operator_attribution_evidence": "no corroborating OSM tag either way",
+        "operator_attributable_area_sqm": null,
+        "operator_usable_area_verified": false,
         "validity_status": "valid",
         "wkt_25832": "MULTIPOLYGON (((486365.06741028745 5878554.872585528, 486331.0913276687 5878523.576201583, 486339.26323230675 5878514.742474674, 486346.0436965189 5878520.9862115905, 486355.0709432171 5878511.237884408, 486357.08022090985 5878513.089945468, 486348.741228119 5878522.102106235, 486373.9275784382 5878545.302756914, 486370.15229536727 5878549.3738531135, 486365.06741028745 5878554.872585528)))",
         "tags": {
@@ -632,7 +689,7 @@
           "status": "ok",
           "source_epsg": 4326,
           "stored_epsg": 25832,
-          "geocoded_at": "2026-10-31T06:11:18.456336+00:00"
+          "geocoded_at": "2026-10-31T18:22:41.932375+00:00"
         },
         "osm_query": {
           "provider": "overpass-api.de",
@@ -643,7 +700,7 @@
           "building_candidates": 8,
           "parking_candidates": 1,
           "geometries_rejected": 0,
-          "queried_at": "2026-10-31T06:11:18.477346+00:00"
+          "queried_at": "2026-10-31T18:22:42.331084+00:00"
         },
         "building": {
           "kind": "osm_building_footprint",
@@ -651,7 +708,10 @@
           "source_url": "https://www.openstreetmap.org/way/186007774",
           "licence": "© OpenStreetMap contributors, ODbL 1.0",
           "match_method": "point_in_building",
-          "match_confidence": "high",
+          "geometric_match_confidence": "high",
+          "operator_attribution_status": "unverified",
+          "operator_attribution_evidence": "no corroborating OSM tag either way",
+          "operator_usable_area_verified": false,
           "validity": "valid",
           "area_crs": "EPSG:25832",
           "ownership_verified": false
@@ -662,14 +722,20 @@
           "source_url": "https://www.openstreetmap.org/way/1463665304",
           "licence": "© OpenStreetMap contributors, ODbL 1.0",
           "match_method": "nearby_parking_le_120m",
-          "match_confidence": "low",
+          "geometric_match_confidence": "low",
+          "operator_attribution_status": "unverified",
+          "operator_attribution_evidence": "no corroborating OSM tag either way",
+          "operator_usable_area_verified": false,
           "validity": "valid",
           "area_crs": "EPSG:25832",
           "ownership_verified": false
         }
       },
       "data_quality_flags": [
-        "geocode_name_not_operator"
+        "geocode_name_not_operator",
+        "building_operator_attribution_unverified",
+        "building_operator_area_not_attributable",
+        "parking_operator_area_not_attributable"
       ],
       "notes": []
     },
@@ -695,8 +761,8 @@
         "source_system": "clean-car.com",
         "source_record_id": "bremerhaven",
         "source_url": "https://www.clean-car.com/standorte/bremerhaven/",
-        "retrieved_at": "2026-10-31T06:07:03.200077+00:00",
-        "html_sha256": "360204b48bf10c2531e939dcce229af208093060d711fe4e9bc980ede1691f72",
+        "retrieved_at": "2026-10-31T18:18:39.599374+00:00",
+        "html_sha256": "6efc70fef5b9b89515c184454ac402037d6165d04d3206a1c2817a57b977d91f",
         "source_attributes": {
           "slug": "bremerhaven",
           "poi_category": "car_wash",
@@ -734,7 +800,7 @@
         "returned_city": "Bremerhaven",
         "alternatives_rejected": 0,
         "error": null,
-        "geocoded_at": "2026-10-31T06:11:18.456522+00:00",
+        "geocoded_at": "2026-10-31T18:22:41.932545+00:00",
         "from_cache": false
       },
       "x_25832": 473267.347,
@@ -747,9 +813,13 @@
         "feature_id": "way/218471804",
         "geometry_type": "MultiPolygon",
         "match_method": "point_in_building",
-        "match_confidence": "high",
+        "geometric_match_confidence": "high",
         "distance_m": 0.0,
         "area_sqm": 439.9,
+        "operator_attribution_status": "car_wash_tagged",
+        "operator_attribution_evidence": "OSM tags the feature as a car wash but do not name the operator; corroborates the use, not the operator",
+        "operator_attributable_area_sqm": null,
+        "operator_usable_area_verified": false,
         "validity_status": "valid",
         "wkt_25832": "MULTIPOLYGON (((473254.703094149 5927121.358696806, 473269.7802213616 5927089.076618164, 473271.94883272547 5927090.087895773, 473273.89794095507 5927091.000286473, 473271.9672530874 5927095.694980536, 473279.8179419464 5927099.555623665, 473267.4466003251 5927126.949460189, 473257.77592152625 5927122.7097408725, 473254.703094149 5927121.358696806)))",
         "tags": {
@@ -775,9 +845,13 @@
         "feature_id": "way/256955400",
         "geometry_type": "MultiPolygon",
         "match_method": "nearby_parking_le_120m",
-        "match_confidence": "low",
+        "geometric_match_confidence": "low",
         "distance_m": 23.87,
         "area_sqm": 1852.0,
+        "operator_attribution_status": "unverified",
+        "operator_attribution_evidence": "no corroborating OSM tag either way",
+        "operator_attributable_area_sqm": null,
+        "operator_usable_area_verified": false,
         "validity_status": "valid",
         "wkt_25832": "MULTIPOLYGON (((473225.9412858199 5927069.65494265, 473252.72163232614 5927078.359202487, 473232.3024182921 5927140.888091131, 473205.5290199653 5927132.183909483, 473225.9412858199 5927069.65494265)))",
         "tags": {
@@ -806,7 +880,7 @@
           "status": "ok",
           "source_epsg": 4326,
           "stored_epsg": 25832,
-          "geocoded_at": "2026-10-31T06:11:18.456522+00:00"
+          "geocoded_at": "2026-10-31T18:22:41.932545+00:00"
         },
         "osm_query": {
           "provider": "overpass-api.de",
@@ -817,7 +891,7 @@
           "building_candidates": 5,
           "parking_candidates": 4,
           "geometries_rejected": 0,
-          "queried_at": "2026-10-31T06:11:18.478029+00:00"
+          "queried_at": "2026-10-31T18:22:42.331802+00:00"
         },
         "building": {
           "kind": "osm_building_footprint",
@@ -825,7 +899,10 @@
           "source_url": "https://www.openstreetmap.org/way/218471804",
           "licence": "© OpenStreetMap contributors, ODbL 1.0",
           "match_method": "point_in_building",
-          "match_confidence": "high",
+          "geometric_match_confidence": "high",
+          "operator_attribution_status": "car_wash_tagged",
+          "operator_attribution_evidence": "OSM tags the feature as a car wash but do not name the operator; corroborates the use, not the operator",
+          "operator_usable_area_verified": false,
           "validity": "valid",
           "area_crs": "EPSG:25832",
           "ownership_verified": false
@@ -836,14 +913,19 @@
           "source_url": "https://www.openstreetmap.org/way/256955400",
           "licence": "© OpenStreetMap contributors, ODbL 1.0",
           "match_method": "nearby_parking_le_120m",
-          "match_confidence": "low",
+          "geometric_match_confidence": "low",
+          "operator_attribution_status": "unverified",
+          "operator_attribution_evidence": "no corroborating OSM tag either way",
+          "operator_usable_area_verified": false,
           "validity": "valid",
           "area_crs": "EPSG:25832",
           "ownership_verified": false
         }
       },
       "data_quality_flags": [
-        "geocode_name_not_operator"
+        "geocode_name_not_operator",
+        "building_operator_area_not_attributable",
+        "parking_operator_area_not_attributable"
       ],
       "notes": []
     },
@@ -869,8 +951,8 @@
         "source_system": "clean-car.com",
         "source_record_id": "buchholz",
         "source_url": "https://www.clean-car.com/standorte/buchholz/",
-        "retrieved_at": "2026-10-31T06:07:09.147847+00:00",
-        "html_sha256": "f19600ecd8fee88955ff63fb01ef3fec226fb3719e56306bc7106024e40d8596",
+        "retrieved_at": "2026-10-31T18:18:42.984010+00:00",
+        "html_sha256": "e473af1cf1858f9602f72ae81f371d986428d4a3e26227d311ff13577d0ac19e",
         "source_attributes": {
           "slug": "buchholz",
           "poi_category": "car_wash",
@@ -908,7 +990,7 @@
         "returned_city": "Buchholz in der Nordheide",
         "alternatives_rejected": 1,
         "error": null,
-        "geocoded_at": "2026-10-31T06:11:18.456703+00:00",
+        "geocoded_at": "2026-10-31T18:22:41.932706+00:00",
         "from_cache": false
       },
       "x_25832": 557641.644,
@@ -921,9 +1003,13 @@
         "feature_id": "way/138169906",
         "geometry_type": "MultiPolygon",
         "match_method": "point_in_building",
-        "match_confidence": "high",
+        "geometric_match_confidence": "high",
         "distance_m": 0.0,
         "area_sqm": 476.8,
+        "operator_attribution_status": "unverified",
+        "operator_attribution_evidence": "no corroborating OSM tag either way",
+        "operator_attributable_area_sqm": null,
+        "operator_usable_area_verified": false,
         "validity_status": "valid",
         "wkt_25832": "MULTIPOLYGON (((557635.1427356915 5911387.142502155, 557628.8368635336 5911381.1914702, 557630.8397880802 5911379.079540629, 557623.9874635865 5911372.621216115, 557637.016767957 5911358.871547853, 557641.7957094051 5911363.368807686, 557648.3035990993 5911356.505037102, 557656.6829973322 5911364.40605907, 557635.1427356915 5911387.142502155)))",
         "tags": {
@@ -938,9 +1024,13 @@
         "feature_id": "way/307291376",
         "geometry_type": "MultiPolygon",
         "match_method": "nearby_parking_le_120m",
-        "match_confidence": "low",
+        "geometric_match_confidence": "low",
         "distance_m": 64.86,
         "area_sqm": 2870.8,
+        "operator_attribution_status": "third_party_named",
+        "operator_attribution_evidence": "OSM names a different occupant (K+A Küchen Aktuell GmbH); the footprint is that occupant's structure",
+        "operator_attributable_area_sqm": null,
+        "operator_usable_area_verified": false,
         "validity_status": "valid",
         "wkt_25832": "MULTIPOLYGON (((557716.7554412385 5911460.341131534, 557715.0530396253 5911462.923970509, 557714.3430060346 5911465.474354205, 557715.110802926 5911469.133039294, 557717.5094128551 5911472.266346405, 557720.2006592253 5911473.77879655, 557723.3026433979 5911474.361642935, 557726.8354349121 5911473.458824693, 557729.3284199382 5911472.109462819, 557774.5487541824 5911512.991003924, 557759.3596794395 5911529.706977705, 557662.1748388897 5911441.854718909, 557677.5663698637 5911424.907246417, 557716.7554412385 5911460.341131534)))",
         "tags": {
@@ -967,7 +1057,7 @@
           "status": "ok",
           "source_epsg": 4326,
           "stored_epsg": 25832,
-          "geocoded_at": "2026-10-31T06:11:18.456703+00:00"
+          "geocoded_at": "2026-10-31T18:22:41.932706+00:00"
         },
         "osm_query": {
           "provider": "overpass-api.de",
@@ -978,7 +1068,7 @@
           "building_candidates": 11,
           "parking_candidates": 1,
           "geometries_rejected": 0,
-          "queried_at": "2026-10-31T06:11:18.478850+00:00"
+          "queried_at": "2026-10-31T18:22:42.332680+00:00"
         },
         "building": {
           "kind": "osm_building_footprint",
@@ -986,7 +1076,10 @@
           "source_url": "https://www.openstreetmap.org/way/138169906",
           "licence": "© OpenStreetMap contributors, ODbL 1.0",
           "match_method": "point_in_building",
-          "match_confidence": "high",
+          "geometric_match_confidence": "high",
+          "operator_attribution_status": "unverified",
+          "operator_attribution_evidence": "no corroborating OSM tag either way",
+          "operator_usable_area_verified": false,
           "validity": "valid",
           "area_crs": "EPSG:25832",
           "ownership_verified": false
@@ -997,13 +1090,21 @@
           "source_url": "https://www.openstreetmap.org/way/307291376",
           "licence": "© OpenStreetMap contributors, ODbL 1.0",
           "match_method": "nearby_parking_le_120m",
-          "match_confidence": "low",
+          "geometric_match_confidence": "low",
+          "operator_attribution_status": "third_party_named",
+          "operator_attribution_evidence": "OSM names a different occupant (K+A Küchen Aktuell GmbH); the footprint is that occupant's structure",
+          "operator_usable_area_verified": false,
           "validity": "valid",
           "area_crs": "EPSG:25832",
           "ownership_verified": false
         }
       },
-      "data_quality_flags": [],
+      "data_quality_flags": [
+        "building_operator_attribution_unverified",
+        "building_operator_area_not_attributable",
+        "parking_attributed_to_other_occupant",
+        "parking_operator_area_not_attributable"
+      ],
       "notes": []
     }
   ]

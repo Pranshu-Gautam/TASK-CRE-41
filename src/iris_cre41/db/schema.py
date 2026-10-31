@@ -40,6 +40,13 @@ from sqlalchemy import (
 )
 from sqlalchemy.dialects.postgresql import JSONB
 
+# SQLAlchemy renders a Python ``None`` into a JSON/JSONB column as the JSON
+# value ``null`` unless told otherwise. In a staging table whose contract is
+# "unavailable data is NULL" that is wrong: `IS NULL` would be false and
+# count() would over-count. none_as_null=True makes an absent value a real
+# SQL NULL. Used for every JSONB column in this schema.
+NullableJSONB = JSONB(none_as_null=True)
+
 COMMERCIAL_POI_TABLE = "commercial_poi_staging"
 RAW_OBSERVATION_TABLE = "commercial_poi_raw_staging"
 LOAD_RUN_TABLE = "commercial_poi_load_run"
@@ -56,6 +63,25 @@ GEOCODE_STATUSES = (
 )
 ENRICHMENT_STATUSES = ("enriched", "partial", "point_only", "failed", "not_attempted")
 CONFIDENCES = ("high", "medium", "low", "none")
+# How far the evidence supports attributing a polygon to the operator. This is
+# a different assertion from geometric match confidence; see
+# enrich/matching.py::classify_operator_attribution.
+ATTRIBUTION_STATUSES = (
+    "operator_tagged",
+    "car_wash_tagged",
+    "third_party_named",
+    "unverified",
+    "no_match",
+)
+
+# Columns renamed between pipeline versions, applied by sync_staging_columns.
+# Renames preserve data; nothing is dropped or retyped.
+COLUMN_RENAMES: dict[str, dict[str, str]] = {
+    COMMERCIAL_POI_TABLE: {
+        "building_match_confidence": "building_geometric_match_confidence",
+        "parking_match_confidence": "parking_geometric_match_confidence",
+    }
+}
 
 
 def _quoted(values: tuple[str, ...]) -> str:
@@ -96,7 +122,7 @@ def build_metadata(schema: str = "iris_staging") -> MetaData:
         Column("max_vehicle_height_m", Numeric(4, 2),
                comment="Published entry clearance (observed), not derived"),
         Column("max_vehicle_width_m", Numeric(4, 2)),
-        Column("source_attributes", JSONB,
+        Column("source_attributes", NullableJSONB,
                comment="All other verbatim attributes observed on the source page"),
         # -- provenance ----------------------------------------------------
         Column("source_system", Text, nullable=False),
@@ -142,12 +168,29 @@ def build_metadata(schema: str = "iris_staging") -> MetaData:
         Column("building_feature_id", Text),
         Column("building_geometry_type", Text),
         Column("building_match_method", Text),
-        Column("building_match_confidence", Text, server_default=text("'none'")),
+        # ASSERTION 1 — geometry only.
+        Column("building_geometric_match_confidence", Text,
+               server_default=text("'none'"),
+               comment="Strength of the geometric tie between the geocoded point "
+                       "and this polygon. Says nothing about who occupies it"),
         Column("building_distance_m", Float),
         Column("building_footprint_area_sqm", Numeric(14, 1),
-               comment="ST_Area in EPSG:25832. Gross footprint, NOT usable PV area"),
+               comment="ST_Area of the matched OSM feature in EPSG:25832. Raw "
+                       "feature metric for provenance. Gross footprint, NOT "
+                       "usable PV area, and NOT necessarily the operator's"),
+        # ASSERTION 2 — operator attribution.
+        Column("building_operator_attribution_status", Text, nullable=False,
+               server_default=text("'no_match'"),
+               comment="operator_tagged | car_wash_tagged | third_party_named | "
+                       "unverified | no_match"),
+        Column("building_operator_attribution_evidence", Text,
+               comment="Exactly what the attribution decision was based on"),
+        Column("building_operator_attributable_area_sqm", Numeric(14, 1),
+               comment="Operator-specific footprint area. NULL unless the polygon "
+                       "is positively linked to the operator and of plausible "
+                       "single-site size"),
         Column("building_geometry_validity", Text),
-        Column("building_tags", JSONB),
+        Column("building_tags", NullableJSONB),
         Column("building_geom",
                Geometry("MULTIPOLYGON", srid=TARGET_SRID, spatial_index=False)),
         # -- parking (OSM, spatially inferred) ------------------------------
@@ -155,9 +198,20 @@ def build_metadata(schema: str = "iris_staging") -> MetaData:
         Column("parking_source_url", Text),
         Column("parking_feature_id", Text),
         Column("parking_match_method", Text),
-        Column("parking_match_confidence", Text, server_default=text("'none'")),
+        Column("parking_geometric_match_confidence", Text,
+               server_default=text("'none'"),
+               comment="Geometric tie only; not an ownership or usage right"),
         Column("parking_distance_m", Float),
-        Column("parking_area_sqm", Numeric(14, 1)),
+        Column("parking_area_sqm", Numeric(14, 1),
+               comment="ST_Area of the matched OSM parking polygon. Raw feature "
+                       "metric; NOT operator-controlled capacity"),
+        Column("parking_operator_attribution_status", Text, nullable=False,
+               server_default=text("'no_match'")),
+        Column("parking_operator_attribution_evidence", Text),
+        Column("parking_operator_attributable_area_sqm", Numeric(14, 1),
+               comment="NULL unless the parking polygon itself names the operator"),
+        Column("parking_tags", NullableJSONB,
+               comment="OSM tags of the matched parking feature, verbatim"),
         Column("parking_geometry_validity", Text),
         Column("parking_geom",
                Geometry("MULTIPOLYGON", srid=TARGET_SRID, spatial_index=False)),
@@ -168,13 +222,20 @@ def build_metadata(schema: str = "iris_staging") -> MetaData:
         Column("parking_ownership_verified", Boolean, nullable=False,
                server_default=text("false"),
                comment="Always false: no ownership source was available"),
+        # ASSERTION 3 — demonstrable operator control. Always false: no
+        # cadastral, land-registry, lease or operator site register was
+        # consulted, and OSM tags are not such a source.
+        Column("operator_usable_area_verified", Boolean, nullable=False,
+               server_default=text("false"),
+               comment="Always false in this output: no property/tenancy source "
+                       "was consulted, so no operator-usable area is verified"),
         # -- status / audit ------------------------------------------------
         Column("osm_operator_tag_match", Boolean, server_default=text("false")),
         Column("osm_car_wash_feature_id", Text),
         Column("enrichment_status", Text, nullable=False,
                server_default=text("'not_attempted'")),
-        Column("geometry_provenance", JSONB),
-        Column("data_quality_flags", JSONB),
+        Column("geometry_provenance", NullableJSONB),
+        Column("data_quality_flags", NullableJSONB),
         Column("notes", Text),
         Column("row_hash", Text, nullable=False,
                comment="Content hash; drives change detection on upsert"),
@@ -203,12 +264,37 @@ def build_metadata(schema: str = "iris_staging") -> MetaData:
             name="ck_poi_enrichment_status",
         ),
         CheckConstraint(
-            f"building_match_confidence IN ({_quoted(CONFIDENCES)})",
+            f"building_geometric_match_confidence IN ({_quoted(CONFIDENCES)})",
             name="ck_poi_building_confidence",
         ),
         CheckConstraint(
-            f"parking_match_confidence IN ({_quoted(CONFIDENCES)})",
+            f"parking_geometric_match_confidence IN ({_quoted(CONFIDENCES)})",
             name="ck_poi_parking_confidence",
+        ),
+        CheckConstraint(
+            f"building_operator_attribution_status IN ({_quoted(ATTRIBUTION_STATUSES)})",
+            name="ck_poi_building_attribution_status",
+        ),
+        CheckConstraint(
+            f"parking_operator_attribution_status IN ({_quoted(ATTRIBUTION_STATUSES)})",
+            name="ck_poi_parking_attribution_status",
+        ),
+        # An operator-specific area may only exist where the polygon is
+        # positively attributed to the operator. This is enforced by the
+        # database, not merely by the application.
+        CheckConstraint(
+            "building_operator_attributable_area_sqm IS NULL "
+            "OR building_operator_attribution_status = 'operator_tagged'",
+            name="ck_poi_building_attributable_area_requires_attribution",
+        ),
+        CheckConstraint(
+            "parking_operator_attributable_area_sqm IS NULL "
+            "OR parking_operator_attribution_status = 'operator_tagged'",
+            name="ck_poi_parking_attributable_area_requires_attribution",
+        ),
+        CheckConstraint(
+            "operator_usable_area_verified = false",
+            name="ck_poi_operator_usable_area_unverified",
         ),
         CheckConstraint(
             f"geom IS NULL OR ST_SRID(geom) = {TARGET_SRID}",
@@ -303,7 +389,7 @@ def build_metadata(schema: str = "iris_staging") -> MetaData:
         Column("rows_unchanged", Integer),
         Column("rows_failed", Integer),
         Column("duplicates_prevented", Integer),
-        Column("stats", JSONB),
+        Column("stats", NullableJSONB),
         Column("id_seq", BigInteger, autoincrement=False),
         comment="Execution evidence: one row per load run",
         schema=schema,
@@ -346,11 +432,44 @@ def sync_staging_columns(engine, metadata: MetaData) -> dict[str, list[str]]:
     log = get_logger(__name__)
     dialect = postgresql.dialect()
     inspector = inspect(engine)
-    report: dict[str, list[str]] = {"added": [], "unknown_in_database": []}
+    report: dict[str, list[str]] = {
+        "added": [],
+        "renamed": [],
+        "json_null_normalised": [],
+        "unknown_in_database": [],
+    }
 
     for table in metadata.sorted_tables:
         if not inspector.has_table(table.name, schema=metadata.schema):
             continue
+
+        # Data-preserving renames first, so the additive pass below does not
+        # create an empty duplicate of a column that already holds values.
+        present = {
+            column["name"]
+            for column in inspector.get_columns(table.name, schema=metadata.schema)
+        }
+        for old_name, new_name in COLUMN_RENAMES.get(table.name, {}).items():
+            if old_name in present and new_name not in present:
+                statement = (
+                    f'ALTER TABLE "{metadata.schema}"."{table.name}" '
+                    f'RENAME COLUMN "{old_name}" TO "{new_name}"'
+                )
+                with engine.begin() as connection:
+                    connection.execute(sql_text(statement))
+                report.setdefault("renamed", []).append(
+                    f"{table.name}.{old_name} -> {new_name}"
+                )
+                log.warning(
+                    "staging_column_renamed",
+                    extra={
+                        "table": f"{metadata.schema}.{table.name}",
+                        "from": old_name,
+                        "to": new_name,
+                    },
+                )
+        inspector = inspect(engine)  # refresh after the renames
+
         existing = {
             column["name"]
             for column in inspector.get_columns(table.name, schema=metadata.schema)
@@ -374,6 +493,35 @@ def sync_staging_columns(engine, metadata: MetaData) -> dict[str, list[str]]:
                     "type": column_type,
                 },
             )
+        # One-off, idempotent storage-representation repair: an earlier
+        # pipeline version wrote Python None into JSONB columns, which
+        # SQLAlchemy rendered as the JSON value `null` rather than SQL NULL.
+        # JSON null carries no information, so converting it is lossless, and
+        # a row-content hash cannot carry a representation change — this has
+        # to happen in SQL. Affects zero rows once the data is clean.
+        for column in table.columns:
+            if column.type.__class__.__name__ != "JSONB" or not column.nullable:
+                continue
+            statement = (
+                f'UPDATE "{metadata.schema}"."{table.name}" '
+                f'SET "{column.name}" = NULL '
+                f"WHERE \"{column.name}\" = 'null'::jsonb"
+            )
+            with engine.begin() as connection:
+                affected = connection.execute(sql_text(statement)).rowcount
+            if affected:
+                report.setdefault("json_null_normalised", []).append(
+                    f"{table.name}.{column.name}={affected}"
+                )
+                log.warning(
+                    "staging_json_null_normalised",
+                    extra={
+                        "table": f"{metadata.schema}.{table.name}",
+                        "column": column.name,
+                        "rows": affected,
+                    },
+                )
+
         for name in sorted(existing - {c.name for c in table.columns}):
             report["unknown_in_database"].append(f"{table.name}.{name}")
             log.warning(
@@ -383,16 +531,56 @@ def sync_staging_columns(engine, metadata: MetaData) -> dict[str, list[str]]:
     return report
 
 
-def create_staging_objects(engine, schema: str = "iris_staging") -> MetaData:
-    """Create the schema and all staging tables, then additively sync columns.
+def ensure_schema(engine, schema: str = "iris_staging") -> bool:
+    """Make sure ``schema`` exists, without needing database-level CREATE.
 
-    Idempotent: safe to run on every start.
+    ``CREATE SCHEMA IF NOT EXISTS`` requires the CREATE privilege on the
+    *database* even when the schema is already there, which a least-privilege
+    loader role must not hold (see sql/002_least_privilege_role.sql). So the
+    existence check comes first and the DDL is only issued when the schema is
+    genuinely missing. If it is missing and we lack the privilege, the error
+    says exactly what a DBA has to run.
+
+    Returns True when this call created the schema.
     """
     from sqlalchemy import text as sql_text
+    from sqlalchemy.exc import ProgrammingError
 
+    from ..logging_setup import get_logger
+
+    log = get_logger(__name__)
+    with engine.connect() as connection:
+        exists = connection.execute(
+            sql_text(
+                "SELECT 1 FROM information_schema.schemata WHERE schema_name = :s"
+            ),
+            {"s": schema},
+        ).fetchone()
+    if exists:
+        return False
+    try:
+        with engine.begin() as connection:
+            connection.execute(sql_text(f'CREATE SCHEMA IF NOT EXISTS "{schema}"'))
+    except ProgrammingError as exc:
+        raise RuntimeError(
+            f"schema {schema!r} does not exist and this role may not create it "
+            f"({exc.orig.__class__.__name__}). Ask a DBA for:\n"
+            f"  CREATE SCHEMA {schema};\n"
+            f"  GRANT USAGE, CREATE ON SCHEMA {schema} TO <loader role>;\n"
+            f"(sql/002_least_privilege_role.sql does both.)"
+        ) from exc
+    log.info("staging_schema_created", extra={"schema": schema})
+    return True
+
+
+def create_staging_objects(engine, schema: str = "iris_staging") -> MetaData:
+    """Create the staging tables, then additively sync columns.
+
+    Idempotent: safe to run on every start, and safe to run as a role that has
+    rights only inside ``schema``.
+    """
     metadata = build_metadata(schema)
-    with engine.begin() as connection:
-        connection.execute(sql_text(f'CREATE SCHEMA IF NOT EXISTS "{schema}"'))
+    ensure_schema(engine, schema)
     metadata.create_all(engine, checkfirst=True)
     sync_staging_columns(engine, metadata)
     return metadata

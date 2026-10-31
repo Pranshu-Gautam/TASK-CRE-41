@@ -39,15 +39,21 @@ SAMPLE_CSV_COLUMNS = [
     "geocode_city_match",
     "building_feature_id",
     "building_match_method",
-    "building_match_confidence",
+    "building_geometric_match_confidence",
     "building_distance_m",
     "building_footprint_area_sqm",
+    "building_operator_attribution_status",
+    "building_operator_attributable_area_sqm",
+    "building_operator_attribution_evidence",
     "building_geometry_validity",
     "parking_feature_id",
     "parking_match_method",
-    "parking_match_confidence",
+    "parking_geometric_match_confidence",
     "parking_area_sqm",
+    "parking_operator_attribution_status",
+    "parking_operator_attributable_area_sqm",
     "parking_area_total_sqm",
+    "operator_usable_area_verified",
     "osm_operator_tag_match",
     "enrichment_status",
     "data_quality_flags",
@@ -80,15 +86,35 @@ def _row_for_csv(poi: EnrichedPoi) -> dict[str, Any]:
         "geocode_city_match": geocode.city_match if geocode else None,
         "building_feature_id": building.feature_id if building else None,
         "building_match_method": building.match_method if building else None,
-        "building_match_confidence": building.match_confidence if building else None,
+        "building_geometric_match_confidence": (
+            building.geometric_match_confidence if building else None
+        ),
         "building_distance_m": building.distance_m if building else None,
         "building_footprint_area_sqm": building.area_sqm if building else None,
+        "building_operator_attribution_status": (
+            building.operator_attribution_status if building else "no_match"
+        ),
+        "building_operator_attributable_area_sqm": (
+            building.operator_attributable_area_sqm if building else None
+        ),
+        "building_operator_attribution_evidence": (
+            building.operator_attribution_evidence if building else None
+        ),
         "building_geometry_validity": building.validity_status if building else None,
         "parking_feature_id": parking.feature_id if parking else None,
         "parking_match_method": parking.match_method if parking else None,
-        "parking_match_confidence": parking.match_confidence if parking else None,
+        "parking_geometric_match_confidence": (
+            parking.geometric_match_confidence if parking else None
+        ),
         "parking_area_sqm": parking.area_sqm if parking else None,
+        "parking_operator_attribution_status": (
+            parking.operator_attribution_status if parking else "no_match"
+        ),
+        "parking_operator_attributable_area_sqm": (
+            parking.operator_attributable_area_sqm if parking else None
+        ),
         "parking_area_total_sqm": poi.parking_area_total_sqm,
+        "operator_usable_area_verified": False,
         "osm_operator_tag_match": poi.osm_operator_tag_match,
         "enrichment_status": poi.enrichment_status,
         "data_quality_flags": ";".join(
@@ -272,9 +298,36 @@ VERIFICATION_QUERIES: list[tuple[str, str]] = [
     ),
     (
         "match_method_distribution",
-        "SELECT building_match_method, building_match_confidence, count(*) AS rows "
-        "FROM iris_staging.commercial_poi_staging "
+        "SELECT building_match_method, building_geometric_match_confidence, "
+        "count(*) AS rows FROM iris_staging.commercial_poi_staging "
         "GROUP BY 1, 2 ORDER BY rows DESC",
+    ),
+    (
+        "operator_attribution_audit",
+        "SELECT building_operator_attribution_status AS attribution, "
+        "count(*) AS rows, "
+        "count(building_footprint_area_sqm) AS raw_osm_areas, "
+        "count(building_operator_attributable_area_sqm) AS operator_areas, "
+        "round(max(building_footprint_area_sqm)) AS max_raw_sqm "
+        "FROM iris_staging.commercial_poi_staging "
+        "GROUP BY 1 ORDER BY rows DESC",
+    ),
+    (
+        "parking_attribution_audit",
+        "SELECT parking_operator_attribution_status AS attribution, "
+        "count(*) AS rows, count(parking_area_sqm) AS raw_osm_areas, "
+        "count(parking_operator_attributable_area_sqm) AS operator_areas, "
+        "round(max(parking_area_sqm)) AS max_raw_sqm "
+        "FROM iris_staging.commercial_poi_staging GROUP BY 1 ORDER BY rows DESC",
+    ),
+    (
+        "operator_area_never_asserted_without_attribution",
+        "SELECT count(*) AS violating_rows FROM iris_staging.commercial_poi_staging "
+        "WHERE (building_operator_attributable_area_sqm IS NOT NULL "
+        "       AND building_operator_attribution_status <> 'operator_tagged') "
+        "   OR (parking_operator_attributable_area_sqm IS NOT NULL "
+        "       AND parking_operator_attribution_status <> 'operator_tagged') "
+        "   OR operator_usable_area_verified IS TRUE",
     ),
     (
         "objects_in_staging_schema",

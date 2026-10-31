@@ -166,7 +166,18 @@ def build_poi_row(poi: EnrichedPoi, collection_run_id: str, load_run_id: str) ->
         "building_feature_id": building.feature_id if building else None,
         "building_geometry_type": building.geometry_type if building else None,
         "building_match_method": building.match_method if building else None,
-        "building_match_confidence": building.match_confidence if building else "none",
+        "building_geometric_match_confidence": (
+            building.geometric_match_confidence if building else "none"
+        ),
+        "building_operator_attribution_status": (
+            building.operator_attribution_status if building else "no_match"
+        ),
+        "building_operator_attribution_evidence": (
+            building.operator_attribution_evidence if building else None
+        ),
+        "building_operator_attributable_area_sqm": (
+            building.operator_attributable_area_sqm if building else None
+        ),
         "building_distance_m": building.distance_m if building else None,
         "building_footprint_area_sqm": building.area_sqm if building else None,
         "building_geometry_validity": building.validity_status if building else None,
@@ -177,7 +188,19 @@ def build_poi_row(poi: EnrichedPoi, collection_run_id: str, load_run_id: str) ->
         "parking_source_url": parking.source_url if parking else None,
         "parking_feature_id": parking.feature_id if parking else None,
         "parking_match_method": parking.match_method if parking else None,
-        "parking_match_confidence": parking.match_confidence if parking else "none",
+        "parking_geometric_match_confidence": (
+            parking.geometric_match_confidence if parking else "none"
+        ),
+        "parking_operator_attribution_status": (
+            parking.operator_attribution_status if parking else "no_match"
+        ),
+        "parking_operator_attribution_evidence": (
+            parking.operator_attribution_evidence if parking else None
+        ),
+        "parking_operator_attributable_area_sqm": (
+            parking.operator_attributable_area_sqm if parking else None
+        ),
+        "parking_tags": (parking.tags or None) if parking else None,
         "parking_distance_m": parking.distance_m if parking else None,
         "parking_area_sqm": parking.area_sqm if parking else None,
         "parking_geometry_validity": parking.validity_status if parking else None,
@@ -185,6 +208,8 @@ def build_poi_row(poi: EnrichedPoi, collection_run_id: str, load_run_id: str) ->
         "parking_features_within_radius": poi.parking_features_within_radius,
         "parking_area_total_sqm": poi.parking_area_total_sqm,
         "parking_ownership_verified": False,
+        # No property/tenancy source was consulted, so this can only be false.
+        "operator_usable_area_verified": False,
         # status
         "osm_operator_tag_match": poi.osm_operator_tag_match,
         "osm_car_wash_feature_id": poi.osm_car_wash_feature_id,

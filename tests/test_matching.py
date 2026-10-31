@@ -51,7 +51,7 @@ def test_b1_point_inside_building_is_high_confidence():
     outcome = run([box(-10, -10, 20, building="commercial")])
     building = outcome["building"]
     assert building.match_method == "point_in_building"
-    assert building.match_confidence == "high"
+    assert building.geometric_match_confidence == "high"
     assert building.distance_m == 0.0
     assert building.area_sqm == pytest.approx(400, rel=0.05)
     assert building.geometry_type == "MultiPolygon"
@@ -62,7 +62,7 @@ def test_b2_nearby_building_is_medium_confidence():
     outcome = run([box(20, 0, 10, building="yes")])
     building = outcome["building"]
     assert building.match_method == "nearest_building_le_30m"
-    assert building.match_confidence == "medium"
+    assert building.geometric_match_confidence == "medium"
     assert 0 < building.distance_m <= 30
 
 
@@ -70,7 +70,7 @@ def test_b3_distant_building_within_radius_is_low_confidence():
     outcome = run([box(50, 0, 10, building="yes")])
     building = outcome["building"]
     assert building.match_method == "nearest_building_le_80m"
-    assert building.match_confidence == "low"
+    assert building.geometric_match_confidence == "low"
 
 
 def test_building_beyond_the_radius_is_not_matched():
@@ -107,20 +107,20 @@ def test_p1_point_inside_parking_is_high_confidence():
     outcome = run([box(-15, -15, 30, amenity="parking")])
     parking = outcome["parking"]
     assert parking.match_method == "point_in_parking"
-    assert parking.match_confidence == "high"
+    assert parking.geometric_match_confidence == "high"
     assert "proximity_does_not_prove_ownership" in parking.notes
 
 
 def test_p2_adjacent_parking_is_medium_confidence():
     outcome = run([box(10, 0, 20, amenity="parking")])
     assert outcome["parking"].match_method == "adjacent_parking_le_15m"
-    assert outcome["parking"].match_confidence == "medium"
+    assert outcome["parking"].geometric_match_confidence == "medium"
 
 
 def test_p3_nearby_parking_is_low_confidence():
     outcome = run([box(60, 0, 20, amenity="parking")])
     assert outcome["parking"].match_method == "nearby_parking_le_120m"
-    assert outcome["parking"].match_confidence == "low"
+    assert outcome["parking"].geometric_match_confidence == "low"
 
 
 def test_parking_total_sums_every_candidate_in_the_radius():
@@ -226,13 +226,14 @@ def test_oversized_footprint_is_flagged_as_a_likely_host_structure():
     assert "building_area_outlier_gt_10000_sqm" in outcome["quality_flags"]
     assert outcome["building"].area_sqm > 10_000
     # The geometric fact is unchanged: the point really is inside it.
-    assert outcome["building"].match_confidence == "high"
+    assert outcome["building"].geometric_match_confidence == "high"
 
 
 def test_building_named_after_another_occupant_is_flagged():
     outcome = run([box(-10, -10, 20, building="retail", name="REWE Center")])
     assert "building_attributed_to_other_occupant" in outcome["quality_flags"]
-    assert any("not_the_operator" in note for note in outcome["building"].notes)
+    assert outcome["building"].operator_attribution_status == "third_party_named"
+    assert "REWE Center" in outcome["building"].operator_attribution_evidence
 
 
 def test_operator_owned_building_is_not_flagged_as_another_occupant():
@@ -248,4 +249,115 @@ def test_car_wash_tagged_building_is_not_flagged_as_another_occupant():
 
 def test_untagged_building_name_produces_no_occupant_flag():
     outcome = run([box(-10, -10, 20, building="yes")])
-    assert outcome["quality_flags"] == []
+    assert "building_attributed_to_other_occupant" not in outcome["quality_flags"]
+    assert outcome["building"].operator_attribution_status == "unverified"
+
+
+# --------------------------------------------------------------------------
+# Operator attribution — the three assertions must stay separate
+# --------------------------------------------------------------------------
+
+def test_operator_named_building_yields_an_attributable_area():
+    outcome = run([box(-10, -10, 20, building="yes", name="Mr. Wash Aachen")])
+    building = outcome["building"]
+    assert building.geometric_match_confidence == "high"
+    assert building.operator_attribution_status == "operator_tagged"
+    assert building.operator_attributable_area_sqm == building.area_sqm
+    # Assertion 3 is never claimed.
+    assert building.operator_usable_area_verified is False
+
+
+def test_car_wash_tagged_building_corroborates_use_not_operator():
+    outcome = run([box(-10, -10, 20, building="yes", amenity="car_wash")])
+    building = outcome["building"]
+    assert building.operator_attribution_status == "car_wash_tagged"
+    # The use is corroborated, the operator is not, so no operator area.
+    assert building.operator_attributable_area_sqm is None
+    assert "building_operator_area_not_attributable" in outcome["quality_flags"]
+
+
+def test_shopping_mall_gets_no_operator_specific_area():
+    """A point inside a mall must not hand the mall's roof to the operator."""
+    outcome = run([box(-75, -75, 150, building="retail", shop="mall",
+                       name="Citti-Park Kiel")])
+    building = outcome["building"]
+    # The geometric fact is preserved...
+    assert building.geometric_match_confidence == "high"
+    assert building.area_sqm > 10_000          # raw OSM metric kept for provenance
+    # ...but no operator-specific area is asserted.
+    assert building.operator_attribution_status == "third_party_named"
+    assert building.operator_attributable_area_sqm is None
+    assert "building_area_outlier_gt_10000_sqm" in outcome["quality_flags"]
+    assert "building_attributed_to_other_occupant" in outcome["quality_flags"]
+
+
+def test_untagged_footprint_gets_no_operator_specific_area():
+    outcome = run([box(-10, -10, 20, building="yes")])
+    assert outcome["building"].operator_attribution_status == "unverified"
+    assert outcome["building"].operator_attributable_area_sqm is None
+
+
+def test_oversized_operator_named_building_still_gets_no_area():
+    """Even an operator-named polygon is refused if it is implausibly large."""
+    outcome = run([box(-75, -75, 150, building="yes", name="Mr. Wash")])
+    building = outcome["building"]
+    assert building.operator_attribution_status == "operator_tagged"
+    assert building.operator_attributable_area_sqm is None
+    assert "exceeds the plausible single-site threshold" in (
+        building.operator_attribution_evidence
+    )
+
+
+def test_shared_parking_lot_gets_no_operator_specific_area():
+    outcome = run([box(-75, -75, 150, amenity="parking", name="Citti-Park")])
+    parking = outcome["parking"]
+    assert parking.geometric_match_confidence == "high"      # point is inside it
+    assert parking.operator_attribution_status == "third_party_named"
+    assert parking.operator_attributable_area_sqm is None
+    assert "parking_operator_area_not_attributable" in outcome["quality_flags"]
+    assert "proximity_does_not_prove_ownership" in parking.notes
+
+
+def test_parking_is_never_classified_as_car_wash_tagged():
+    outcome = run([box(-15, -15, 30, amenity="parking")])
+    assert outcome["parking"].operator_attribution_status == "unverified"
+
+
+def test_operator_named_parking_is_attributable():
+    outcome = run([box(-15, -15, 30, amenity="parking", operator="Mr. Wash")])
+    parking = outcome["parking"]
+    assert parking.operator_attribution_status == "operator_tagged"
+    assert parking.operator_attributable_area_sqm == parking.area_sqm
+
+
+def test_no_match_yields_no_match_status():
+    outcome = run([])
+    assert outcome["building"] is None and outcome["parking"] is None
+
+
+@pytest.mark.parametrize(
+    "tags,expected",
+    [
+        ({"name": "Mr. Wash"}, "operator_tagged"),
+        ({"operator": "Mr. Wash Autoservice AG"}, "operator_tagged"),
+        ({"amenity": "car_wash"}, "car_wash_tagged"),
+        ({"shop": "car_wash"}, "car_wash_tagged"),
+        ({"name": "REWE Center"}, "third_party_named"),
+        ({"building": "yes"}, "unverified"),
+        ({}, "unverified"),
+    ],
+)
+def test_classify_operator_attribution_statuses(tags, expected):
+    from iris_cre41.enrich.matching import classify_operator_attribution
+
+    status, evidence, _ = classify_operator_attribution(tags, "Mr. Wash", 400.0)
+    assert status == expected
+    assert evidence
+
+
+def test_classify_returns_no_match_for_an_absent_polygon():
+    from iris_cre41.enrich.matching import classify_operator_attribution
+
+    status, _, area = classify_operator_attribution({}, "Mr. Wash", None)
+    assert status == "no_match"
+    assert area is None

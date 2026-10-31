@@ -86,33 +86,79 @@ response body so a later re-read can be compared.
 | `geom` | `geometry(POINT, 25832)` — the projected point. CHECK: SRID = 25832 and not empty. |
 | `x_25832`, `y_25832` | Scalar easting/northing, for convenience and for cheap verification. |
 
-### 3.5 Building footprint (`inferred` from OSM)
+### 3.5 Three separate assertions — do not conflate them
+
+A polygon match carries three claims of very different strength. They are
+stored in three different columns, because collapsing them is how a shopping
+mall's roof ends up credited to a car-wash operator.
+
+| # | Assertion | Column | Strongest value reached in this output |
+|---|---|---|---|
+| 1 | "the geocoded point lies inside this polygon" | `building_geometric_match_confidence` | `high` (64 rows) — a pure geometric fact |
+| 2 | "this polygon plausibly contains the operator's facility" | `building_operator_attribution_status` | `operator_tagged` (24 rows) — third-party OSM tag naming the operator |
+| 3 | "this polygon is demonstrably controlled by the operator" | `operator_usable_area_verified` | **never reached — always `false`** |
+
+Assertion 3 needs a property or tenancy source (cadastre/ALKIS, Grundbuch, a
+lease, or an operator-supplied site register). None was consulted, none is
+freely available, and volunteer-entered OSM tags are not such a source. A
+CHECK constraint pins `operator_usable_area_verified = false` so the column
+cannot be set true by accident.
+
+### 3.6 Building footprint (`inferred` from OSM)
 
 | Column | Notes |
 |---|---|
 | `building_source`, `building_source_url`, `building_feature_id` | `openstreetmap`, the feature permalink, and `way/<id>` or `relation/<id>`. |
 | `building_match_method` | `point_in_building` \| `nearest_building_le_30m` \| `nearest_building_le_80m`. |
-| `building_match_confidence` | `high` \| `medium` \| `low` \| `none` — **geometric** association only. Capped at `low` when the geocode precision is not `address`. |
+| `building_geometric_match_confidence` | **Assertion 1.** `high` \| `medium` \| `low` \| `none` — geometric association only. Capped at `low` when the geocode precision is not `address`. |
 | `building_distance_m` | Point-to-polygon distance in metres (EPSG:25832). `0` means containment. |
-| `building_footprint_area_sqm` | `ST_Area` in EPSG:25832. **Gross roof footprint, not usable PV area.** |
+| `building_footprint_area_sqm` | `ST_Area` of the **matched OSM feature** in EPSG:25832. Raw feature metric, kept for provenance. Gross footprint, not usable PV area, **and not necessarily the operator's structure**. |
+| `building_operator_attribution_status` | **Assertion 2.** `operator_tagged` \| `car_wash_tagged` \| `third_party_named` \| `unverified` \| `no_match`. |
+| `building_operator_attribution_evidence` | The exact basis for the decision, e.g. `OSM tag names the operator (name=Mr. Wash)` or `OSM names a different occupant (Citti-Park Kiel)`. |
+| `building_operator_attributable_area_sqm` | Operator-specific footprint area. **NULL** unless the status is `operator_tagged` *and* the polygon is of plausible single-site size (≤ 10 000 m²). |
 | `building_geometry_validity` | `valid` \| `repaired` (`shapely.make_valid()` was applied). |
 | `building_geom` | `geometry(MULTIPOLYGON, 25832)`. CHECK: SRID, non-empty, `ST_IsValid`. |
 | `building_tags` | The OSM tags of the matched feature, verbatim. |
 
-A CHECK constraint enforces `(building_geom IS NULL) = (building_footprint_area_sqm IS NULL)`
-— an area can never exist without the geometry it was computed from.
+Attribution statuses, and what each one licenses you to say:
 
-### 3.6 Parking (`inferred` from OSM)
+| Status | Evidence | Operator-specific area |
+|---|---|---|
+| `operator_tagged` | an OSM `name`/`operator`/`brand` tag names *this* operator | asserted (if size is plausible) |
+| `car_wash_tagged` | tagged `amenity`/`shop=car_wash` but not naming the operator — corroborates the **use**, not the operator | **NULL** |
+| `third_party_named` | OSM names a different occupant; the footprint is that occupant's structure | **NULL** |
+| `unverified` | no corroborating tag either way | **NULL** |
+| `no_match` | no polygon matched | **NULL** |
 
-Same shape as the building columns, plus:
+Two CHECK constraints enforce this in the database rather than only in the
+application:
+
+* `(building_geom IS NULL) = (building_footprint_area_sqm IS NULL)` — an area
+  can never exist without the geometry it was computed from;
+* `building_operator_attributable_area_sqm IS NULL OR
+  building_operator_attribution_status = 'operator_tagged'` — an
+  operator-specific area can never exist without operator attribution.
+
+### 3.7 Parking (`inferred` from OSM)
+
+Same three-assertion shape as the building columns —
+`parking_geometric_match_confidence`, `parking_operator_attribution_status`,
+`parking_operator_attribution_evidence`,
+`parking_operator_attributable_area_sqm` (same CHECK constraint), plus
+`parking_tags` (the matched feature's OSM tags, verbatim) — and:
 
 | Column | Notes |
 |---|---|
+| `parking_area_sqm` | `ST_Area` of the matched OSM parking polygon. Raw feature metric; **not operator-controlled capacity**. |
 | `parking_features_within_radius` | Count of `amenity=parking` polygons inside the search radius. |
 | `parking_area_total_sqm` | Sum of their areas — **parking supply in the vicinity, not operator-owned capacity**. |
 | `parking_ownership_verified` | `boolean NOT NULL DEFAULT false`. Always `false`: no ownership source was consulted or available. |
 
-### 3.7 Status and audit
+In the executed run **no parking polygon in OSM names either operator**, so
+`parking_operator_attributable_area_sqm` is NULL on all 84 rows. That is the
+correct result, not a gap in the pipeline.
+
+### 3.8 Status and audit
 
 `osm_operator_tag_match`, `osm_car_wash_feature_id`, `enrichment_status`
 (`enriched` \| `partial` \| `point_only` \| `failed` \| `not_attempted`),
@@ -134,10 +180,12 @@ match method, `ownership_verified: false`), `data_quality_flags` (JSONB array),
 ## 4. Constraints and indexes
 
 * `PRIMARY KEY (poi_uid)`; `UNIQUE (source_uid)`; `UNIQUE (dedup_key)`.
-* `CHECK` on: postal-code format `^[0-9]{5}$`, `country = 'DE'`, the four
-  status/confidence enumerations, latitude/longitude ranges, non-negative
-  areas, SRID = 25832 for all three geometry columns, non-empty geometries,
-  `ST_IsValid` for both polygon columns, and area-requires-geometry.
+* `CHECK` on: postal-code format `^[0-9]{5}$`, `country = 'DE'`, the
+  status/confidence/attribution enumerations, latitude/longitude ranges,
+  non-negative areas, SRID = 25832 for all three geometry columns, non-empty
+  geometries, `ST_IsValid` for both polygon columns, area-requires-geometry,
+  **operator-area-requires-attribution** (building and parking), and
+  `operator_usable_area_verified = false`.
 * GiST indexes on `geom`, `building_geom`, `parking_geom`; btree on
   `operator_slug`, `postal_code`, `geocode_status`.
 
@@ -159,7 +207,24 @@ RETURNING poi_uid, (xmax = 0) AS was_insert;
 * `row_hash` excludes timestamps and run ids so they cannot cause false
   "changed" verdicts.
 
-## 6. Open questions for Tariq
+## 6. Migrations
+
+`sync_staging_columns` reconciles an existing table with the current model
+without ever losing data. It performs, in order:
+
+1. **documented renames** (`COLUMN_RENAMES`) via `ALTER TABLE ... RENAME
+   COLUMN`, so a renamed column keeps its values instead of being shadowed by
+   an empty new one;
+2. **additive `ADD COLUMN IF NOT EXISTS`** for genuinely new columns;
+3. a one-off **JSON-`null` → SQL `NULL`** repair for JSONB columns (an earlier
+   version let SQLAlchemy render Python `None` as the JSON value `null`, which
+   made `IS NULL` false; JSON null carries no information, so the conversion
+   is lossless and idempotent).
+
+Nothing is ever dropped or retyped, and every statement is schema-qualified to
+`iris_staging`.
+
+## 7. Open questions for Tariq
 
 1. Authoritative DDL and column names for `commercial_poi_staging`.
 2. Primary-key type and whether `dedup_key` uniqueness is wanted at the
@@ -173,3 +238,8 @@ RETURNING poi_uid, (xmax = 0) AS was_insert;
 6. Whether a POI with no usable coordinate should be loaded at all (this
    pipeline loads it with `NULL` geometry and an explicit status, so the
    discovered location is not silently lost).
+7. Whether `operator_attribution_status` should become a shared enum/lookup in
+   `iris_staging`, and whether downstream consumers should be forced to read
+   `*_operator_attributable_area_sqm` rather than the raw
+   `*_footprint_area_sqm` (strongly recommended — the raw column is the OSM
+   feature's area, not the operator's).

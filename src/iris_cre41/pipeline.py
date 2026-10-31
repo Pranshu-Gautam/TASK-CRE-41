@@ -449,18 +449,18 @@ def run_enrich(
         # the point it was matched from.
         if poi.geocode.precision != "address":
             for spatial_match in (poi.building, poi.parking):
-                if spatial_match is not None and spatial_match.match_confidence in {
-                    "high",
-                    "medium",
-                }:
+                if (
+                    spatial_match is not None
+                    and spatial_match.geometric_match_confidence in {"high", "medium"}
+                ):
                     spatial_match.notes.append(
                         f"confidence_capped_geocode_precision_{poi.geocode.precision}"
                     )
-                    spatial_match.match_confidence = "low"
+                    spatial_match.geometric_match_confidence = "low"
 
         if poi.building is None:
             poi.data_quality_flags.append("osm_no_building_match")
-        elif poi.building.match_confidence == "low":
+        elif poi.building.geometric_match_confidence == "low":
             poi.data_quality_flags.append("building_match_low_confidence")
         if poi.parking is None:
             poi.data_quality_flags.append("osm_no_parking_match")
@@ -484,7 +484,10 @@ def run_enrich(
                 "source_url": poi.building.source_url,
                 "licence": OSM_ATTRIBUTION,
                 "match_method": poi.building.match_method,
-                "match_confidence": poi.building.match_confidence,
+                "geometric_match_confidence": poi.building.geometric_match_confidence,
+                "operator_attribution_status": poi.building.operator_attribution_status,
+                "operator_attribution_evidence": poi.building.operator_attribution_evidence,
+                "operator_usable_area_verified": poi.building.operator_usable_area_verified,
                 "validity": poi.building.validity_status,
                 "area_crs": f"EPSG:{settings.target_epsg}",
                 "ownership_verified": False,
@@ -499,7 +502,10 @@ def run_enrich(
                 "source_url": poi.parking.source_url,
                 "licence": OSM_ATTRIBUTION,
                 "match_method": poi.parking.match_method,
-                "match_confidence": poi.parking.match_confidence,
+                "geometric_match_confidence": poi.parking.geometric_match_confidence,
+                "operator_attribution_status": poi.parking.operator_attribution_status,
+                "operator_attribution_evidence": poi.parking.operator_attribution_evidence,
+                "operator_usable_area_verified": poi.parking.operator_usable_area_verified,
                 "validity": poi.parking.validity_status,
                 "area_crs": f"EPSG:{settings.target_epsg}",
                 "ownership_verified": False,
@@ -527,9 +533,12 @@ def run_enrich(
         )
     buildings = [poi for poi in pois if poi.building]
     confidence_histogram: dict[str, int] = {}
+    attribution_histogram: dict[str, int] = {}
     for poi in buildings:
-        key = poi.building.match_confidence
+        key = poi.building.geometric_match_confidence
         confidence_histogram[key] = confidence_histogram.get(key, 0) + 1
+        status = poi.building.operator_attribution_status
+        attribution_histogram[status] = attribution_histogram.get(status, 0) + 1
 
     stats.finish(
         artefact=str(path),
@@ -538,7 +547,26 @@ def run_enrich(
         parking_matched=sum(1 for poi in pois if poi.parking),
         polygonized=len(buildings),
         enrichment_status=status_histogram,
-        building_confidence=confidence_histogram,
+        building_geometric_confidence=confidence_histogram,
+        building_operator_attribution=attribution_histogram,
+        parking_operator_attribution={
+            status: sum(
+                1
+                for poi in pois
+                if poi.parking and poi.parking.operator_attribution_status == status
+            )
+            for status in ("operator_tagged", "third_party_named", "unverified")
+        },
+        operator_attributable_building_areas=sum(
+            1
+            for poi in pois
+            if poi.building and poi.building.operator_attributable_area_sqm is not None
+        ),
+        operator_attributable_parking_areas=sum(
+            1
+            for poi in pois
+            if poi.parking and poi.parking.operator_attributable_area_sqm is not None
+        ),
         osm_operator_tag_matches=sum(1 for poi in pois if poi.osm_operator_tag_match),
         building_area_outliers=sum(
             1
@@ -554,6 +582,13 @@ def run_enrich(
         skipped_locality_precision=skipped_precision,
         building_area_sqm_total=round(
             sum(poi.building.area_sqm or 0 for poi in buildings), 1
+        ),
+        operator_attributable_building_area_sqm_total=round(
+            sum(
+                poi.building.operator_attributable_area_sqm or 0
+                for poi in buildings
+            ),
+            1,
         ),
         provider_stats=overpass.stats(),
     )

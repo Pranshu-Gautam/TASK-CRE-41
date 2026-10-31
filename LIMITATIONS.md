@@ -121,13 +121,45 @@ downstream publication, and ODbL share-alike obligations attach to derived
 databases. The attribution string is stored in the enrichment artefact and in
 `geometry_provenance`.
 
-## 6. Building/parking matching uncertainty
+## 6. Building/parking matching uncertainty — and the limit of attribution
 
 The matching rules are fixed and documented (`src/iris_cre41/enrich/matching.py`,
-summarised in the README). The important caveats:
+summarised in the README).
 
-* **`match_confidence` is a statement about geometry, not about the business.**
-  `high` means "the geocoded point lies inside this polygon", nothing more.
+**Three different assertions are kept in three different columns.** Collapsing
+them is exactly how a shopping mall's roof gets credited to a car wash:
+
+| # | Assertion | Column | Best value reached |
+|---|---|---|---|
+| 1 | the geocoded point lies inside this polygon | `*_geometric_match_confidence` | `high`, 64 of 81 building matches |
+| 2 | this polygon plausibly contains the operator's facility | `*_operator_attribution_status` | `operator_tagged`, 24 of 81 |
+| 3 | this polygon is demonstrably controlled by the operator | `operator_usable_area_verified` | **never — always `false`** |
+
+Assertion 3 is **not reached for a single row**, and cannot be with the
+sources used here. It needs a cadastre/ALKIS extract, a land-registry entry, a
+lease, or an operator-supplied site register. Volunteer-entered OSM tags are
+not any of those. A CHECK constraint pins the column to `false` so it cannot
+be set true by accident.
+
+Consequently, in the executed run:
+
+* **24 of 81** building footprints carry an operator-specific area
+  (`building_operator_attributable_area_sqm`, 46 387 m² in total). The other
+  **57 are NULL**: 42 `unverified`, 12 `third_party_named`, 3 `car_wash_tagged`.
+* **0 of 72** parking polygons carry an operator-specific area — **no parking
+  polygon in OSM names either operator.** Every parking area in this output is
+  a raw OSM feature metric, not operator capacity.
+* The raw `*_footprint_area_sqm` / `*_area_sqm` columns are retained for
+  provenance and are the area of **the OSM feature**, not of the operator's
+  premises. 127 068 m² of matched building footprint sits on polygons named
+  after a third party. **Downstream consumers must read the
+  `*_operator_attributable_area_sqm` columns, not the raw ones.**
+
+Other caveats:
+
+* **`*_geometric_match_confidence` is a statement about geometry, not about the
+  business.** `high` means "the geocoded point lies inside this polygon",
+  nothing more.
 * **Proximity does not prove ownership, tenancy, or any right of use.** This
   applies with full force to parking: `parking_area_total_sqm` is the parking
   supply found within the search radius, which may belong to a neighbouring
@@ -135,9 +167,17 @@ summarised in the README). The important caveats:
   always `false` in this output.
 * A matched footprint may be **a whole retail building** that merely contains
   the car wash, or conversely the car-wash *site* polygon including forecourt
-  and canopy rather than the roofed structure. One verified example: the Aachen
+  and canopy rather than the roofed structure. Two verified examples: Clean Car
+  Kiel (Mühlendamm 1) matches the 47 136 m² *Citti-Park Kiel* shopping mall,
+  and Clean Car Kiel Winterbeker Weg matches a 22 922 m² *REWE Center*. Both
+  are `third_party_named` with a NULL operator area. Separately, the Aachen
   Mr. Wash matches a 5 382 m² feature tagged `amenity=car_wash` + `building` —
-  that is the site, not a 5 382 m² roof.
+  that is the whole site, not a 5 382 m² roof, which is why
+  `operator_usable_area_verified` stays `false` even for `operator_tagged`
+  rows.
+* An `unverified` footprint may be the right building or the neighbour's; there
+  is no tag either way. The largest `unverified` match is 15 284 m², which is
+  implausible for a car wash and is flagged as an area outlier.
 * Confidence is capped at `low` whenever the underlying geocode precision is
   not `address`, and polygon matching is **skipped entirely** for
   `locality`-precision geocodes, because attributing a footprint to a town
@@ -147,8 +187,10 @@ summarised in the README). The important caveats:
 
 ## 7. Roof area is not usable PV area
 
-`building_footprint_area_sqm` is the **gross 2-D footprint** computed as
-`ST_Area` in EPSG:25832. It is **not**:
+`building_footprint_area_sqm` is the **gross 2-D footprint of the matched OSM
+feature**, computed as `ST_Area` in EPSG:25832. Even
+`building_operator_attributable_area_sqm` — the subset that survives operator
+attribution — is still a gross footprint. Neither is:
 
 * usable rooftop PV area — no deduction for roof pitch, orientation, plant,
   HVAC, skylights, walkways, setbacks, fire-service access, shading, or
@@ -178,7 +220,8 @@ filter*, not an input to a yield model.
   input) are not computable.
 
 **Consequence:** this dataset answers "where are these car washes, how big is
-the building OSM believes is there, and how confident is that link". It does
+the building OSM believes is there, how strong is the geometric link, and how
+far the evidence supports attributing that building to the operator". It does
 not answer any question about value, rights, or ownership.
 
 ## 9. Unverified external services
@@ -211,3 +254,19 @@ is the cheapest way to raise confidence and is the first thing worth adding.
 * **The local database credentials in `.env.example` and `compose.yaml` are
   throwaway local values.** No production credential appears anywhere in this
   repository, and `.env` is git-ignored.
+* **The application statement guard is not the primary control.** It is a
+  convenience that catches programming mistakes early. The control that
+  actually constrains the connection is the PostgreSQL privilege set of the
+  role in `DB_URI` — see `sql/002_least_privilege_role.sql` and the
+  independently reproducible evidence in
+  `samples/role_isolation_evidence.txt`, which tests the role through a raw
+  engine with the guard removed. **If you run the pipeline as a superuser, the
+  guard is the only thing standing between it and your production schemas**,
+  and a guard that works by inspecting SQL text is not something to bet a
+  production database on. Create the restricted role.
+* **The pinned lock is interpreter-aware.** `pyproj` 3.8 and `shapely` 2.2
+  require Python ≥ 3.12, so `requirements.txt` uses environment markers to
+  install `pyproj` 3.7.2 / `shapely` 2.0.7 on 3.11. Both configurations are
+  tested (248 unit tests pass on 3.11.18 and on 3.13), but the full live run
+  documented in `docs/EXECUTION_EVIDENCE.md` was executed on 3.14 with the
+  newer pair.

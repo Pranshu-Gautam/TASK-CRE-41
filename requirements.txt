@@ -1,9 +1,14 @@
-# Runtime dependencies (pinned to the versions this submission was executed with).
+# Runtime dependencies, pinned to the versions this submission was executed
+# with. Environment markers keep the lock installable on every interpreter the
+# task allows (Python 3.11+): pyproj 3.8 and shapely 2.2 declare
+# Requires-Python >= 3.12, so 3.11 gets the latest release that supports it.
 requests==2.34.2
 beautifulsoup4==4.15.0
 lxml==6.1.3
-shapely==2.2.0
-pyproj==3.8.0
+shapely==2.2.0; python_version >= "3.12"
+shapely==2.0.7; python_version < "3.12"
+pyproj==3.8.0; python_version >= "3.12"
+pyproj==3.7.2; python_version < "3.12"
 SQLAlchemy==2.1.6
 GeoAlchemy2==0.20.0
 psycopg[binary]==3.3.6

@@ -71,6 +71,99 @@ AREA_OUTLIER_SQM = 10_000.0
 # wash, the footprint belongs to that occupant, not to our operator.
 OCCUPANT_NAME_TAGS = ("name", "operator", "brand", "official_name")
 
+# --------------------------------------------------------------------------
+# Operator attribution — a DIFFERENT question from geometric matching
+# --------------------------------------------------------------------------
+# Three assertions are deliberately kept apart, because they are not the same
+# claim and only the first is ever proven by this pipeline:
+#
+#   1. "the geocoded point lies inside this polygon"
+#         -> *_geometric_match_confidence  (high/medium/low)
+#   2. "this polygon plausibly contains the operator's facility"
+#         -> *_operator_attribution_status
+#   3. "this polygon is demonstrably controlled by the operator"
+#         -> operator_usable_area_verified  (ALWAYS false here, see below)
+#
+# Assertion 3 requires a property or tenancy source (cadastre/ALKIS,
+# Grundbuch, a lease, or an operator-supplied site register). None was
+# consulted, none is freely available, and volunteer-entered OSM tags are not
+# such a source. OPERATOR_USABLE_AREA_VERIFIED is therefore a hard-coded
+# False: the only honest value until such a source is wired in.
+OPERATOR_USABLE_AREA_VERIFIED = False
+
+ATTR_OPERATOR_TAGGED = "operator_tagged"
+ATTR_CAR_WASH_TAGGED = "car_wash_tagged"
+ATTR_THIRD_PARTY_NAMED = "third_party_named"
+ATTR_UNVERIFIED = "unverified"
+ATTR_NO_MATCH = "no_match"
+
+ATTRIBUTION_STATUSES = (
+    ATTR_OPERATOR_TAGGED,
+    ATTR_CAR_WASH_TAGGED,
+    ATTR_THIRD_PARTY_NAMED,
+    ATTR_UNVERIFIED,
+    ATTR_NO_MATCH,
+)
+
+
+def classify_operator_attribution(
+    tags: dict[str, Any] | None,
+    operator: str,
+    area_sqm: float | None,
+    allow_car_wash_tag: bool = True,
+) -> tuple[str, str, float | None]:
+    """Classify how far the evidence supports attributing a polygon to the operator.
+
+    Returns ``(status, evidence, operator_attributable_area_sqm)``.
+
+    The area is returned ONLY for ``operator_tagged`` features of plausible
+    size. For every other status it is ``None``, so no operator-specific area
+    is ever asserted for a shopping mall, a shared building, a neighbouring
+    business, or an untagged footprint that happens to sit under the geocoded
+    point.
+    """
+    tags = tags or {}
+    if not tags and area_sqm is None:
+        return ATTR_NO_MATCH, "no polygon matched", None
+
+    if _operator_name_match(tags, operator):
+        named = next(
+            (f"{tag}={tags[tag]}" for tag in OCCUPANT_NAME_TAGS if tags.get(tag)),
+            "operator name tag",
+        )
+        status, evidence = ATTR_OPERATOR_TAGGED, f"OSM tag names the operator ({named})"
+    elif allow_car_wash_tag and _is_car_wash(tags):
+        status = ATTR_CAR_WASH_TAGGED
+        evidence = (
+            "OSM tags the feature as a car wash but do not name the operator; "
+            "corroborates the use, not the operator"
+        )
+    else:
+        occupant = next(
+            (str(tags[tag]) for tag in OCCUPANT_NAME_TAGS if tags.get(tag)), None
+        )
+        if occupant:
+            status = ATTR_THIRD_PARTY_NAMED
+            evidence = (
+                f"OSM names a different occupant ({occupant}); the footprint is "
+                "that occupant's structure"
+            )
+        else:
+            status = ATTR_UNVERIFIED
+            evidence = "no corroborating OSM tag either way"
+
+    attributable: float | None = None
+    if status == ATTR_OPERATOR_TAGGED:
+        if area_sqm is not None and area_sqm > AREA_OUTLIER_SQM:
+            evidence += (
+                f"; area {area_sqm:.0f} m2 exceeds the plausible single-site "
+                f"threshold of {AREA_OUTLIER_SQM:.0f} m2, so no operator-specific "
+                "area is asserted"
+            )
+        else:
+            attributable = area_sqm
+    return status, evidence, attributable
+
 
 @dataclass(frozen=True)
 class MatchConfig:
@@ -164,9 +257,19 @@ def _to_match(
     kind: str,
     method: str,
     confidence: str,
+    operator: str,
     extra_notes: list[str] | None = None,
 ) -> SpatialMatch:
     geometry = as_multipolygon(candidate.geometry)
+    area = round(geometry.area, 1)
+    status, evidence, attributable = classify_operator_attribution(
+        candidate.tags,
+        operator,
+        area,
+        # A parking lot is never tagged as a car wash; that status only makes
+        # sense for the structure itself.
+        allow_car_wash_tag=(kind == "building"),
+    )
     return SpatialMatch(
         feature_kind=kind,
         source="openstreetmap",
@@ -174,9 +277,13 @@ def _to_match(
         feature_id=feature_id(candidate.element),
         geometry_type=geometry.geom_type,
         match_method=method,
-        match_confidence=confidence,
+        geometric_match_confidence=confidence,
         distance_m=candidate.distance_m,
-        area_sqm=round(geometry.area, 1),
+        area_sqm=area,
+        operator_attribution_status=status,
+        operator_attribution_evidence=evidence,
+        operator_attributable_area_sqm=attributable,
+        operator_usable_area_verified=OPERATOR_USABLE_AREA_VERIFIED,
         validity_status=candidate.validity,
         wkt_25832=geometry.wkt,
         tags=dict(candidate.tags),
@@ -238,13 +345,14 @@ def match_site(
     if buildings:
         best = buildings[0]
         if best.contains_point:
-            building = _to_match(best, "building", "point_in_building", "high")
+            building = _to_match(best, "building", "point_in_building", "high", operator)
         elif best.distance_m <= config.building_medium_distance_m:
             building = _to_match(
                 best,
                 "building",
                 f"nearest_building_le_{int(config.building_medium_distance_m)}m",
                 "medium",
+                operator,
             )
         elif best.distance_m <= config.building_radius_m:
             building = _to_match(
@@ -252,6 +360,7 @@ def match_site(
                 "building",
                 f"nearest_building_le_{int(config.building_radius_m)}m",
                 "low",
+                operator,
             )
     quality_flags: list[str] = []
     if building is not None:
@@ -263,45 +372,33 @@ def match_site(
 
         # --- host-structure detection ------------------------------------
         # The geometric statement ("the point lies inside this polygon") stays
-        # true and keeps its confidence; what is added here is the semantic
-        # caveat that the polygon is not the operator's own structure.
-        occupant = next(
-            (
-                str(building.tags[tag])
-                for tag in OCCUPANT_NAME_TAGS
-                if building.tags.get(tag)
-            ),
-            None,
-        )
-        attributed_elsewhere = bool(
-            occupant
-            and not _is_car_wash(building.tags)
-            and not _operator_name_match(building.tags, operator)
-        )
-        if attributed_elsewhere:
+        # true and keeps its confidence; what is added here is the separate
+        # question of whether the polygon is the operator's own structure.
+        if building.operator_attribution_status == ATTR_THIRD_PARTY_NAMED:
             quality_flags.append("building_attributed_to_other_occupant")
-            building.notes.append(
-                f"osm_feature_named_{normalize_token(occupant).replace(' ', '_')}"
-                "_not_the_operator"
-            )
+        if building.operator_attribution_status == ATTR_UNVERIFIED:
+            quality_flags.append("building_operator_attribution_unverified")
         if (building.area_sqm or 0) > AREA_OUTLIER_SQM:
             quality_flags.append("building_area_outlier_gt_10000_sqm")
             building.notes.append(
                 "footprint_exceeds_plausible_car_wash_site_area_likely_host_structure"
             )
+        if building.operator_attributable_area_sqm is None:
+            quality_flags.append("building_operator_area_not_attributable")
 
     # ---- parking rules ---------------------------------------------------
     parking: SpatialMatch | None = None
     if parkings:
         best = parkings[0]
         if best.contains_point:
-            parking = _to_match(best, "parking", "point_in_parking", "high")
+            parking = _to_match(best, "parking", "point_in_parking", "high", operator)
         elif best.distance_m <= config.parking_adjacent_distance_m:
             parking = _to_match(
                 best,
                 "parking",
                 f"adjacent_parking_le_{int(config.parking_adjacent_distance_m)}m",
                 "medium",
+                operator,
             )
         elif best.distance_m <= config.parking_radius_m:
             parking = _to_match(
@@ -309,9 +406,16 @@ def match_site(
                 "parking",
                 f"nearby_parking_le_{int(config.parking_radius_m)}m",
                 "low",
+                operator,
             )
     if parking is not None:
         parking.notes.append("proximity_does_not_prove_ownership")
+        if parking.operator_attribution_status == ATTR_THIRD_PARTY_NAMED:
+            quality_flags.append("parking_attributed_to_other_occupant")
+        if parking.operator_attributable_area_sqm is None:
+            quality_flags.append("parking_operator_area_not_attributable")
+        if (parking.area_sqm or 0) > AREA_OUTLIER_SQM:
+            quality_flags.append("parking_area_outlier_gt_10000_sqm")
 
     parking_total = round(sum(c.area_sqm for c in parkings), 1) if parkings else None
 

@@ -1,0 +1,13 @@
+FROM python:3.11-slim-bookworm
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates && rm -rf /var/lib/apt/lists/*
+ENV PYTHONUNBUFFERED=1 IRIS_PROJECT_ROOT=/app
+WORKDIR /app
+COPY requirements.txt requirements-dev.txt ./
+RUN pip install --no-cache-dir -r requirements-dev.txt
+COPY pyproject.toml README.md ./
+COPY src ./src
+COPY sql ./sql
+COPY tests ./tests
+COPY tools ./tools
+RUN pip install --no-cache-dir --no-deps -e .
+RUN mkdir -p /app/data /app/samples /app/.pytest_cache && chmod 0777 /app/data /app/samples /app/.pytest_cache
