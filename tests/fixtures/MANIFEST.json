@@ -1,0 +1,75 @@
+{
+  "note": "Fixtures captured from the live official sources. HTML files have script/style/link/svg/noscript tags and comments removed (the parsers discard them anyway); original_sha256 is the hash of the unmodified response.",
+  "files": {
+    "mrwash_locations.html": {
+      "source_url": "https://www.mrwash.de/de/frontend/default/locations",
+      "http_status": 200,
+      "original_bytes": 221736,
+      "original_sha256": "9179c386c89056cf6d2aead1b653078ef9c654f1af22158931627cb30063f8f5",
+      "stored_bytes": 61953
+    },
+    "mrwash_branch_36_aachen.html": {
+      "source_url": "https://www.mrwash.de/de/frontend/branch?id=36",
+      "http_status": 200,
+      "original_bytes": 28877,
+      "original_sha256": "da291379f0c84301281437a6e1baaf70fa889a1117aded0c62d4e2a4b6948228",
+      "stored_bytes": 23731
+    },
+    "mrwash_branch_1_hamburg.html": {
+      "source_url": "https://www.mrwash.de/de/frontend/branch?id=1",
+      "http_status": 200,
+      "original_bytes": 26759,
+      "original_sha256": "224d427b374f93f0b3cad0ab6a78d905db41ba870403978e9da51b44c0bac83d",
+      "stored_bytes": 21613
+    },
+    "mrwash_branch_404.html": {
+      "source_url": "https://www.mrwash.de/de/frontend/branch?id=10",
+      "error": "HTTP 404 for https://www.mrwash.de/de/frontend/branch?id=10"
+    },
+    "cleancar_standorte_index.html": {
+      "source_url": "https://www.clean-car.com/standorte/",
+      "http_status": 200,
+      "original_bytes": 372162,
+      "original_sha256": "4bdad820a75e9a9ccfaec391682fb0a564c4599851d825187f6e46570e977e81",
+      "stored_bytes": 256933
+    },
+    "cleancar_sitemap_pages.xml": {
+      "source_url": "https://www.clean-car.com/wp-sitemap-posts-page-1.xml",
+      "http_status": 200,
+      "original_bytes": 7935,
+      "original_sha256": "ffdc054fd114c57e3b736e882f3ef01ef4eafcdfa06f30902e9488a2fca85491",
+      "stored_bytes": 7935
+    },
+    "cleancar_bremen.html": {
+      "source_url": "https://www.clean-car.com/standorte/bremen/",
+      "http_status": 200,
+      "original_bytes": 163944,
+      "original_sha256": "64826b8cdd71656c2e5a48cfe4ef42ffd1014685daa7c1001f056f8e8ab9a461",
+      "stored_bytes": 46120
+    },
+    "cleancar_bad_oldesloe_2.html": {
+      "source_url": "https://www.clean-car.com/standorte/bad-oldesloe-2/",
+      "http_status": 200,
+      "original_bytes": 159444,
+      "original_sha256": "2ba16a01936d4c286584ccf34cedbf360a5ab6f3c6d80df09c4bd41220c741a1",
+      "stored_bytes": 43083
+    },
+    "cleancar_hamburg_steilshoop.html": {
+      "source_url": "https://www.clean-car.com/standorte/hamburg-kollaustrasse-2/",
+      "http_status": 200,
+      "original_bytes": 149135,
+      "original_sha256": "36bbc5f8d77328bb4f4ead7eafd1e73a6af005bbf33b6c02d1d7576a04ae3671",
+      "stored_bytes": 33648
+    },
+    "nominatim_responses.json": {
+      "source": "nominatim/search",
+      "entries": 5,
+      "note": "verbatim API responses for the smoke-test sites"
+    },
+    "overpass_responses.json": {
+      "source": "overpass/site",
+      "entries": 5,
+      "note": "verbatim API responses for the smoke-test sites"
+    }
+  }
+}

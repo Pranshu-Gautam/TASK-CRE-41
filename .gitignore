@@ -1,0 +1,17 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Secrets and local configuration — never commit these.
+.env
+.env.*
+!.env.example
+
+# Pipeline artefacts and caches are reproducible outputs, not source.
+data/

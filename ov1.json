@@ -1,0 +1,88 @@
+{
+  "version": 0.6,
+  "generator": "Overpass API 0.7.62.11 87bfad18",
+  "osm3s": {
+    "timestamp_osm_base": "2026-10-31T04:08:39Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+  },
+  "elements": [
+
+{
+  "type": "way",
+  "id": 31786622,
+  "bounds": {
+    "minlat": 50.7778237,
+    "minlon": 6.1182213,
+    "maxlat": 50.7788265,
+    "maxlon": 6.1196873
+  },
+  "geometry": [
+    { "lat": 50.7778237, "lon": 6.1190784 },
+    { "lat": 50.7782814, "lon": 6.1185878 },
+    { "lat": 50.7782551, "lon": 6.1185252 },
+    { "lat": 50.7785433, "lon": 6.1182213 },
+    { "lat": 50.7786284, "lon": 6.1184232 },
+    { "lat": 50.7786895, "lon": 6.1185680 },
+    { "lat": 50.7787663, "lon": 6.1187504 },
+    { "lat": 50.7788265, "lon": 6.1188931 },
+    { "lat": 50.7780800, "lon": 6.1196873 },
+    { "lat": 50.7780151, "lon": 6.1195355 },
+    { "lat": 50.7779869, "lon": 6.1194671 },
+    { "lat": 50.7779628, "lon": 6.1194081 },
+    { "lat": 50.7779400, "lon": 6.1193537 },
+    { "lat": 50.7779198, "lon": 6.1193068 },
+    { "lat": 50.7778888, "lon": 6.1192346 },
+    { "lat": 50.7778604, "lon": 6.1191674 },
+    { "lat": 50.7778388, "lon": 6.1191169 },
+    { "lat": 50.7778237, "lon": 6.1190784 }
+  ],
+  "tags": {
+    "addr:city": "Aachen",
+    "addr:country": "DE",
+    "addr:housenumber": "10",
+    "addr:postcode": "52068",
+    "addr:street": "Breslauer Straße",
+    "amenity": "car_wash",
+    "automated": "no",
+    "branch": "Aachen Rothe Erde",
+    "brand": "Mr. Wash",
+    "brand:wikidata": "Q1951447",
+    "building": "industrial",
+    "building:levels": "1",
+    "check_date": "2026-04-18",
+    "contact:phone": "+49 241 55910610",
+    "contact:website": "https://www.mrwash.de/standort/aachen-rothe-erde",
+    "name": "Mr. Wash",
+    "opening_hours": "Mo-Sa 08:00-18:00; Su, PH off",
+    "operator": "Mr. Wash Autoservice AG",
+    "roof:levels": "0",
+    "roof:shape": "flat",
+    "self_service": "yes",
+    "wheelchair": "yes"
+  }
+},
+{
+  "type": "way",
+  "id": 1267941940,
+  "bounds": {
+    "minlat": 50.7774738,
+    "minlon": 6.1184458,
+    "maxlat": 50.7777020,
+    "maxlon": 6.1186098
+  },
+  "geometry": [
+    { "lat": 50.7777020, "lon": 6.1185257 },
+    { "lat": 50.7776917, "lon": 6.1185917 },
+    { "lat": 50.7776219, "lon": 6.1185653 },
+    { "lat": 50.7776151, "lon": 6.1186098 },
+    { "lat": 50.7774738, "lon": 6.1185560 },
+    { "lat": 50.7774910, "lon": 6.1184458 },
+    { "lat": 50.7777020, "lon": 6.1185257 }
+  ],
+  "tags": {
+    "building": "yes"
+  }
+}
+
+  ]
+}

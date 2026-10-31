@@ -1,0 +1,97 @@
+TASK-CRE-41 — IDEMPOTENCY AND ERROR-HANDLING EVIDENCE
+Generated: 2026-10-31T06:12:41Z
+Database:  PostgreSQL 16.4 (Debian 16.4-1.pgdg110+2) on x86_64-pc-linux-gnu / PostGIS 3.4
+
+Method
+------
+The upsert executed for every POI is:
+
+  INSERT INTO iris_staging.commercial_poi_staging (...) VALUES (...)
+  ON CONFLICT (poi_uid) DO UPDATE SET ..., last_seen_at = now(), updated_at = now()
+    WHERE commercial_poi_staging.row_hash <> excluded.row_hash
+  RETURNING poi_uid, (xmax = 0) AS was_insert;
+
+* conflict target is poi_uid, a stable hash of the operator's own record id,
+  so re-running can never duplicate a row;
+* the WHERE guard suppresses the write entirely when the content hash is
+  unchanged, so an unchanged row returns nothing and is counted "unchanged";
+* (xmax = 0) is true only for a genuine insert, so inserts and updates are
+  MEASURED by PostgreSQL rather than inferred by the application;
+* first_seen_at is excluded from the update set and therefore preserved.
+
+Measured history, read back from iris_staging.commercial_poi_load_run
+---------------------------------------------------------------------
+load-20261031T055913Z-789edf23           | processed= 84 | inserted=  0 | updated=  0 | unchanged=  0 | failed= 84
+load-20261031T060001Z-be685b1f           | processed= 84 | inserted= 84 | updated=  0 | unchanged=  0 | failed=  0
+load-20261031T060022Z-aa599aa9           | processed= 84 | inserted=  0 | updated=  0 | unchanged= 84 | failed=  0
+load-20261031T060023Z-45c14c86           | processed= 84 | inserted=  0 | updated=  0 | unchanged= 84 | failed=  0
+load-20261031T060216Z-14515e0b           | processed= 84 | inserted=  0 | updated= 81 | unchanged=  3 | failed=  0
+load-20261031T060218Z-c14ec7a5           | processed= 84 | inserted=  0 | updated=  0 | unchanged= 84 | failed=  0
+load-20261031T061118Z-b8a25bd9           | processed= 84 | inserted=  0 | updated= 84 | unchanged=  0 | failed=  0
+load-20261031T061206Z-4179aff8           | processed= 84 | inserted=  0 | updated=  0 | unchanged= 84 | failed=  0
+load-20261031T061207Z-95d4d506           | processed= 84 | inserted=  0 | updated=  0 | unchanged= 84 | failed=  0
+
+Reading of the above, in order
+------------------------------
+1. ...T055913Z  failed=84   A real, recorded failure, kept rather than hidden.
+                            The table had been created by an earlier pipeline
+                            version that predated the geocode_precision
+                            column, so every INSERT was rejected with
+                            'column "geocode_precision" does not exist'.
+                            Nothing was written. This is the error-handling
+                            evidence: each row failure is isolated inside its
+                            own transaction, counted, and reported with the
+                            driver message — never swallowed.
+                            Fixed by an additive, staging-scoped schema sync
+                            (ALTER TABLE ... ADD COLUMN IF NOT EXISTS, see
+                            db/schema.py::sync_staging_columns) which never
+                            drops or retypes a column.
+2. ...T060001Z  inserted=84 The real first load.
+3. ...T060022Z  unchanged=84  IDEMPOTENT: re-running the identical input is a
+4. ...T060023Z  unchanged=84  no-op. Zero inserts, zero updates, zero
+                              duplicates, on two consecutive repeats.
+5. ...T060216Z  updated=81   POSITIVE CONTROL for change detection. Two new
+                unchanged=3  data-quality flags were added to the enrichment
+                             stage (host-structure and area-outlier
+                             detection). Exactly the 81 rows with a building
+                             match changed; the 3 rows without one were
+                             correctly left alone. Row-level, not table-level.
+6. ...T060218Z  unchanged=84  Idempotent again immediately after.
+7. ...T061118Z  updated=84   A second, deliberate positive control: the
+                             row_hash *definition* changed (source_html_sha256
+                             was moved out of the hashed payload, because
+                             mrwash.de embeds a per-response widget id that
+                             makes the page hash differ between two identical
+                             requests). Changing the hash definition
+                             invalidates every stored hash exactly once.
+8. ...T061206Z  unchanged=84  IDEMPOTENT: stable again on the new definition,
+9. ...T061207Z  unchanged=84  on two consecutive repeats.
+
+Note for operations: runs 5 and 7 show that a change to the enrichment logic
+or to the row_hash definition causes a one-time full re-write. That is the
+intended behaviour — it is how a corrected value reaches the table — but it
+should be expected after a pipeline upgrade and is not data drift.
+
+Duplicate protection
+--------------------
+rows = 84   distinct poi_uid = 84   distinct source_uid = 84   distinct dedup_key = 84
+
+All four numbers are equal after nine load executions. The table additionally
+enforces UNIQUE(source_uid) and UNIQUE(dedup_key), so a duplicate address
+cannot be inserted even by a caller that bypasses the application-level
+deduplication — proven by
+tests/test_db_integration.py::test_duplicate_dedup_key_cannot_be_inserted,
+which asserts the insert fails and the row count does not change.
+
+Rows rewritten by the final two no-op runs
+------------------------------------------
+rows whose updated_at changed in the last 60s = 0 (of 84)
+
+Automated coverage of this behaviour
+------------------------------------
+tests/test_db_integration.py
+  test_load_inserts_then_is_idempotent                     (3 inserted, then 3 unchanged)
+  test_changed_content_produces_an_update_not_a_duplicate  (1 updated, still 1 row)
+  test_first_seen_at_is_preserved_across_updates
+  test_duplicate_dedup_key_cannot_be_inserted
+  test_run_log_records_execution_evidence

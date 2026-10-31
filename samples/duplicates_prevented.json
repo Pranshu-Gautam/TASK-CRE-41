@@ -1,0 +1,5 @@
+{
+  "task_id": "TASK-CRE-41",
+  "note": "Records collected from the official sites that resolved to an address already represented by another record of the same operator. They are kept for provenance but not loaded as separate POIs.",
+  "duplicates": []
+}

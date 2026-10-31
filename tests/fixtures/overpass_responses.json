@@ -1,0 +1,3086 @@
+[
+ {
+  "request": {
+   "query": "[out:json][timeout:90];\n(\n  way(around:80,50.7784123,6.1188465)[\"building\"];\n  relation(around:80,50.7784123,6.1188465)[\"building\"][\"type\"=\"multipolygon\"];\n  way(around:120,50.7784123,6.1188465)[\"amenity\"=\"parking\"];\n  relation(around:120,50.7784123,6.1188465)[\"amenity\"=\"parking\"][\"type\"=\"multipolygon\"];\n  nwr(around:120,50.7784123,6.1188465)[\"amenity\"=\"car_wash\"];\n  nwr(around:120,50.7784123,6.1188465)[\"shop\"=\"car_wash\"];\n);\nout geom tags;",
+   "url": "https://overpass-api.de/api/interpreter"
+  },
+  "response": {
+   "version": 0.6,
+   "generator": "Overpass API 0.7.62.11 87bfad18",
+   "osm3s": {
+    "timestamp_osm_base": "2026-10-31T04:11:51Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+   },
+   "elements": [
+    {
+     "type": "way",
+     "id": 31786622,
+     "bounds": {
+      "minlat": 50.7778237,
+      "minlon": 6.1182213,
+      "maxlat": 50.7788265,
+      "maxlon": 6.1196873
+     },
+     "geometry": [
+      {
+       "lat": 50.7778237,
+       "lon": 6.1190784
+      },
+      {
+       "lat": 50.7782814,
+       "lon": 6.1185878
+      },
+      {
+       "lat": 50.7782551,
+       "lon": 6.1185252
+      },
+      {
+       "lat": 50.7785433,
+       "lon": 6.1182213
+      },
+      {
+       "lat": 50.7786284,
+       "lon": 6.1184232
+      },
+      {
+       "lat": 50.7786895,
+       "lon": 6.118568
+      },
+      {
+       "lat": 50.7787663,
+       "lon": 6.1187504
+      },
+      {
+       "lat": 50.7788265,
+       "lon": 6.1188931
+      },
+      {
+       "lat": 50.77808,
+       "lon": 6.1196873
+      },
+      {
+       "lat": 50.7780151,
+       "lon": 6.1195355
+      },
+      {
+       "lat": 50.7779869,
+       "lon": 6.1194671
+      },
+      {
+       "lat": 50.7779628,
+       "lon": 6.1194081
+      },
+      {
+       "lat": 50.77794,
+       "lon": 6.1193537
+      },
+      {
+       "lat": 50.7779198,
+       "lon": 6.1193068
+      },
+      {
+       "lat": 50.7778888,
+       "lon": 6.1192346
+      },
+      {
+       "lat": 50.7778604,
+       "lon": 6.1191674
+      },
+      {
+       "lat": 50.7778388,
+       "lon": 6.1191169
+      },
+      {
+       "lat": 50.7778237,
+       "lon": 6.1190784
+      }
+     ],
+     "tags": {
+      "addr:city": "Aachen",
+      "addr:country": "DE",
+      "addr:housenumber": "10",
+      "addr:postcode": "52068",
+      "addr:street": "Breslauer Straße",
+      "amenity": "car_wash",
+      "automated": "no",
+      "branch": "Aachen Rothe Erde",
+      "brand": "Mr. Wash",
+      "brand:wikidata": "Q1951447",
+      "building": "industrial",
+      "building:levels": "1",
+      "check_date": "2026-04-18",
+      "contact:phone": "+49 241 55910610",
+      "contact:website": "https://www.mrwash.de/standort/aachen-rothe-erde",
+      "name": "Mr. Wash",
+      "opening_hours": "Mo-Sa 08:00-18:00; Su, PH off",
+      "operator": "Mr. Wash Autoservice AG",
+      "roof:levels": "0",
+      "roof:shape": "flat",
+      "self_service": "yes",
+      "wheelchair": "yes"
+     }
+    }
+   ]
+  }
+ },
+ {
+  "request": {
+   "query": "[out:json][timeout:90];\n(\n  way(around:80,53.0556959,8.7973913)[\"building\"];\n  relation(around:80,53.0556959,8.7973913)[\"building\"][\"type\"=\"multipolygon\"];\n  way(around:120,53.0556959,8.7973913)[\"amenity\"=\"parking\"];\n  relation(around:120,53.0556959,8.7973913)[\"amenity\"=\"parking\"][\"type\"=\"multipolygon\"];\n  nwr(around:120,53.0556959,8.7973913)[\"amenity\"=\"car_wash\"];\n  nwr(around:120,53.0556959,8.7973913)[\"shop\"=\"car_wash\"];\n);\nout geom tags;",
+   "url": "https://overpass-api.de/api/interpreter"
+  },
+  "response": {
+   "version": 0.6,
+   "generator": "Overpass API 0.7.62.11 87bfad18",
+   "osm3s": {
+    "timestamp_osm_base": "2026-10-31T04:12:49Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+   },
+   "elements": [
+    {
+     "type": "node",
+     "id": 12696871601,
+     "lat": 53.0557424,
+     "lon": 8.7976858,
+     "tags": {
+      "addr:housenumber": "93-95",
+      "addr:postcode": "28199",
+      "addr:street": "Neuenlander Straße",
+      "amenity": "car_wash",
+      "name": "Clean Car Autowaschanlage und SB-Waschboxen",
+      "opening_hours": "Mo-Sa 08:00-18:00",
+      "self_service": "yes",
+      "website": "https://clean-car.com/"
+     }
+    },
+    {
+     "type": "way",
+     "id": 111465354,
+     "bounds": {
+      "minlat": 53.0549976,
+      "minlon": 8.7975061,
+      "maxlat": 53.0556187,
+      "maxlon": 8.7990489
+     },
+     "geometry": [
+      {
+       "lat": 53.0551117,
+       "lon": 8.7985823
+      },
+      {
+       "lat": 53.0551411,
+       "lon": 8.7986296
+      },
+      {
+       "lat": 53.0552256,
+       "lon": 8.7984838
+      },
+      {
+       "lat": 53.0551961,
+       "lon": 8.7984366
+      },
+      {
+       "lat": 53.0551055,
+       "lon": 8.7982925
+      },
+      {
+       "lat": 53.0552157,
+       "lon": 8.7981012
+      },
+      {
+       "lat": 53.0550401,
+       "lon": 8.797821
+      },
+      {
+       "lat": 53.0552216,
+       "lon": 8.7975061
+      },
+      {
+       "lat": 53.0554034,
+       "lon": 8.7977961
+      },
+      {
+       "lat": 53.0556187,
+       "lon": 8.7981396
+      },
+      {
+       "lat": 53.0550947,
+       "lon": 8.7990489
+      },
+      {
+       "lat": 53.0549976,
+       "lon": 8.798894
+      },
+      {
+       "lat": 53.0551281,
+       "lon": 8.7986676
+      },
+      {
+       "lat": 53.0550937,
+       "lon": 8.7986128
+      },
+      {
+       "lat": 53.0551117,
+       "lon": 8.7985823
+      }
+     ],
+     "tags": {
+      "addr:city": "Bremen",
+      "addr:country": "DE",
+      "addr:housenumber": "97",
+      "addr:postcode": "28199",
+      "addr:street": "Neuenlander Straße",
+      "building": "commercial"
+     }
+    },
+    {
+     "type": "way",
+     "id": 186007769,
+     "bounds": {
+      "minlat": 53.0552992,
+      "minlon": 8.796804,
+      "maxlat": 53.0557379,
+      "maxlon": 8.7975102
+     },
+     "geometry": [
+      {
+       "lat": 53.0552992,
+       "lon": 8.7973148
+      },
+      {
+       "lat": 53.0554299,
+       "lon": 8.7975102
+      },
+      {
+       "lat": 53.0555365,
+       "lon": 8.7973128
+      },
+      {
+       "lat": 53.0555504,
+       "lon": 8.7973336
+      },
+      {
+       "lat": 53.0555807,
+       "lon": 8.7972775
+      },
+      {
+       "lat": 53.0555667,
+       "lon": 8.7972566
+      },
+      {
+       "lat": 53.0555984,
+       "lon": 8.7971978
+      },
+      {
+       "lat": 53.0556307,
+       "lon": 8.7972461
+      },
+      {
+       "lat": 53.0557379,
+       "lon": 8.7970475
+      },
+      {
+       "lat": 53.0555751,
+       "lon": 8.796804
+      },
+      {
+       "lat": 53.0552992,
+       "lon": 8.7973148
+      }
+     ],
+     "tags": {
+      "addr:city": "Bremen",
+      "addr:country": "DE",
+      "addr:housenumber": "30",
+      "addr:postcode": "28199",
+      "addr:street": "Paul-Feller-Straße",
+      "building": "commercial",
+      "building:levels": "2"
+     }
+    },
+    {
+     "type": "way",
+     "id": 186007770,
+     "bounds": {
+      "minlat": 53.055901,
+      "minlon": 8.7963211,
+      "maxlat": 53.0563399,
+      "maxlon": 8.7971312
+     },
+     "geometry": [
+      {
+       "lat": 53.0563399,
+       "lon": 8.7967657
+      },
+      {
+       "lat": 53.0561041,
+       "lon": 8.7971312
+      },
+      {
+       "lat": 53.0560306,
+       "lon": 8.7969999
+      },
+      {
+       "lat": 53.0560511,
+       "lon": 8.796968
+      },
+      {
+       "lat": 53.0559845,
+       "lon": 8.796849
+      },
+      {
+       "lat": 53.0560412,
+       "lon": 8.7967613
+      },
+      {
+       "lat": 53.055901,
+       "lon": 8.7965108
+      },
+      {
+       "lat": 53.0559427,
+       "lon": 8.7964459
+      },
+      {
+       "lat": 53.0560235,
+       "lon": 8.7963211
+      },
+      {
+       "lat": 53.0562327,
+       "lon": 8.7966959
+      },
+      {
+       "lat": 53.0562692,
+       "lon": 8.7966394
+      },
+      {
+       "lat": 53.0563399,
+       "lon": 8.7967657
+      }
+     ],
+     "tags": {
+      "addr:city": "Bremen",
+      "addr:country": "DE",
+      "addr:housenumber": "91",
+      "addr:postcode": "28199",
+      "addr:street": "Neuenlander Straße",
+      "building": "retail"
+     }
+    },
+    {
+     "type": "way",
+     "id": 186007774,
+     "bounds": {
+      "minlat": 53.0554921,
+      "minlon": 8.7972111,
+      "maxlat": 53.055803,
+      "maxlon": 8.7977892
+     },
+     "geometry": [
+      {
+       "lat": 53.0554921,
+       "lon": 8.7976416
+      },
+      {
+       "lat": 53.0555829,
+       "lon": 8.7977892
+      },
+      {
+       "lat": 53.0556469,
+       "lon": 8.7976802
+      },
+      {
+       "lat": 53.0556142,
+       "lon": 8.7976271
+      },
+      {
+       "lat": 53.055803,
+       "lon": 8.7973056
+      },
+      {
+       "lat": 53.0557448,
+       "lon": 8.7972111
+      },
+      {
+       "lat": 53.0554921,
+       "lon": 8.7976416
+      }
+     ],
+     "tags": {
+      "addr:city": "Bremen",
+      "addr:country": "DE",
+      "addr:housenumber": "93-95",
+      "addr:postcode": "28199",
+      "addr:street": "Neuenlander Straße",
+      "building": "commercial",
+      "building:levels": "2"
+     }
+    },
+    {
+     "type": "way",
+     "id": 309448213,
+     "bounds": {
+      "minlat": 53.0549865,
+      "minlon": 8.7972957,
+      "maxlat": 53.05505,
+      "maxlon": 8.7974097
+     },
+     "geometry": [
+      {
+       "lat": 53.05505,
+       "lon": 8.7973258
+      },
+      {
+       "lat": 53.0550084,
+       "lon": 8.7974097
+      },
+      {
+       "lat": 53.0549865,
+       "lon": 8.7973797
+      },
+      {
+       "lat": 53.0550281,
+       "lon": 8.7972957
+      },
+      {
+       "lat": 53.05505,
+       "lon": 8.7973258
+      }
+     ],
+     "tags": {
+      "building": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 1463665304,
+     "bounds": {
+      "minlat": 53.055926,
+      "minlon": 8.7960577,
+      "maxlat": 53.0563185,
+      "maxlon": 8.7966959
+     },
+     "geometry": [
+      {
+       "lat": 53.0563185,
+       "lon": 8.7965633
+      },
+      {
+       "lat": 53.0560363,
+       "lon": 8.7960577
+      },
+      {
+       "lat": 53.0559571,
+       "lon": 8.79618
+      },
+      {
+       "lat": 53.0560134,
+       "lon": 8.7962809
+      },
+      {
+       "lat": 53.055926,
+       "lon": 8.796416
+      },
+      {
+       "lat": 53.0559427,
+       "lon": 8.7964459
+      },
+      {
+       "lat": 53.0560235,
+       "lon": 8.7963211
+      },
+      {
+       "lat": 53.0562327,
+       "lon": 8.7966959
+      },
+      {
+       "lat": 53.0562692,
+       "lon": 8.7966394
+      },
+      {
+       "lat": 53.0563185,
+       "lon": 8.7965633
+      }
+     ],
+     "tags": {
+      "amenity": "parking",
+      "building": "yes",
+      "parking": "multi-storey"
+     }
+    },
+    {
+     "type": "way",
+     "id": 1463665305,
+     "bounds": {
+      "minlat": 53.0556227,
+      "minlon": 8.7972394,
+      "maxlat": 53.0558858,
+      "maxlon": 8.7976923
+     },
+     "geometry": [
+      {
+       "lat": 53.0556656,
+       "lon": 8.7976923
+      },
+      {
+       "lat": 53.0558858,
+       "lon": 8.7973074
+      },
+      {
+       "lat": 53.0558428,
+       "lon": 8.7972394
+      },
+      {
+       "lat": 53.0556227,
+       "lon": 8.7976244
+      },
+      {
+       "lat": 53.0556656,
+       "lon": 8.7976923
+      }
+     ],
+     "tags": {
+      "building": "roof",
+      "layer": "1"
+     }
+    },
+    {
+     "type": "way",
+     "id": 1463665306,
+     "bounds": {
+      "minlat": 53.0557897,
+      "minlon": 8.7974389,
+      "maxlat": 53.0559915,
+      "maxlon": 8.7977795
+     },
+     "geometry": [
+      {
+       "lat": 53.0559915,
+       "lon": 8.7975196
+      },
+      {
+       "lat": 53.0558396,
+       "lon": 8.7977795
+      },
+      {
+       "lat": 53.0557897,
+       "lon": 8.7976988
+      },
+      {
+       "lat": 53.0559415,
+       "lon": 8.7974389
+      },
+      {
+       "lat": 53.0559915,
+       "lon": 8.7975196
+      }
+     ],
+     "tags": {
+      "building": "roof",
+      "layer": "1"
+     }
+    }
+   ]
+  }
+ },
+ {
+  "request": {
+   "query": "[out:json][timeout:90];\n(\n  way(around:80,53.7975103,10.4054010)[\"building\"];\n  relation(around:80,53.7975103,10.4054010)[\"building\"][\"type\"=\"multipolygon\"];\n  way(around:120,53.7975103,10.4054010)[\"amenity\"=\"parking\"];\n  relation(around:120,53.7975103,10.4054010)[\"amenity\"=\"parking\"][\"type\"=\"multipolygon\"];\n  nwr(around:120,53.7975103,10.4054010)[\"amenity\"=\"car_wash\"];\n  nwr(around:120,53.7975103,10.4054010)[\"shop\"=\"car_wash\"];\n);\nout geom tags;",
+   "url": "https://overpass-api.de/api/interpreter"
+  },
+  "response": {
+   "version": 0.6,
+   "generator": "Overpass API 0.7.62.11 87bfad18",
+   "osm3s": {
+    "timestamp_osm_base": "2026-10-31T05:11:02Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+   },
+   "elements": [
+    {
+     "type": "way",
+     "id": 29351351,
+     "bounds": {
+      "minlat": 53.798011,
+      "minlon": 10.4060614,
+      "maxlat": 53.7983417,
+      "maxlon": 10.4066785
+     },
+     "geometry": [
+      {
+       "lat": 53.7983033,
+       "lon": 10.4061013
+      },
+      {
+       "lat": 53.798241,
+       "lon": 10.4060614
+      },
+      {
+       "lat": 53.7981775,
+       "lon": 10.4060982
+      },
+      {
+       "lat": 53.7981722,
+       "lon": 10.4061365
+      },
+      {
+       "lat": 53.7981164,
+       "lon": 10.4061761
+      },
+      {
+       "lat": 53.7980887,
+       "lon": 10.4061545
+      },
+      {
+       "lat": 53.7980323,
+       "lon": 10.4061945
+      },
+      {
+       "lat": 53.798011,
+       "lon": 10.4063042
+      },
+      {
+       "lat": 53.7980308,
+       "lon": 10.4064047
+      },
+      {
+       "lat": 53.7980527,
+       "lon": 10.406427
+      },
+      {
+       "lat": 53.7981096,
+       "lon": 10.4066785
+      },
+      {
+       "lat": 53.7982464,
+       "lon": 10.4065897
+      },
+      {
+       "lat": 53.7981957,
+       "lon": 10.4063656
+      },
+      {
+       "lat": 53.7983417,
+       "lon": 10.4062708
+      },
+      {
+       "lat": 53.7983033,
+       "lon": 10.4061013
+      }
+     ],
+     "tags": {
+      "addr:city": "Bad Oldesloe",
+      "addr:country": "DE",
+      "addr:housenumber": "13",
+      "addr:postcode": "23843",
+      "addr:street": "Lily-Braun-Straße",
+      "brand": "Toyota",
+      "brand:wikidata": "Q53268",
+      "brand:wikipedia": "en:Toyota",
+      "building": "yes",
+      "email": "info@toyotabehrens.de",
+      "name": "Behrens Kraftfahrzeuge GmbH",
+      "opening_hours": "Mo-Fr 07:30-18:00; Sa 09:00-14:00",
+      "operator": "Behrens Kraftfahrzeuge GmbH",
+      "phone": "+49453117410",
+      "shop": "car",
+      "website": "https://autohaus.toyota.de/behrens/"
+     }
+    },
+    {
+     "type": "way",
+     "id": 29351610,
+     "bounds": {
+      "minlat": 53.7974341,
+      "minlon": 10.4064678,
+      "maxlat": 53.7978518,
+      "maxlon": 10.4075459
+     },
+     "geometry": [
+      {
+       "lat": 53.7976223,
+       "lon": 10.4064678
+      },
+      {
+       "lat": 53.7978518,
+       "lon": 10.4074153
+      },
+      {
+       "lat": 53.7976636,
+       "lon": 10.4075459
+      },
+      {
+       "lat": 53.7974341,
+       "lon": 10.4065985
+      },
+      {
+       "lat": 53.7976223,
+       "lon": 10.4064678
+      }
+     ],
+     "tags": {
+      "addr:city": "Bad Oldesloe",
+      "addr:country": "DE",
+      "addr:housenumber": "15",
+      "addr:postcode": "23843",
+      "addr:street": "Lily-Braun-Straße",
+      "building": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 29986068,
+     "bounds": {
+      "minlat": 53.7974376,
+      "minlon": 10.4051722,
+      "maxlat": 53.797601,
+      "maxlon": 10.405561
+     },
+     "geometry": [
+      {
+       "lat": 53.797601,
+       "lon": 10.4055105
+      },
+      {
+       "lat": 53.7975463,
+       "lon": 10.405561
+      },
+      {
+       "lat": 53.7974376,
+       "lon": 10.4052227
+      },
+      {
+       "lat": 53.7974923,
+       "lon": 10.4051722
+      },
+      {
+       "lat": 53.797601,
+       "lon": 10.4055105
+      }
+     ],
+     "tags": {
+      "building": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 128092791,
+     "bounds": {
+      "minlat": 53.7974979,
+      "minlon": 10.4057133,
+      "maxlat": 53.7976319,
+      "maxlon": 10.4059383
+     },
+     "geometry": [
+      {
+       "lat": 53.7975848,
+       "lon": 10.4057133
+      },
+      {
+       "lat": 53.7976319,
+       "lon": 10.4058563
+      },
+      {
+       "lat": 53.797545,
+       "lon": 10.4059383
+      },
+      {
+       "lat": 53.7974979,
+       "lon": 10.4057953
+      },
+      {
+       "lat": 53.7975848,
+       "lon": 10.4057133
+      }
+     ],
+     "tags": {
+      "addr:city": "Bad Oldesloe",
+      "addr:housenumber": "36",
+      "addr:postcode": "23843",
+      "addr:street": "Lily-Braun-Straße",
+      "building": "yes",
+      "source": "Bing"
+     }
+    },
+    {
+     "type": "way",
+     "id": 128092793,
+     "bounds": {
+      "minlat": 53.7971231,
+      "minlon": 10.4054382,
+      "maxlat": 53.7974873,
+      "maxlon": 10.4061964
+     },
+     "geometry": [
+      {
+       "lat": 53.7974873,
+       "lon": 10.4060401
+      },
+      {
+       "lat": 53.7973239,
+       "lon": 10.4061964
+      },
+      {
+       "lat": 53.7971231,
+       "lon": 10.4055945
+      },
+      {
+       "lat": 53.7972867,
+       "lon": 10.4054382
+      },
+      {
+       "lat": 53.7974873,
+       "lon": 10.4060401
+      }
+     ],
+     "tags": {
+      "building": "yes",
+      "source": "Bing"
+     }
+    },
+    {
+     "type": "way",
+     "id": 128092795,
+     "bounds": {
+      "minlat": 53.7970943,
+      "minlon": 10.4060824,
+      "maxlat": 53.7972492,
+      "maxlon": 10.4063625
+     },
+     "geometry": [
+      {
+       "lat": 53.7971822,
+       "lon": 10.4060824
+      },
+      {
+       "lat": 53.7972492,
+       "lon": 10.4062746
+      },
+      {
+       "lat": 53.7971613,
+       "lon": 10.4063625
+      },
+      {
+       "lat": 53.7970943,
+       "lon": 10.4061703
+      },
+      {
+       "lat": 53.7971822,
+       "lon": 10.4060824
+      }
+     ],
+     "tags": {
+      "addr:city": "Bad Oldesloe",
+      "addr:housenumber": "42",
+      "addr:postcode": "23843",
+      "addr:street": "Lily-Braun-Straße",
+      "building": "yes",
+      "source": "Bing"
+     }
+    },
+    {
+     "type": "way",
+     "id": 128092798,
+     "bounds": {
+      "minlat": 53.7968501,
+      "minlon": 10.4052836,
+      "maxlat": 53.7969641,
+      "maxlon": 10.4054834
+     },
+     "geometry": [
+      {
+       "lat": 53.7969641,
+       "lon": 10.405417
+      },
+      {
+       "lat": 53.7968943,
+       "lon": 10.4054834
+      },
+      {
+       "lat": 53.7968501,
+       "lon": 10.40535
+      },
+      {
+       "lat": 53.7969198,
+       "lon": 10.4052836
+      },
+      {
+       "lat": 53.7969641,
+       "lon": 10.405417
+      }
+     ],
+     "tags": {
+      "addr:city": "Bad Oldesloe",
+      "addr:housenumber": "42b",
+      "addr:postcode": "23843",
+      "addr:street": "Lily-Braun-Straße",
+      "building": "yes",
+      "source": "Bing"
+     }
+    },
+    {
+     "type": "way",
+     "id": 128092802,
+     "bounds": {
+      "minlat": 53.796579,
+      "minlon": 10.4053716,
+      "maxlat": 53.7967979,
+      "maxlon": 10.4056888
+     },
+     "geometry": [
+      {
+       "lat": 53.7967979,
+       "lon": 10.4055168
+      },
+      {
+       "lat": 53.7966313,
+       "lon": 10.4056888
+      },
+      {
+       "lat": 53.796579,
+       "lon": 10.4055436
+      },
+      {
+       "lat": 53.7967456,
+       "lon": 10.4053716
+      },
+      {
+       "lat": 53.7967979,
+       "lon": 10.4055168
+      }
+     ],
+     "tags": {
+      "building": "yes",
+      "source": "Bing"
+     }
+    },
+    {
+     "type": "way",
+     "id": 211890546,
+     "bounds": {
+      "minlat": 53.7983321,
+      "minlon": 10.4040832,
+      "maxlat": 53.7996474,
+      "maxlon": 10.4052336
+     },
+     "geometry": [
+      {
+       "lat": 53.7995448,
+       "lon": 10.4042463
+      },
+      {
+       "lat": 53.7996474,
+       "lon": 10.4045474
+      },
+      {
+       "lat": 53.7994919,
+       "lon": 10.4046997
+      },
+      {
+       "lat": 53.7989786,
+       "lon": 10.4047677
+      },
+      {
+       "lat": 53.7988199,
+       "lon": 10.4048412
+      },
+      {
+       "lat": 53.7983913,
+       "lon": 10.4052336
+      },
+      {
+       "lat": 53.7983321,
+       "lon": 10.4050483
+      },
+      {
+       "lat": 53.7988685,
+       "lon": 10.4045499
+      },
+      {
+       "lat": 53.7989191,
+       "lon": 10.4045875
+      },
+      {
+       "lat": 53.7989508,
+       "lon": 10.4045057
+      },
+      {
+       "lat": 53.7989825,
+       "lon": 10.4044239
+      },
+      {
+       "lat": 53.7989366,
+       "lon": 10.4043702
+      },
+      {
+       "lat": 53.798981,
+       "lon": 10.4042683
+      },
+      {
+       "lat": 53.7990475,
+       "lon": 10.4041852
+      },
+      {
+       "lat": 53.799122,
+       "lon": 10.4041315
+      },
+      {
+       "lat": 53.7991884,
+       "lon": 10.4041047
+      },
+      {
+       "lat": 53.799255,
+       "lon": 10.4040832
+      },
+      {
+       "lat": 53.7993041,
+       "lon": 10.4040913
+      },
+      {
+       "lat": 53.7993675,
+       "lon": 10.4042656
+      },
+      {
+       "lat": 53.7994019,
+       "lon": 10.4043718
+      },
+      {
+       "lat": 53.7995448,
+       "lon": 10.4042463
+      }
+     ],
+     "tags": {
+      "access": "customers",
+      "amenity": "parking",
+      "fee": "no",
+      "parking": "surface",
+      "source": "Bing;knowledge"
+     }
+    },
+    {
+     "type": "way",
+     "id": 243531509,
+     "bounds": {
+      "minlat": 53.7972041,
+      "minlon": 10.4047102,
+      "maxlat": 53.7978163,
+      "maxlon": 10.4060918
+     },
+     "geometry": [
+      {
+       "lat": 53.7978163,
+       "lon": 10.4058754
+      },
+      {
+       "lat": 53.7975862,
+       "lon": 10.4060918
+      },
+      {
+       "lat": 53.7972041,
+       "lon": 10.4049266
+      },
+      {
+       "lat": 53.7974343,
+       "lon": 10.4047102
+      },
+      {
+       "lat": 53.7978163,
+       "lon": 10.4058754
+      }
+     ],
+     "tags": {
+      "addr:city": "Bad Oldesloe",
+      "addr:housenumber": "36",
+      "addr:postcode": "23843",
+      "addr:street": "Lily-Braun-Straße",
+      "amenity": "car_wash",
+      "automated": "yes",
+      "landuse": "retail",
+      "name": "Waschbär",
+      "self_service": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 1104049253,
+     "bounds": {
+      "minlat": 53.7967694,
+      "minlon": 10.4059513,
+      "maxlat": 53.7969812,
+      "maxlon": 10.4063916
+     },
+     "geometry": [
+      {
+       "lat": 53.7968626,
+       "lon": 10.4063916
+      },
+      {
+       "lat": 53.7967694,
+       "lon": 10.4061223
+      },
+      {
+       "lat": 53.7967911,
+       "lon": 10.4061008
+      },
+      {
+       "lat": 53.7967727,
+       "lon": 10.4060474
+      },
+      {
+       "lat": 53.7968696,
+       "lon": 10.4059513
+      },
+      {
+       "lat": 53.7969812,
+       "lon": 10.4062739
+      },
+      {
+       "lat": 53.7968626,
+       "lon": 10.4063916
+      }
+     ],
+     "tags": {
+      "building": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 1104049261,
+     "bounds": {
+      "minlat": 53.797381,
+      "minlon": 10.4051024,
+      "maxlat": 53.7974923,
+      "maxlon": 10.4052541
+     },
+     "geometry": [
+      {
+       "lat": 53.797381,
+       "lon": 10.4051842
+      },
+      {
+       "lat": 53.7974699,
+       "lon": 10.4051024
+      },
+      {
+       "lat": 53.7974923,
+       "lon": 10.4051722
+      },
+      {
+       "lat": 53.7974376,
+       "lon": 10.4052227
+      },
+      {
+       "lat": 53.7974035,
+       "lon": 10.4052541
+      },
+      {
+       "lat": 53.797381,
+       "lon": 10.4051842
+      }
+     ],
+     "tags": {
+      "building": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 1232008593,
+     "bounds": {
+      "minlat": 53.7968943,
+      "minlon": 10.405417,
+      "maxlat": 53.7970175,
+      "maxlon": 10.4056443
+     },
+     "geometry": [
+      {
+       "lat": 53.7969641,
+       "lon": 10.405417
+      },
+      {
+       "lat": 53.7970175,
+       "lon": 10.4055779
+      },
+      {
+       "lat": 53.7969477,
+       "lon": 10.4056443
+      },
+      {
+       "lat": 53.7968943,
+       "lon": 10.4054834
+      },
+      {
+       "lat": 53.7969641,
+       "lon": 10.405417
+      }
+     ],
+     "tags": {
+      "addr:city": "Bad Oldesloe",
+      "addr:housenumber": "42a",
+      "addr:postcode": "23843",
+      "addr:street": "Lily-Braun-Straße",
+      "building": "yes"
+     }
+    }
+   ]
+  }
+ },
+ {
+  "request": {
+   "query": "[out:json][timeout:90];\n(\n  way(around:80,53.6078581,10.0566716)[\"building\"];\n  relation(around:80,53.6078581,10.0566716)[\"building\"][\"type\"=\"multipolygon\"];\n  way(around:120,53.6078581,10.0566716)[\"amenity\"=\"parking\"];\n  relation(around:120,53.6078581,10.0566716)[\"amenity\"=\"parking\"][\"type\"=\"multipolygon\"];\n  nwr(around:120,53.6078581,10.0566716)[\"amenity\"=\"car_wash\"];\n  nwr(around:120,53.6078581,10.0566716)[\"shop\"=\"car_wash\"];\n);\nout geom tags;",
+   "url": "https://overpass-api.de/api/interpreter"
+  },
+  "response": {
+   "version": 0.6,
+   "generator": "Overpass API 0.7.62.11 87bfad18",
+   "osm3s": {
+    "timestamp_osm_base": "2026-10-31T05:16:44Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+   },
+   "elements": [
+    {
+     "type": "way",
+     "id": 22818097,
+     "bounds": {
+      "minlat": 53.6072136,
+      "minlon": 10.0562475,
+      "maxlat": 53.6078586,
+      "maxlon": 10.0570629
+     },
+     "geometry": [
+      {
+       "lat": 53.6072136,
+       "lon": 10.0565717
+      },
+      {
+       "lat": 53.6077224,
+       "lon": 10.0570629
+      },
+      {
+       "lat": 53.6078586,
+       "lon": 10.0564581
+      },
+      {
+       "lat": 53.6077772,
+       "lon": 10.0564139
+      },
+      {
+       "lat": 53.6077697,
+       "lon": 10.0562475
+      },
+      {
+       "lat": 53.607554,
+       "lon": 10.0562952
+      },
+      {
+       "lat": 53.607556,
+       "lon": 10.0563538
+      },
+      {
+       "lat": 53.6074012,
+       "lon": 10.0563845
+      },
+      {
+       "lat": 53.6073261,
+       "lon": 10.0563024
+      },
+      {
+       "lat": 53.6072136,
+       "lon": 10.0565717
+      }
+     ],
+     "tags": {
+      "access": "customers",
+      "amenity": "parking",
+      "fee": "no",
+      "parking": "surface"
+     }
+    },
+    {
+     "type": "way",
+     "id": 22818138,
+     "bounds": {
+      "minlat": 53.6081089,
+      "minlon": 10.0561627,
+      "maxlat": 53.6083629,
+      "maxlon": 10.0563677
+     },
+     "geometry": [
+      {
+       "lat": 53.6083593,
+       "lon": 10.0561627
+      },
+      {
+       "lat": 53.6081089,
+       "lon": 10.0561771
+      },
+      {
+       "lat": 53.6081107,
+       "lon": 10.0563677
+      },
+      {
+       "lat": 53.6083629,
+       "lon": 10.056354
+      },
+      {
+       "lat": 53.6083593,
+       "lon": 10.0561627
+      }
+     ],
+     "tags": {
+      "building": "roof",
+      "layer": "1"
+     }
+    },
+    {
+     "type": "way",
+     "id": 22935164,
+     "bounds": {
+      "minlat": 53.6087223,
+      "minlon": 10.0562987,
+      "maxlat": 53.6098989,
+      "maxlon": 10.0571533
+     },
+     "geometry": [
+      {
+       "lat": 53.6087223,
+       "lon": 10.0563636
+      },
+      {
+       "lat": 53.6087379,
+       "lon": 10.0571533
+      },
+      {
+       "lat": 53.6098989,
+       "lon": 10.0570258
+      },
+      {
+       "lat": 53.6097401,
+       "lon": 10.0562987
+      },
+      {
+       "lat": 53.6087223,
+       "lon": 10.0563636
+      }
+     ],
+     "tags": {
+      "amenity": "parking",
+      "parking": "surface"
+     }
+    },
+    {
+     "type": "way",
+     "id": 48358183,
+     "bounds": {
+      "minlat": 53.6081069,
+      "minlon": 10.0564708,
+      "maxlat": 53.6082781,
+      "maxlon": 10.0570171
+     },
+     "geometry": [
+      {
+       "lat": 53.608267,
+       "lon": 10.0564708
+      },
+      {
+       "lat": 53.6081069,
+       "lon": 10.0564801
+      },
+      {
+       "lat": 53.608118,
+       "lon": 10.0570171
+      },
+      {
+       "lat": 53.6082781,
+       "lon": 10.0570077
+      },
+      {
+       "lat": 53.608267,
+       "lon": 10.0564708
+      }
+     ],
+     "tags": {
+      "addr:city": "Hamburg",
+      "addr:country": "DE",
+      "addr:housenumber": "319",
+      "addr:postcode": "22309",
+      "addr:street": "Steilshooper Straße",
+      "building": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 48358195,
+     "bounds": {
+      "minlat": 53.6080812,
+      "minlon": 10.0556391,
+      "maxlat": 53.6083167,
+      "maxlon": 10.0560016
+     },
+     "geometry": [
+      {
+       "lat": 53.6083111,
+       "lon": 10.0556391
+      },
+      {
+       "lat": 53.6080812,
+       "lon": 10.0556495
+      },
+      {
+       "lat": 53.6080868,
+       "lon": 10.0560016
+      },
+      {
+       "lat": 53.6083167,
+       "lon": 10.0559912
+      },
+      {
+       "lat": 53.6083111,
+       "lon": 10.0556391
+      }
+     ],
+     "tags": {
+      "addr:city": "Hamburg",
+      "addr:country": "DE",
+      "addr:housenumber": "42",
+      "addr:postcode": "22309",
+      "addr:street": "Steilshooper Allee",
+      "building": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 48358210,
+     "bounds": {
+      "minlat": 53.607932,
+      "minlon": 10.0552072,
+      "maxlat": 53.6083161,
+      "maxlon": 10.0555307
+     },
+     "geometry": [
+      {
+       "lat": 53.6083161,
+       "lon": 10.0552743
+      },
+      {
+       "lat": 53.6079499,
+       "lon": 10.0552072
+      },
+      {
+       "lat": 53.607932,
+       "lon": 10.055485
+      },
+      {
+       "lat": 53.6081817,
+       "lon": 10.0555307
+      },
+      {
+       "lat": 53.6081922,
+       "lon": 10.0553689
+      },
+      {
+       "lat": 53.6083087,
+       "lon": 10.0553903
+      },
+      {
+       "lat": 53.6083161,
+       "lon": 10.0552743
+      }
+     ],
+     "tags": {
+      "addr:city": "Hamburg",
+      "addr:country": "DE",
+      "addr:housenumber": "40",
+      "addr:postcode": "22309",
+      "addr:street": "Steilshooper Allee",
+      "building": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 48358213,
+     "bounds": {
+      "minlat": 53.6073392,
+      "minlon": 10.0558435,
+      "maxlat": 53.6078897,
+      "maxlon": 10.0563484
+     },
+     "geometry": [
+      {
+       "lat": 53.6078897,
+       "lon": 10.0558435
+      },
+      {
+       "lat": 53.6073392,
+       "lon": 10.0559623
+      },
+      {
+       "lat": 53.6073456,
+       "lon": 10.0560494
+      },
+      {
+       "lat": 53.6073897,
+       "lon": 10.0560379
+      },
+      {
+       "lat": 53.6074132,
+       "lon": 10.0563484
+      },
+      {
+       "lat": 53.6075514,
+       "lon": 10.056318
+      },
+      {
+       "lat": 53.6075503,
+       "lon": 10.0562875
+      },
+      {
+       "lat": 53.6078778,
+       "lon": 10.0562163
+      },
+      {
+       "lat": 53.6078897,
+       "lon": 10.0558435
+      }
+     ],
+     "tags": {
+      "addr:city": "Hamburg",
+      "addr:country": "DE",
+      "addr:housenumber": "317",
+      "addr:postcode": "22309",
+      "addr:street": "Steilshooper Straße",
+      "brand": "Aldi Nord",
+      "brand:wikidata": "Q41171373",
+      "building": "yes",
+      "check_date": "2026-05-28",
+      "contact:instagram": "aldinord",
+      "contact:twitter": "ALDINord_Presse",
+      "name": "Aldi",
+      "opening_hours": "Mo-Sa 07:00-21:00",
+      "operator": "ALDI SE & Co. KG (ALDI Nord Deutschland Stiftung & Co. KG)",
+      "payment:american_express": "yes",
+      "payment:apple_pay": "yes",
+      "payment:cash": "yes",
+      "payment:contactless": "yes",
+      "payment:debit_cards": "yes",
+      "payment:discover_card": "yes",
+      "payment:girocard": "yes",
+      "payment:google_pay": "yes",
+      "payment:maestro": "yes",
+      "payment:mastercard": "yes",
+      "payment:visa": "yes",
+      "payment:vpay": "yes",
+      "phone": "0800 7234870",
+      "shop": "supermarket",
+      "website": "https://www.aldi-nord.de/filialen-und-oeffnungszeiten.html/l/hamburg/steilshooper-strasse-317/3180599",
+      "wheelchair": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 48358218,
+     "bounds": {
+      "minlat": 53.6069579,
+      "minlon": 10.0560012,
+      "maxlat": 53.6073086,
+      "maxlon": 10.0564026
+     },
+     "geometry": [
+      {
+       "lat": 53.6073086,
+       "lon": 10.056241
+      },
+      {
+       "lat": 53.6071235,
+       "lon": 10.0560012
+      },
+      {
+       "lat": 53.60704,
+       "lon": 10.0560187
+      },
+      {
+       "lat": 53.6069709,
+       "lon": 10.0560413
+      },
+      {
+       "lat": 53.6069579,
+       "lon": 10.0560455
+      },
+      {
+       "lat": 53.607234,
+       "lon": 10.0564026
+      },
+      {
+       "lat": 53.6073086,
+       "lon": 10.056241
+      }
+     ],
+     "tags": {
+      "addr:city": "Hamburg",
+      "addr:country": "DE",
+      "addr:housenumber": "315",
+      "addr:postcode": "22309",
+      "addr:street": "Steilshooper Straße",
+      "building": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 48539880,
+     "bounds": {
+      "minlat": 53.6070097,
+      "minlon": 10.0555068,
+      "maxlat": 53.6079054,
+      "maxlon": 10.0560187
+     },
+     "geometry": [
+      {
+       "lat": 53.6070292,
+       "lon": 10.0558845
+      },
+      {
+       "lat": 53.6070243,
+       "lon": 10.0558172
+      },
+      {
+       "lat": 53.6070146,
+       "lon": 10.0556827
+      },
+      {
+       "lat": 53.6070097,
+       "lon": 10.0556155
+      },
+      {
+       "lat": 53.6071749,
+       "lon": 10.0555791
+      },
+      {
+       "lat": 53.6071997,
+       "lon": 10.0558957
+      },
+      {
+       "lat": 53.6072923,
+       "lon": 10.0558768
+      },
+      {
+       "lat": 53.607267,
+       "lon": 10.0555573
+      },
+      {
+       "lat": 53.6074835,
+       "lon": 10.0555068
+      },
+      {
+       "lat": 53.6075092,
+       "lon": 10.0558351
+      },
+      {
+       "lat": 53.6075635,
+       "lon": 10.0558229
+      },
+      {
+       "lat": 53.6075446,
+       "lon": 10.0555928
+      },
+      {
+       "lat": 53.6076819,
+       "lon": 10.055561
+      },
+      {
+       "lat": 53.6078193,
+       "lon": 10.0555292
+      },
+      {
+       "lat": 53.6079054,
+       "lon": 10.0555254
+      },
+      {
+       "lat": 53.6078935,
+       "lon": 10.0558322
+      },
+      {
+       "lat": 53.6075689,
+       "lon": 10.055905
+      },
+      {
+       "lat": 53.6071235,
+       "lon": 10.0560012
+      },
+      {
+       "lat": 53.60704,
+       "lon": 10.0560187
+      },
+      {
+       "lat": 53.6070292,
+       "lon": 10.0558845
+      }
+     ],
+     "tags": {
+      "building": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 147001959,
+     "bounds": {
+      "minlat": 53.6077465,
+      "minlon": 10.0576308,
+      "maxlat": 53.6083856,
+      "maxlon": 10.0587261
+     },
+     "geometry": [
+      {
+       "lat": 53.6077986,
+       "lon": 10.0577603
+      },
+      {
+       "lat": 53.6077465,
+       "lon": 10.0581092
+      },
+      {
+       "lat": 53.6077541,
+       "lon": 10.0587261
+      },
+      {
+       "lat": 53.6078682,
+       "lon": 10.0587221
+      },
+      {
+       "lat": 53.607862,
+       "lon": 10.0581886
+      },
+      {
+       "lat": 53.6083856,
+       "lon": 10.0581524
+      },
+      {
+       "lat": 53.6083835,
+       "lon": 10.0578473
+      },
+      {
+       "lat": 53.6083387,
+       "lon": 10.0578489
+      },
+      {
+       "lat": 53.6082781,
+       "lon": 10.0578335
+      },
+      {
+       "lat": 53.6082873,
+       "lon": 10.0577304
+      },
+      {
+       "lat": 53.6078961,
+       "lon": 10.0576308
+      },
+      {
+       "lat": 53.6078278,
+       "lon": 10.0576712
+      },
+      {
+       "lat": 53.6077986,
+       "lon": 10.0577603
+      }
+     ],
+     "tags": {
+      "access": "customers",
+      "amenity": "parking",
+      "fee": "no",
+      "parking": "surface",
+      "wheelchair": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 147001961,
+     "bounds": {
+      "minlat": 53.6065966,
+      "minlon": 10.0546867,
+      "maxlat": 53.6075641,
+      "maxlon": 10.0555604
+     },
+     "geometry": [
+      {
+       "lat": 53.60693,
+       "lon": 10.0546867
+      },
+      {
+       "lat": 53.6065966,
+       "lon": 10.0555345
+      },
+      {
+       "lat": 53.6066198,
+       "lon": 10.0555604
+      },
+      {
+       "lat": 53.6074647,
+       "lon": 10.0552956
+      },
+      {
+       "lat": 53.60756,
+       "lon": 10.0550533
+      },
+      {
+       "lat": 53.6075253,
+       "lon": 10.0550145
+      },
+      {
+       "lat": 53.6075641,
+       "lon": 10.054916
+      },
+      {
+       "lat": 53.6074765,
+       "lon": 10.0548182
+      },
+      {
+       "lat": 53.6073519,
+       "lon": 10.0551349
+      },
+      {
+       "lat": 53.60731,
+       "lon": 10.055088
+      },
+      {
+       "lat": 53.6073259,
+       "lon": 10.0550475
+      },
+      {
+       "lat": 53.6071324,
+       "lon": 10.0548313
+      },
+      {
+       "lat": 53.6071101,
+       "lon": 10.0548879
+      },
+      {
+       "lat": 53.60693,
+       "lon": 10.0546867
+      }
+     ],
+     "tags": {
+      "access": "customers",
+      "amenity": "parking",
+      "fee": "no",
+      "parking": "surface"
+     }
+    },
+    {
+     "type": "way",
+     "id": 337262674,
+     "bounds": {
+      "minlat": 53.6079959,
+      "minlon": 10.056063,
+      "maxlat": 53.6081295,
+      "maxlon": 10.0563696
+     },
+     "geometry": [
+      {
+       "lat": 53.6081288,
+       "lon": 10.056063
+      },
+      {
+       "lat": 53.6081295,
+       "lon": 10.0561404
+      },
+      {
+       "lat": 53.608114,
+       "lon": 10.0561408
+      },
+      {
+       "lat": 53.6081143,
+       "lon": 10.0561758
+      },
+      {
+       "lat": 53.6081161,
+       "lon": 10.0563664
+      },
+      {
+       "lat": 53.6079977,
+       "lon": 10.0563696
+      },
+      {
+       "lat": 53.6079959,
+       "lon": 10.0561788
+      },
+      {
+       "lat": 53.6080458,
+       "lon": 10.0561775
+      },
+      {
+       "lat": 53.6080447,
+       "lon": 10.0560652
+      },
+      {
+       "lat": 53.6081288,
+       "lon": 10.056063
+      }
+     ],
+     "tags": {
+      "addr:city": "Hamburg",
+      "addr:country": "DE",
+      "addr:housenumber": "44",
+      "addr:postcode": "22309",
+      "addr:street": "Steilshooper Allee",
+      "amenity": "fuel",
+      "brand": "JET",
+      "brand:wikidata": "Q568940",
+      "building": "yes",
+      "contact:phone": "+49 40 6303587",
+      "contact:website": "https://www.jet.de/tankstellen/hamburg/steilshooper-allee-44",
+      "fuel:adblue": "yes",
+      "fuel:diesel": "yes",
+      "fuel:e10": "yes",
+      "fuel:octane_95": "yes",
+      "fuel:octane_98": "yes",
+      "name": "JET",
+      "opening_hours": "24/7",
+      "payment:dkv": "yes",
+      "tenant": "Marcel Rothlander"
+     }
+    },
+    {
+     "type": "way",
+     "id": 1196089736,
+     "bounds": {
+      "minlat": 53.607049,
+      "minlon": 10.0570795,
+      "maxlat": 53.6072519,
+      "maxlon": 10.0574305
+     },
+     "geometry": [
+      {
+       "lat": 53.6071571,
+       "lon": 10.0574305
+      },
+      {
+       "lat": 53.6071468,
+       "lon": 10.0574178
+      },
+      {
+       "lat": 53.607049,
+       "lon": 10.0572959
+      },
+      {
+       "lat": 53.6071439,
+       "lon": 10.0570795
+      },
+      {
+       "lat": 53.6072519,
+       "lon": 10.0572141
+      },
+      {
+       "lat": 53.6071571,
+       "lon": 10.0574305
+      }
+     ],
+     "tags": {
+      "addr:city": "Hamburg",
+      "addr:housenumber": "316",
+      "addr:postcode": "22309",
+      "addr:street": "Steilshooper Straße",
+      "building": "apartments",
+      "building:levels": "4",
+      "roof:levels": "0",
+      "roof:shape": "flat"
+     }
+    },
+    {
+     "type": "way",
+     "id": 1196089742,
+     "bounds": {
+      "minlat": 53.6073323,
+      "minlon": 10.0573928,
+      "maxlat": 53.6075346,
+      "maxlon": 10.057742
+     },
+     "geometry": [
+      {
+       "lat": 53.60744,
+       "lon": 10.057742
+      },
+      {
+       "lat": 53.6074301,
+       "lon": 10.0577297
+      },
+      {
+       "lat": 53.6073323,
+       "lon": 10.0576066
+      },
+      {
+       "lat": 53.607427,
+       "lon": 10.0573928
+      },
+      {
+       "lat": 53.6075346,
+       "lon": 10.0575282
+      },
+      {
+       "lat": 53.60744,
+       "lon": 10.057742
+      }
+     ],
+     "tags": {
+      "addr:city": "Hamburg",
+      "addr:housenumber": "322",
+      "addr:postcode": "22309",
+      "addr:street": "Steilshooper Straße",
+      "building": "apartments",
+      "building:levels": "4",
+      "roof:levels": "0",
+      "roof:shape": "flat"
+     }
+    },
+    {
+     "type": "way",
+     "id": 1243471460,
+     "bounds": {
+      "minlat": 53.6077935,
+      "minlon": 10.0564951,
+      "maxlat": 53.6079226,
+      "maxlon": 10.0568475
+     },
+     "geometry": [
+      {
+       "lat": 53.6079226,
+       "lon": 10.0565317
+      },
+      {
+       "lat": 53.6078466,
+       "lon": 10.0568475
+      },
+      {
+       "lat": 53.6077935,
+       "lon": 10.0568153
+      },
+      {
+       "lat": 53.6078696,
+       "lon": 10.0564951
+      },
+      {
+       "lat": 53.6079226,
+       "lon": 10.0565317
+      }
+     ],
+     "tags": {
+      "addr:city": "Hamburg",
+      "addr:housenumber": "321",
+      "addr:postcode": "22309",
+      "addr:street": "Steilshooper Straße",
+      "amenity": "car_wash",
+      "building": "carport",
+      "name": "A - Z Autowaschanlagen GmbH",
+      "opening_hours": "24/7",
+      "operator": "A-Z SB-Autowaschanlagen GmbH",
+      "payment:cash": "yes",
+      "self_service": "yes",
+      "truck_wash": "no",
+      "vacuum_cleaner": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 1246062187,
+     "bounds": {
+      "minlat": 53.6077785,
+      "minlon": 10.0568153,
+      "maxlat": 53.6078466,
+      "maxlon": 10.0569181
+     },
+     "geometry": [
+      {
+       "lat": 53.6077785,
+       "lon": 10.0568859
+      },
+      {
+       "lat": 53.6078315,
+       "lon": 10.0569181
+      },
+      {
+       "lat": 53.6078466,
+       "lon": 10.0568475
+      },
+      {
+       "lat": 53.6077935,
+       "lon": 10.0568153
+      },
+      {
+       "lat": 53.6077785,
+       "lon": 10.0568859
+      }
+     ],
+     "tags": {
+      "building": "yes",
+      "building:levels": "1"
+     }
+    }
+   ]
+  }
+ },
+ {
+  "request": {
+   "query": "[out:json][timeout:90];\n(\n  way(around:80,53.5892164,10.1016974)[\"building\"];\n  relation(around:80,53.5892164,10.1016974)[\"building\"][\"type\"=\"multipolygon\"];\n  way(around:120,53.5892164,10.1016974)[\"amenity\"=\"parking\"];\n  relation(around:120,53.5892164,10.1016974)[\"amenity\"=\"parking\"][\"type\"=\"multipolygon\"];\n  nwr(around:120,53.5892164,10.1016974)[\"amenity\"=\"car_wash\"];\n  nwr(around:120,53.5892164,10.1016974)[\"shop\"=\"car_wash\"];\n);\nout geom tags;",
+   "url": "https://overpass-api.de/api/interpreter"
+  },
+  "response": {
+   "version": 0.6,
+   "generator": "Overpass API 0.7.62.11 87bfad18",
+   "osm3s": {
+    "timestamp_osm_base": "2026-10-31T05:37:09Z",
+    "copyright": "The data included in this document is from www.openstreetmap.org. The data is made available under ODbL."
+   },
+   "elements": [
+    {
+     "type": "node",
+     "id": 253199479,
+     "lat": 53.5888967,
+     "lon": 10.101521,
+     "tags": {
+      "addr:city": "Hamburg",
+      "addr:housenumber": "170",
+      "addr:postcode": "22047",
+      "addr:street": "Friedrich-Ebert-Damm",
+      "amenity": "car_wash",
+      "brand": "Mr. Wash",
+      "brand:wikidata": "Q1951447",
+      "name": "Mr. Wash",
+      "opening_hours": "Mo-Fr 08:30-19:00; Sa 08:30-18:00",
+      "payment:cash": "yes",
+      "self_service": "no",
+      "website": "https://www.mrwash.de/standort/hamburg-wandsbek"
+     }
+    },
+    {
+     "type": "way",
+     "id": 49411686,
+     "bounds": {
+      "minlat": 53.588608,
+      "minlon": 10.1021356,
+      "maxlat": 53.5894306,
+      "maxlon": 10.1027015
+     },
+     "geometry": [
+      {
+       "lat": 53.5894008,
+       "lon": 10.1024175
+      },
+      {
+       "lat": 53.5893661,
+       "lon": 10.1024395
+      },
+      {
+       "lat": 53.5893565,
+       "lon": 10.1024756
+      },
+      {
+       "lat": 53.5892608,
+       "lon": 10.1025329
+      },
+      {
+       "lat": 53.5892219,
+       "lon": 10.1025012
+      },
+      {
+       "lat": 53.5892172,
+       "lon": 10.1025037
+      },
+      {
+       "lat": 53.5891565,
+       "lon": 10.102537
+      },
+      {
+       "lat": 53.5891338,
+       "lon": 10.1024334
+      },
+      {
+       "lat": 53.5886801,
+       "lon": 10.1027015
+      },
+      {
+       "lat": 53.588608,
+       "lon": 10.1023578
+      },
+      {
+       "lat": 53.5888387,
+       "lon": 10.1022204
+      },
+      {
+       "lat": 53.5888496,
+       "lon": 10.1022693
+      },
+      {
+       "lat": 53.5889956,
+       "lon": 10.1021913
+      },
+      {
+       "lat": 53.5890216,
+       "lon": 10.1023144
+      },
+      {
+       "lat": 53.5891634,
+       "lon": 10.1022317
+      },
+      {
+       "lat": 53.5891644,
+       "lon": 10.1022361
+      },
+      {
+       "lat": 53.5893359,
+       "lon": 10.1021356
+      },
+      {
+       "lat": 53.5893461,
+       "lon": 10.102183
+      },
+      {
+       "lat": 53.5893646,
+       "lon": 10.1021708
+      },
+      {
+       "lat": 53.5893872,
+       "lon": 10.1022801
+      },
+      {
+       "lat": 53.5894306,
+       "lon": 10.1023139
+      },
+      {
+       "lat": 53.5894101,
+       "lon": 10.1023855
+      },
+      {
+       "lat": 53.5894008,
+       "lon": 10.1024175
+      }
+     ],
+     "tags": {
+      "building": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 49411894,
+     "bounds": {
+      "minlat": 53.588419,
+      "minlon": 10.1014271,
+      "maxlat": 53.589043,
+      "maxlon": 10.1020319
+     },
+     "geometry": [
+      {
+       "lat": 53.5889875,
+       "lon": 10.1014271
+      },
+      {
+       "lat": 53.5885569,
+       "lon": 10.1016747
+      },
+      {
+       "lat": 53.5885394,
+       "lon": 10.1015884
+      },
+      {
+       "lat": 53.5884707,
+       "lon": 10.1016279
+      },
+      {
+       "lat": 53.5884892,
+       "lon": 10.1017191
+      },
+      {
+       "lat": 53.5885216,
+       "lon": 10.1017005
+      },
+      {
+       "lat": 53.5885357,
+       "lon": 10.10177
+      },
+      {
+       "lat": 53.5884283,
+       "lon": 10.1018318
+      },
+      {
+       "lat": 53.5884354,
+       "lon": 10.1018671
+      },
+      {
+       "lat": 53.588419,
+       "lon": 10.1018766
+      },
+      {
+       "lat": 53.5884249,
+       "lon": 10.1019057
+      },
+      {
+       "lat": 53.5884364,
+       "lon": 10.1019626
+      },
+      {
+       "lat": 53.5884462,
+       "lon": 10.1020111
+      },
+      {
+       "lat": 53.5884611,
+       "lon": 10.1020025
+      },
+      {
+       "lat": 53.5884671,
+       "lon": 10.1020319
+      },
+      {
+       "lat": 53.589043,
+       "lon": 10.1017008
+      },
+      {
+       "lat": 53.5890302,
+       "lon": 10.1016376
+      },
+      {
+       "lat": 53.5890134,
+       "lon": 10.1015547
+      },
+      {
+       "lat": 53.5889875,
+       "lon": 10.1014271
+      }
+     ],
+     "tags": {
+      "building": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 49412007,
+     "bounds": {
+      "minlat": 53.5890688,
+      "minlon": 10.1009781,
+      "maxlat": 53.5893146,
+      "maxlon": 10.1017057
+     },
+     "geometry": [
+      {
+       "lat": 53.589219,
+       "lon": 10.1011281
+      },
+      {
+       "lat": 53.5890925,
+       "lon": 10.1009781
+      },
+      {
+       "lat": 53.5890688,
+       "lon": 10.1010411
+      },
+      {
+       "lat": 53.5891821,
+       "lon": 10.1015491
+      },
+      {
+       "lat": 53.5891761,
+       "lon": 10.1016124
+      },
+      {
+       "lat": 53.5892568,
+       "lon": 10.1017057
+      },
+      {
+       "lat": 53.5893146,
+       "lon": 10.1015733
+      },
+      {
+       "lat": 53.5892191,
+       "lon": 10.1014566
+      },
+      {
+       "lat": 53.5892636,
+       "lon": 10.101348
+      },
+      {
+       "lat": 53.5891719,
+       "lon": 10.1012414
+      },
+      {
+       "lat": 53.589219,
+       "lon": 10.1011281
+      }
+     ],
+     "tags": {
+      "building": "roof",
+      "layer": "1"
+     }
+    },
+    {
+     "type": "way",
+     "id": 49412754,
+     "bounds": {
+      "minlat": 53.5887533,
+      "minlon": 10.1004651,
+      "maxlat": 53.5890457,
+      "maxlon": 10.1008044
+     },
+     "geometry": [
+      {
+       "lat": 53.5890457,
+       "lon": 10.1006651
+      },
+      {
+       "lat": 53.5888018,
+       "lon": 10.1008044
+      },
+      {
+       "lat": 53.5887533,
+       "lon": 10.1005632
+      },
+      {
+       "lat": 53.5889095,
+       "lon": 10.1004739
+      },
+      {
+       "lat": 53.5889178,
+       "lon": 10.1005151
+      },
+      {
+       "lat": 53.5890055,
+       "lon": 10.1004651
+      },
+      {
+       "lat": 53.5890457,
+       "lon": 10.1006651
+      }
+     ],
+     "tags": {
+      "addr:city": "Hamburg",
+      "addr:country": "DE",
+      "addr:housenumber": "166",
+      "addr:postcode": "22047",
+      "addr:street": "Friedrich-Ebert-Damm",
+      "amenity": "fast_food",
+      "brand": "Burger King",
+      "brand:wikidata": "Q177054",
+      "brand:wikipedia": "en:Burger King",
+      "building": "yes",
+      "building:levels": "1",
+      "cuisine": "burger",
+      "delivery": "no",
+      "drive_through": "yes",
+      "internet_access": "wlan",
+      "internet_access:fee": "no",
+      "name": "Burger King",
+      "old_name": "BurgerKing",
+      "opening_hours": "Mo-Th 00:00-01:00,09:00-24:00; Fr,Sa 00:00-03:00,09:00-24:00; Su 00:00-01:00,10:00-24:00",
+      "operator": "DFM Hamburg GmbH & Co. KG",
+      "outdoor_seating": "yes",
+      "payment:cash": "yes",
+      "payment:maestro": "yes",
+      "payment:mastercard": "yes",
+      "payment:visa": "yes",
+      "smoking": "outside",
+      "takeaway": "yes",
+      "website": "https://www.burgerking.de/kingfinder/22119?id=1003",
+      "wheelchair": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 155610544,
+     "bounds": {
+      "minlat": 53.588985,
+      "minlon": 10.1013244,
+      "maxlat": 53.589054,
+      "maxlon": 10.101442
+     },
+     "geometry": [
+      {
+       "lat": 53.589054,
+       "lon": 10.101365
+      },
+      {
+       "lat": 53.5890066,
+       "lon": 10.1013244
+      },
+      {
+       "lat": 53.588985,
+       "lon": 10.1014056
+      },
+      {
+       "lat": 53.589029,
+       "lon": 10.101442
+      },
+      {
+       "lat": 53.589054,
+       "lon": 10.101365
+      }
+     ],
+     "tags": {
+      "building": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 155610589,
+     "bounds": {
+      "minlat": 53.5883685,
+      "minlon": 10.1002863,
+      "maxlat": 53.5887108,
+      "maxlon": 10.1010436
+     },
+     "geometry": [
+      {
+       "lat": 53.5885858,
+       "lon": 10.1002863
+      },
+      {
+       "lat": 53.5887108,
+       "lon": 10.1009057
+      },
+      {
+       "lat": 53.5884915,
+       "lon": 10.1010436
+      },
+      {
+       "lat": 53.5883685,
+       "lon": 10.1004179
+      },
+      {
+       "lat": 53.5885858,
+       "lon": 10.1002863
+      }
+     ],
+     "tags": {
+      "access": "private",
+      "amenity": "parking"
+     }
+    },
+    {
+     "type": "way",
+     "id": 155610592,
+     "bounds": {
+      "minlat": 53.5886134,
+      "minlon": 10.1001446,
+      "maxlat": 53.5890263,
+      "maxlon": 10.1005371
+     },
+     "geometry": [
+      {
+       "lat": 53.5890111,
+       "lon": 10.1001446
+      },
+      {
+       "lat": 53.5890263,
+       "lon": 10.1002213
+      },
+      {
+       "lat": 53.5889862,
+       "lon": 10.1002438
+      },
+      {
+       "lat": 53.5890171,
+       "lon": 10.1003996
+      },
+      {
+       "lat": 53.5887724,
+       "lon": 10.1005371
+      },
+      {
+       "lat": 53.5887478,
+       "lon": 10.1004129
+      },
+      {
+       "lat": 53.5886349,
+       "lon": 10.1004764
+      },
+      {
+       "lat": 53.5886134,
+       "lon": 10.1003681
+      },
+      {
+       "lat": 53.5890111,
+       "lon": 10.1001446
+      }
+     ],
+     "tags": {
+      "amenity": "parking",
+      "parking": "surface"
+     }
+    },
+    {
+     "type": "way",
+     "id": 316698049,
+     "bounds": {
+      "minlat": 53.5891653,
+      "minlon": 10.1016129,
+      "maxlat": 53.5892567,
+      "maxlon": 10.1017729
+     },
+     "geometry": [
+      {
+       "lat": 53.5892567,
+       "lon": 10.1017059
+      },
+      {
+       "lat": 53.5891653,
+       "lon": 10.1017729
+      },
+      {
+       "lat": 53.589176,
+       "lon": 10.1016129
+      },
+      {
+       "lat": 53.5892567,
+       "lon": 10.1017059
+      }
+     ],
+     "tags": {
+      "addr:city": "Hamburg",
+      "addr:country": "DE",
+      "addr:housenumber": "170",
+      "addr:postcode": "22047",
+      "addr:street": "Friedrich-Ebert-Damm",
+      "building": "yes"
+     }
+    },
+    {
+     "type": "way",
+     "id": 845371404,
+     "bounds": {
+      "minlat": 53.5898573,
+      "minlon": 10.1020378,
+      "maxlat": 53.5899246,
+      "maxlon": 10.1021701
+     },
+     "geometry": [
+      {
+       "lat": 53.5899246,
+       "lon": 10.1021426
+      },
+      {
+       "lat": 53.5898803,
+       "lon": 10.1021701
+      },
+      {
+       "lat": 53.5898573,
+       "lon": 10.1020653
+      },
+      {
+       "lat": 53.5899016,
+       "lon": 10.1020378
+      },
+      {
+       "lat": 53.5899246,
+       "lon": 10.1021426
+      }
+     ],
+     "tags": {
+      "building": "allotment_house",
+      "building:levels": "1"
+     }
+    },
+    {
+     "type": "way",
+     "id": 845371405,
+     "bounds": {
+      "minlat": 53.5898188,
+      "minlon": 10.1018982,
+      "maxlat": 53.5899121,
+      "maxlon": 10.1020419
+     },
+     "geometry": [
+      {
+       "lat": 53.5899121,
+       "lon": 10.1019972
+      },
+      {
+       "lat": 53.5898406,
+       "lon": 10.1020419
+      },
+      {
+       "lat": 53.5898188,
+       "lon": 10.1019428
+      },
+      {
+       "lat": 53.5898904,
+       "lon": 10.1018982
+      },
+      {
+       "lat": 53.5899121,
+       "lon": 10.1019972
+      }
+     ],
+     "tags": {
+      "building": "allotment_house",
+      "building:levels": "1"
+     }
+    },
+    {
+     "type": "way",
+     "id": 845371406,
+     "bounds": {
+      "minlat": 53.5897683,
+      "minlon": 10.1016861,
+      "maxlat": 53.5899162,
+      "maxlon": 10.1018517
+     },
+     "geometry": [
+      {
+       "lat": 53.5899162,
+       "lon": 10.1017439
+      },
+      {
+       "lat": 53.5898382,
+       "lon": 10.1017888
+      },
+      {
+       "lat": 53.5898441,
+       "lon": 10.1018182
+      },
+      {
+       "lat": 53.5897859,
+       "lon": 10.1018517
+      },
+      {
+       "lat": 53.5897683,
+       "lon": 10.1017645
+      },
+      {
+       "lat": 53.5899045,
+       "lon": 10.1016861
+      },
+      {
+       "lat": 53.5899162,
+       "lon": 10.1017439
+      }
+     ],
+     "tags": {
+      "building": "allotment_house",
+      "building:levels": "1",
+      "roof:shape": "gabled"
+     }
+    },
+    {
+     "type": "way",
+     "id": 845371407,
+     "bounds": {
+      "minlat": 53.5897809,
+      "minlon": 10.1015886,
+      "maxlat": 53.5898832,
+      "maxlon": 10.1017238
+     },
+     "geometry": [
+      {
+       "lat": 53.5898547,
+       "lon": 10.1016938
+      },
+      {
+       "lat": 53.5897968,
+       "lon": 10.1017238
+      },
+      {
+       "lat": 53.5897809,
+       "lon": 10.101637
+      },
+      {
+       "lat": 53.5898741,
+       "lon": 10.1015886
+      },
+      {
+       "lat": 53.5898832,
+       "lon": 10.1016383
+      },
+      {
+       "lat": 53.5898479,
+       "lon": 10.1016566
+      },
+      {
+       "lat": 53.5898547,
+       "lon": 10.1016938
+      }
+     ],
+     "tags": {
+      "building": "allotment_house",
+      "building:levels": "1",
+      "roof:shape": "gabled"
+     }
+    },
+    {
+     "type": "way",
+     "id": 845371408,
+     "bounds": {
+      "minlat": 53.5897197,
+      "minlon": 10.1015037,
+      "maxlat": 53.5898381,
+      "maxlon": 10.1016244
+     },
+     "geometry": [
+      {
+       "lat": 53.5898381,
+       "lon": 10.1015661
+      },
+      {
+       "lat": 53.5897349,
+       "lon": 10.1016244
+      },
+      {
+       "lat": 53.5897197,
+       "lon": 10.101548
+      },
+      {
+       "lat": 53.5897981,
+       "lon": 10.1015037
+      },
+      {
+       "lat": 53.5898054,
+       "lon": 10.1015403
+      },
+      {
+       "lat": 53.5898302,
+       "lon": 10.1015263
+      },
+      {
+       "lat": 53.5898381,
+       "lon": 10.1015661
+      }
+     ],
+     "tags": {
+      "building": "allotment_house",
+      "building:levels": "1"
+     }
+    },
+    {
+     "type": "way",
+     "id": 845371452,
+     "bounds": {
+      "minlat": 53.5897337,
+      "minlon": 10.1011476,
+      "maxlat": 53.5898666,
+      "maxlon": 10.1012839
+     },
+     "geometry": [
+      {
+       "lat": 53.5898515,
+       "lon": 10.1011476
+      },
+      {
+       "lat": 53.5898209,
+       "lon": 10.101162
+      },
+      {
+       "lat": 53.5898254,
+       "lon": 10.1011895
+      },
+      {
+       "lat": 53.589787,
+       "lon": 10.1012076
+      },
+      {
+       "lat": 53.58978,
+       "lon": 10.1011654
+      },
+      {
+       "lat": 53.5897366,
+       "lon": 10.1011858
+      },
+      {
+       "lat": 53.5897415,
+       "lon": 10.1012155
+      },
+      {
+       "lat": 53.5897337,
+       "lon": 10.1012192
+      },
+      {
+       "lat": 53.5897445,
+       "lon": 10.1012839
+      },
+      {
+       "lat": 53.5898059,
+       "lon": 10.101255
+      },
+      {
+       "lat": 53.5898077,
+       "lon": 10.1012658
+      },
+      {
+       "lat": 53.5898666,
+       "lon": 10.101238
+      },
+      {
+       "lat": 53.5898515,
+       "lon": 10.1011476
+      }
+     ],
+     "tags": {
+      "building": "allotment_house",
+      "building:levels": "1",
+      "roof:shape": "gabled"
+     }
+    },
+    {
+     "type": "way",
+     "id": 845371458,
+     "bounds": {
+      "minlat": 53.5896834,
+      "minlon": 10.101019,
+      "maxlat": 53.5897416,
+      "maxlon": 10.1011097
+     },
+     "geometry": [
+      {
+       "lat": 53.5897416,
+       "lon": 10.1010919
+      },
+      {
+       "lat": 53.5896928,
+       "lon": 10.1011097
+      },
+      {
+       "lat": 53.5896834,
+       "lon": 10.1010368
+      },
+      {
+       "lat": 53.5897323,
+       "lon": 10.101019
+      },
+      {
+       "lat": 53.5897416,
+       "lon": 10.1010919
+      }
+     ],
+     "tags": {
+      "building": "allotment_house",
+      "building:levels": "1",
+      "roof:shape": "gabled"
+     }
+    },
+    {
+     "type": "way",
+     "id": 845371459,
+     "bounds": {
+      "minlat": 53.5896494,
+      "minlon": 10.1006864,
+      "maxlat": 53.5897011,
+      "maxlon": 10.1007782
+     },
+     "geometry": [
+      {
+       "lat": 53.5897011,
+       "lon": 10.1007639
+      },
+      {
+       "lat": 53.5896586,
+       "lon": 10.1007782
+      },
+      {
+       "lat": 53.5896494,
+       "lon": 10.1007007
+      },
+      {
+       "lat": 53.5896919,
+       "lon": 10.1006864
+      },
+      {
+       "lat": 53.5897011,
+       "lon": 10.1007639
+      }
+     ],
+     "tags": {
+      "building": "allotment_house",
+      "building:levels": "1",
+      "roof:shape": "gabled"
+     }
+    },
+    {
+     "type": "way",
+     "id": 1547197134,
+     "bounds": {
+      "minlat": 53.5892172,
+      "minlon": 10.1023855,
+      "maxlat": 53.5894351,
+      "maxlon": 10.1026133
+     },
+     "geometry": [
+      {
+       "lat": 53.5892172,
+       "lon": 10.1025037
+      },
+      {
+       "lat": 53.5892219,
+       "lon": 10.1025012
+      },
+      {
+       "lat": 53.5892608,
+       "lon": 10.1025329
+      },
+      {
+       "lat": 53.5893565,
+       "lon": 10.1024756
+      },
+      {
+       "lat": 53.5893661,
+       "lon": 10.1024395
+      },
+      {
+       "lat": 53.5894008,
+       "lon": 10.1024175
+      },
+      {
+       "lat": 53.5894101,
+       "lon": 10.1023855
+      },
+      {
+       "lat": 53.5894351,
+       "lon": 10.1024971
+      },
+      {
+       "lat": 53.5892411,
+       "lon": 10.1026133
+      },
+      {
+       "lat": 53.5892172,
+       "lon": 10.1025037
+      }
+     ],
+     "tags": {
+      "building": "roof",
+      "building:levels": "1",
+      "roof:shape": "flat"
+     }
+    },
+    {
+     "type": "way",
+     "id": 1547197135,
+     "bounds": {
+      "minlat": 53.588401,
+      "minlon": 10.1013225,
+      "maxlat": 53.5885353,
+      "maxlon": 10.1015363
+     },
+     "geometry": [
+      {
+       "lat": 53.5884323,
+       "lon": 10.1015363
+      },
+      {
+       "lat": 53.5884246,
+       "lon": 10.1014986
+      },
+      {
+       "lat": 53.588401,
+       "lon": 10.1013817
+      },
+      {
+       "lat": 53.588504,
+       "lon": 10.1013225
+      },
+      {
+       "lat": 53.5885353,
+       "lon": 10.1014771
+      },
+      {
+       "lat": 53.5884323,
+       "lon": 10.1015363
+      }
+     ],
+     "tags": {
+      "building": "roof",
+      "building:levels": "1",
+      "roof:shape": "flat"
+     }
+    }
+   ]
+  }
+ }
+]

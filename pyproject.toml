@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "iris-cre41"
+version = "1.0.0"
+description = "TASK-CRE-41 — Mr. Wash & CleanCar commercial POI collection, geocoding and PostGIS staging pipeline (Project IRIS, Wave 4)"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Proprietary — assessment submission" }
+authors = [{ name = "Candidate (Scraping/OSINT track)" }]
+
+dependencies = [
+    "requests>=2.31,<3",
+    "beautifulsoup4>=4.12,<5",
+    "lxml>=5.0",
+    "shapely>=2.0,<3",
+    "pyproj>=3.6,<4",
+    "SQLAlchemy>=2.0,<3",
+    "GeoAlchemy2>=0.14,<1",
+    "psycopg[binary]>=3.1,<4",
+    "python-dotenv>=1.0,<2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-cov>=5.0"]
+
+[project.scripts]
+iris-cre41 = "iris_cre41.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra --strict-markers"
+markers = [
+    "integration: requires a live PostgreSQL/PostGIS instance (DB_URI)",
+    "network: requires outbound internet access to third-party services",
+]
+filterwarnings = ["error::DeprecationWarning:iris_cre41.*"]

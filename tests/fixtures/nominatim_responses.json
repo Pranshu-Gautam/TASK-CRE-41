@@ -1,0 +1,453 @@
+[
+ {
+  "request": {
+   "params": {
+    "addressdetails": 1,
+    "city": "Aachen",
+    "countrycodes": "de",
+    "format": "jsonv2",
+    "limit": 5,
+    "postalcode": "52068",
+    "street": "10 Breslauer Straße"
+   },
+   "url": "https://nominatim.openstreetmap.org/search"
+  },
+  "response": [
+   {
+    "place_id": 116529006,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "way",
+    "osm_id": 31786622,
+    "lat": "50.7784123",
+    "lon": "6.1188465",
+    "category": "amenity",
+    "type": "car_wash",
+    "place_rank": 30,
+    "importance": 7.28747997252921e-05,
+    "addresstype": "amenity",
+    "name": "Mr. Wash",
+    "display_name": "Mr. Wash, 10, Breslauer Straße, Forst, Aachen-Mitte, Aachen, Städteregion Aachen, Nordrhein-Westfalen, 52068, Deutschland",
+    "address": {
+     "amenity": "Mr. Wash",
+     "house_number": "10",
+     "road": "Breslauer Straße",
+     "suburb": "Forst",
+     "city_district": "Aachen-Mitte",
+     "city": "Aachen",
+     "county": "Städteregion Aachen",
+     "state": "Nordrhein-Westfalen",
+     "ISO3166-2-lvl4": "DE-NW",
+     "postcode": "52068",
+     "country": "Deutschland",
+     "country_code": "de"
+    },
+    "boundingbox": [
+     "50.7778237",
+     "50.7788265",
+     "6.1182213",
+     "6.1196873"
+    ]
+   },
+   {
+    "place_id": 116985993,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "way",
+    "osm_id": 315832635,
+    "lat": "50.8720664",
+    "lon": "6.1711256",
+    "category": "building",
+    "type": "yes",
+    "place_rank": 30,
+    "importance": 5.5441367208316434e-05,
+    "addresstype": "building",
+    "name": "",
+    "display_name": "10, Breslauer Straße, Siedlung Ost, Alsdorf, Städteregion Aachen, Nordrhein-Westfalen, 52477, Deutschland",
+    "address": {
+     "house_number": "10",
+     "road": "Breslauer Straße",
+     "suburb": "Siedlung Ost",
+     "town": "Alsdorf",
+     "county": "Städteregion Aachen",
+     "state": "Nordrhein-Westfalen",
+     "ISO3166-2-lvl4": "DE-NW",
+     "postcode": "52477",
+     "country": "Deutschland",
+     "country_code": "de"
+    },
+    "boundingbox": [
+     "50.8720257",
+     "50.8721069",
+     "6.1710628",
+     "6.1711883"
+    ]
+   },
+   {
+    "place_id": 116742633,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "node",
+    "osm_id": 4978052816,
+    "lat": "50.8802158",
+    "lon": "6.1037536",
+    "category": "place",
+    "type": "house",
+    "place_rank": 30,
+    "importance": 5.474860761420642e-05,
+    "addresstype": "place",
+    "name": "",
+    "display_name": "10, Breslauer Straße, Thiergarten, Herzogenrath, Städteregion Aachen, Nordrhein-Westfalen, 52134, Deutschland",
+    "address": {
+     "house_number": "10",
+     "road": "Breslauer Straße",
+     "hamlet": "Thiergarten",
+     "town": "Herzogenrath",
+     "county": "Städteregion Aachen",
+     "state": "Nordrhein-Westfalen",
+     "ISO3166-2-lvl4": "DE-NW",
+     "postcode": "52134",
+     "country": "Deutschland",
+     "country_code": "de"
+    },
+    "boundingbox": [
+     "50.8801658",
+     "50.8802658",
+     "6.1037036",
+     "6.1038036"
+    ]
+   },
+   {
+    "place_id": 116609456,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "way",
+    "osm_id": 163860659,
+    "lat": "50.8361381",
+    "lon": "6.2812101",
+    "category": "building",
+    "type": "residential",
+    "place_rank": 30,
+    "importance": 5.784313725485645e-05,
+    "addresstype": "building",
+    "name": "",
+    "display_name": "10, Breslauer Straße, Vöckelsberg, Dürwiß, Eschweiler, Städteregion Aachen, Nordrhein-Westfalen, 52249, Deutschland",
+    "address": {
+     "house_number": "10",
+     "road": "Breslauer Straße",
+     "suburb": "Vöckelsberg",
+     "village": "Dürwiß",
+     "town": "Eschweiler",
+     "county": "Städteregion Aachen",
+     "state": "Nordrhein-Westfalen",
+     "ISO3166-2-lvl4": "DE-NW",
+     "postcode": "52249",
+     "country": "Deutschland",
+     "country_code": "de"
+    },
+    "boundingbox": [
+     "50.8360975",
+     "50.8361831",
+     "6.2810987",
+     "6.2813206"
+    ]
+   }
+  ]
+ },
+ {
+  "request": {
+   "params": {
+    "addressdetails": 1,
+    "city": "Bremen",
+    "countrycodes": "de",
+    "format": "jsonv2",
+    "limit": 5,
+    "postalcode": "28199",
+    "street": "93-95 Neuenlander Straße"
+   },
+   "url": "https://nominatim.openstreetmap.org/search"
+  },
+  "response": [
+   {
+    "place_id": 142124391,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "way",
+    "osm_id": 186007774,
+    "lat": "53.0556959",
+    "lon": "8.7973913",
+    "category": "building",
+    "type": "commercial",
+    "place_rank": 30,
+    "importance": 7.550545510028256e-05,
+    "addresstype": "building",
+    "name": "",
+    "display_name": "93-95, Neuenlander Straße, Gartenstadt Süd, Neustadt, Bremen-Süd, Bremen, 28199, Deutschland",
+    "address": {
+     "house_number": "93-95",
+     "road": "Neuenlander Straße",
+     "quarter": "Gartenstadt Süd",
+     "suburb": "Neustadt",
+     "city_district": "Bremen-Süd",
+     "city": "Bremen",
+     "state": "Bremen",
+     "ISO3166-2-lvl4": "DE-HB",
+     "postcode": "28199",
+     "country": "Deutschland",
+     "country_code": "de"
+    },
+    "boundingbox": [
+     "53.0554921",
+     "53.0558030",
+     "8.7972111",
+     "8.7977892"
+    ]
+   },
+   {
+    "place_id": 142405504,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "node",
+    "osm_id": 12696871601,
+    "lat": "53.0557424",
+    "lon": "8.7976858",
+    "category": "amenity",
+    "type": "car_wash",
+    "place_rank": 30,
+    "importance": 7.550545510028256e-05,
+    "addresstype": "amenity",
+    "name": "Clean Car Autowaschanlage und SB-Waschboxen",
+    "display_name": "Clean Car Autowaschanlage und SB-Waschboxen, 93-95, Neuenlander Straße, Gartenstadt Süd, Neustadt, Bremen-Süd, Bremen, 28199, Deutschland",
+    "address": {
+     "amenity": "Clean Car Autowaschanlage und SB-Waschboxen",
+     "house_number": "93-95",
+     "road": "Neuenlander Straße",
+     "quarter": "Gartenstadt Süd",
+     "suburb": "Neustadt",
+     "city_district": "Bremen-Süd",
+     "city": "Bremen",
+     "state": "Bremen",
+     "ISO3166-2-lvl4": "DE-HB",
+     "postcode": "28199",
+     "country": "Deutschland",
+     "country_code": "de"
+    },
+    "boundingbox": [
+     "53.0556924",
+     "53.0557924",
+     "8.7976358",
+     "8.7977358"
+    ]
+   }
+  ]
+ },
+ {
+  "request": {
+   "params": {
+    "addressdetails": 1,
+    "city": "Wandsbek",
+    "countrycodes": "de",
+    "format": "jsonv2",
+    "limit": 5,
+    "postalcode": "22309",
+    "street": "321 Steilshooper Straße"
+   },
+   "url": "https://nominatim.openstreetmap.org/search"
+  },
+  "response": [
+   {
+    "place_id": 143757814,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "way",
+    "osm_id": 1243471460,
+    "lat": "53.6078581",
+    "lon": "10.0566716",
+    "category": "amenity",
+    "type": "car_wash",
+    "place_rank": 30,
+    "importance": 8.255359731436664e-05,
+    "addresstype": "amenity",
+    "name": "A - Z Autowaschanlagen GmbH",
+    "display_name": "A - Z Autowaschanlagen GmbH, 321, Steilshooper Straße, Steilshoop, Wandsbek, Hamburg, 22309, Deutschland",
+    "address": {
+     "amenity": "A - Z Autowaschanlagen GmbH",
+     "house_number": "321",
+     "road": "Steilshooper Straße",
+     "suburb": "Steilshoop",
+     "city_district": "Wandsbek",
+     "city": "Hamburg",
+     "ISO3166-2-lvl4": "DE-HH",
+     "postcode": "22309",
+     "country": "Deutschland",
+     "country_code": "de"
+    },
+    "boundingbox": [
+     "53.6077935",
+     "53.6079226",
+     "10.0564951",
+     "10.0568475"
+    ]
+   }
+  ]
+ },
+ {
+  "request": {
+   "params": {
+    "addressdetails": 1,
+    "city": "Hamburg",
+    "countrycodes": "de",
+    "format": "jsonv2",
+    "limit": 5,
+    "postalcode": "22047",
+    "street": "170 Friedrich-Ebert-Damm"
+   },
+   "url": "https://nominatim.openstreetmap.org/search"
+  },
+  "response": [
+   {
+    "place_id": 143778194,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "way",
+    "osm_id": 316698049,
+    "lat": "53.5892164",
+    "lon": "10.1016974",
+    "category": "building",
+    "type": "yes",
+    "place_rank": 30,
+    "importance": 8.255359731436664e-05,
+    "addresstype": "building",
+    "name": "",
+    "display_name": "170, Friedrich-Ebert-Damm, Tonndorf, Wandsbek, Hamburg, 22047, Deutschland",
+    "address": {
+     "house_number": "170",
+     "road": "Friedrich-Ebert-Damm",
+     "suburb": "Tonndorf",
+     "city_district": "Wandsbek",
+     "city": "Hamburg",
+     "ISO3166-2-lvl4": "DE-HH",
+     "postcode": "22047",
+     "country": "Deutschland",
+     "country_code": "de"
+    },
+    "boundingbox": [
+     "53.5891653",
+     "53.5892567",
+     "10.1016129",
+     "10.1017729"
+    ]
+   },
+   {
+    "place_id": 142976230,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "node",
+    "osm_id": 253199479,
+    "lat": "53.5888967",
+    "lon": "10.1015210",
+    "category": "amenity",
+    "type": "car_wash",
+    "place_rank": 30,
+    "importance": 8.255359731436664e-05,
+    "addresstype": "amenity",
+    "name": "Mr. Wash",
+    "display_name": "Mr. Wash, 170, Friedrich-Ebert-Damm, Tonndorf, Wandsbek, Hamburg, 22047, Deutschland",
+    "address": {
+     "amenity": "Mr. Wash",
+     "house_number": "170",
+     "road": "Friedrich-Ebert-Damm",
+     "suburb": "Tonndorf",
+     "city_district": "Wandsbek",
+     "city": "Hamburg",
+     "ISO3166-2-lvl4": "DE-HH",
+     "postcode": "22047",
+     "country": "Deutschland",
+     "country_code": "de"
+    },
+    "boundingbox": [
+     "53.5888467",
+     "53.5889467",
+     "10.1014710",
+     "10.1015710"
+    ]
+   }
+  ]
+ },
+ {
+  "request": {
+   "params": {
+    "addressdetails": 1,
+    "city": "Bad Oldesloe",
+    "countrycodes": "de",
+    "format": "jsonv2",
+    "limit": 5,
+    "postalcode": "23843",
+    "street": "36 Lily-Braun-Straße"
+   },
+   "url": "https://nominatim.openstreetmap.org/search"
+  },
+  "response": [
+   {
+    "place_id": 143122918,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "way",
+    "osm_id": 243531509,
+    "lat": "53.7975103",
+    "lon": "10.4054010",
+    "category": "amenity",
+    "type": "car_wash",
+    "place_rank": 30,
+    "importance": 5.709391927972866e-05,
+    "addresstype": "amenity",
+    "name": "Waschbär",
+    "display_name": "Waschbär, 36, Lily-Braun-Straße, Rethwischhof, Sehmsdorf, Bad Oldesloe, Kreis Stormarn, Schleswig-Holstein, 23843, Deutschland",
+    "address": {
+     "amenity": "Waschbär",
+     "house_number": "36",
+     "road": "Lily-Braun-Straße",
+     "hamlet": "Rethwischhof",
+     "village": "Sehmsdorf",
+     "town": "Bad Oldesloe",
+     "county": "Kreis Stormarn",
+     "state": "Schleswig-Holstein",
+     "ISO3166-2-lvl4": "DE-SH",
+     "postcode": "23843",
+     "country": "Deutschland",
+     "country_code": "de"
+    },
+    "boundingbox": [
+     "53.7972041",
+     "53.7978163",
+     "10.4047102",
+     "10.4060918"
+    ]
+   },
+   {
+    "place_id": 143804777,
+    "licence": "Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright",
+    "osm_type": "way",
+    "osm_id": 128092791,
+    "lat": "53.7975649",
+    "lon": "10.4058258",
+    "category": "building",
+    "type": "yes",
+    "place_rank": 30,
+    "importance": 5.709391927972866e-05,
+    "addresstype": "building",
+    "name": "",
+    "display_name": "36, Lily-Braun-Straße, Rethwischhof, Sehmsdorf, Bad Oldesloe, Kreis Stormarn, Schleswig-Holstein, 23843, Deutschland",
+    "address": {
+     "house_number": "36",
+     "road": "Lily-Braun-Straße",
+     "hamlet": "Rethwischhof",
+     "village": "Sehmsdorf",
+     "town": "Bad Oldesloe",
+     "county": "Kreis Stormarn",
+     "state": "Schleswig-Holstein",
+     "ISO3166-2-lvl4": "DE-SH",
+     "postcode": "23843",
+     "country": "Deutschland",
+     "country_code": "de"
+    },
+    "boundingbox": [
+     "53.7974979",
+     "53.7976319",
+     "10.4057133",
+     "10.4059383"
+    ]
+   }
+  ]
+ }
+]

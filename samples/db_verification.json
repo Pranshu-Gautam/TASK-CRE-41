@@ -1,0 +1,337 @@
+{
+  "task_id": "TASK-CRE-41",
+  "pipeline_version": "1.0.0",
+  "generated_at": "2026-10-31T06:12:42.525238+00:00",
+  "queries": [
+    {
+      "name": "search_path",
+      "sql": "SHOW search_path",
+      "rows": [
+        {
+          "search_path": "iris_staging, public"
+        }
+      ]
+    },
+    {
+      "name": "postgres_version",
+      "sql": "SELECT version()",
+      "rows": [
+        {
+          "version": "PostgreSQL 16.4 (Debian 16.4-1.pgdg110+2) on x86_64-pc-linux-gnu, compiled by gcc (Debian 10.2.1-6) 10.2.1 20210110, 64-bit"
+        }
+      ]
+    },
+    {
+      "name": "postgis_version",
+      "sql": "SELECT postgis_version()",
+      "rows": [
+        {
+          "postgis_version": "3.4 USE_GEOS=1 USE_PROJ=1 USE_STATS=1"
+        }
+      ]
+    },
+    {
+      "name": "row_counts",
+      "sql": "SELECT operator, count(*) AS rows, count(geom) AS with_point, count(building_geom) AS with_building, count(parking_geom) AS with_parking FROM iris_staging.commercial_poi_staging GROUP BY operator ORDER BY operator",
+      "rows": [
+        {
+          "operator": "Clean Car",
+          "rows": 48,
+          "with_point": 47,
+          "with_building": 46,
+          "with_parking": 41
+        },
+        {
+          "operator": "Mr. Wash",
+          "rows": 36,
+          "with_point": 36,
+          "with_building": 35,
+          "with_parking": 31
+        }
+      ]
+    },
+    {
+      "name": "srid_check",
+      "sql": "SELECT DISTINCT ST_SRID(geom) AS geom_srid, ST_SRID(building_geom) AS building_srid, ST_SRID(parking_geom) AS parking_srid FROM iris_staging.commercial_poi_staging WHERE geom IS NOT NULL",
+      "rows": [
+        {
+          "geom_srid": 25832,
+          "building_srid": null,
+          "parking_srid": null
+        },
+        {
+          "geom_srid": 25832,
+          "building_srid": 25832,
+          "parking_srid": null
+        },
+        {
+          "geom_srid": 25832,
+          "building_srid": 25832,
+          "parking_srid": 25832
+        }
+      ]
+    },
+    {
+      "name": "geometry_columns_registered",
+      "sql": "SELECT f_table_schema, f_table_name, f_geometry_column, srid, type FROM geometry_columns WHERE f_table_schema = 'iris_staging' ORDER BY f_table_name, f_geometry_column",
+      "rows": [
+        {
+          "f_table_schema": "iris_staging",
+          "f_table_name": "commercial_poi_staging",
+          "f_geometry_column": "building_geom",
+          "srid": 25832,
+          "type": "MULTIPOLYGON"
+        },
+        {
+          "f_table_schema": "iris_staging",
+          "f_table_name": "commercial_poi_staging",
+          "f_geometry_column": "geom",
+          "srid": 25832,
+          "type": "POINT"
+        },
+        {
+          "f_table_schema": "iris_staging",
+          "f_table_name": "commercial_poi_staging",
+          "f_geometry_column": "parking_geom",
+          "srid": 25832,
+          "type": "MULTIPOLYGON"
+        }
+      ]
+    },
+    {
+      "name": "invalid_geometry_count",
+      "sql": "SELECT count(*) AS invalid_rows FROM iris_staging.commercial_poi_staging WHERE (building_geom IS NOT NULL AND NOT ST_IsValid(building_geom))    OR (parking_geom IS NOT NULL AND NOT ST_IsValid(parking_geom))",
+      "rows": [
+        {
+          "invalid_rows": 0
+        }
+      ]
+    },
+    {
+      "name": "duplicate_key_check",
+      "sql": "SELECT count(*) AS duplicate_dedup_keys FROM (  SELECT dedup_key FROM iris_staging.commercial_poi_staging   GROUP BY dedup_key HAVING count(*) > 1) AS d",
+      "rows": [
+        {
+          "duplicate_dedup_keys": 0
+        }
+      ]
+    },
+    {
+      "name": "area_sanity",
+      "sql": "SELECT operator, count(building_footprint_area_sqm) AS n_areas, round(min(building_footprint_area_sqm))::text AS min_sqm, round(avg(building_footprint_area_sqm))::text AS avg_sqm, round(max(building_footprint_area_sqm))::text AS max_sqm FROM iris_staging.commercial_poi_staging GROUP BY operator ORDER BY operator",
+      "rows": [
+        {
+          "operator": "Clean Car",
+          "n_areas": 46,
+          "min_sqm": "33",
+          "avg_sqm": "3347",
+          "max_sqm": "47136"
+        },
+        {
+          "operator": "Mr. Wash",
+          "n_areas": 35,
+          "min_sqm": "43",
+          "avg_sqm": "2159",
+          "max_sqm": "5611"
+        }
+      ]
+    },
+    {
+      "name": "area_recomputed_in_db",
+      "sql": "SELECT poi_uid, building_footprint_area_sqm AS stored_sqm, round(ST_Area(building_geom)::numeric, 1) AS postgis_sqm, abs(building_footprint_area_sqm - round(ST_Area(building_geom)::numeric, 1)) AS delta FROM iris_staging.commercial_poi_staging WHERE building_geom IS NOT NULL ORDER BY delta DESC LIMIT 5",
+      "rows": [
+        {
+          "poi_uid": "cre41-5f4cad0ce86c713ae6d3",
+          "stored_sqm": "416.6",
+          "postgis_sqm": "416.6",
+          "delta": "0.0"
+        },
+        {
+          "poi_uid": "cre41-4b7e51ba6e0ccb110c86",
+          "stored_sqm": "175.9",
+          "postgis_sqm": "175.9",
+          "delta": "0.0"
+        },
+        {
+          "poi_uid": "cre41-c0e99b9673679b85e3d1",
+          "stored_sqm": "1216.2",
+          "postgis_sqm": "1216.2",
+          "delta": "0.0"
+        },
+        {
+          "poi_uid": "cre41-86b259b6d3a52dee6140",
+          "stored_sqm": "117.9",
+          "postgis_sqm": "117.9",
+          "delta": "0.0"
+        },
+        {
+          "poi_uid": "cre41-e548c59b3b145f2e7c51",
+          "stored_sqm": "232.7",
+          "postgis_sqm": "232.7",
+          "delta": "0.0"
+        }
+      ]
+    },
+    {
+      "name": "match_method_distribution",
+      "sql": "SELECT building_match_method, building_match_confidence, count(*) AS rows FROM iris_staging.commercial_poi_staging GROUP BY 1, 2 ORDER BY rows DESC",
+      "rows": [
+        {
+          "building_match_method": "point_in_building",
+          "building_match_confidence": "high",
+          "rows": 64
+        },
+        {
+          "building_match_method": "nearest_building_le_30m",
+          "building_match_confidence": "low",
+          "rows": 9
+        },
+        {
+          "building_match_method": "nearest_building_le_30m",
+          "building_match_confidence": "medium",
+          "rows": 7
+        },
+        {
+          "building_match_method": null,
+          "building_match_confidence": "none",
+          "rows": 3
+        },
+        {
+          "building_match_method": "nearest_building_le_80m",
+          "building_match_confidence": "low",
+          "rows": 1
+        }
+      ]
+    },
+    {
+      "name": "objects_in_staging_schema",
+      "sql": "SELECT table_name FROM information_schema.tables WHERE table_schema = 'iris_staging' ORDER BY table_name",
+      "rows": [
+        {
+          "table_name": "commercial_poi_load_run"
+        },
+        {
+          "table_name": "commercial_poi_raw_staging"
+        },
+        {
+          "table_name": "commercial_poi_staging"
+        }
+      ]
+    },
+    {
+      "name": "objects_outside_staging_created_by_pipeline",
+      "sql": "SELECT table_schema, table_name FROM information_schema.tables WHERE table_name LIKE 'commercial_poi%' AND table_schema <> 'iris_staging'",
+      "rows": []
+    },
+    {
+      "name": "load_runs",
+      "sql": "SELECT run_id, stage, locations_processed, rows_inserted, rows_updated, rows_unchanged, rows_failed, duplicates_prevented, started_at FROM iris_staging.commercial_poi_load_run ORDER BY started_at",
+      "rows": [
+        {
+          "run_id": "load-20261031T055913Z-789edf23",
+          "stage": "load",
+          "locations_processed": 84,
+          "rows_inserted": 0,
+          "rows_updated": 0,
+          "rows_unchanged": 0,
+          "rows_failed": 84,
+          "duplicates_prevented": 0,
+          "started_at": "2026-10-31 05:59:13.743706+00:00"
+        },
+        {
+          "run_id": "load-20261031T060001Z-be685b1f",
+          "stage": "load",
+          "locations_processed": 84,
+          "rows_inserted": 84,
+          "rows_updated": 0,
+          "rows_unchanged": 0,
+          "rows_failed": 0,
+          "duplicates_prevented": 0,
+          "started_at": "2026-10-31 06:00:01.598496+00:00"
+        },
+        {
+          "run_id": "load-20261031T060022Z-aa599aa9",
+          "stage": "load",
+          "locations_processed": 84,
+          "rows_inserted": 0,
+          "rows_updated": 0,
+          "rows_unchanged": 84,
+          "rows_failed": 0,
+          "duplicates_prevented": 0,
+          "started_at": "2026-10-31 06:00:22.399702+00:00"
+        },
+        {
+          "run_id": "load-20261031T060023Z-45c14c86",
+          "stage": "load",
+          "locations_processed": 84,
+          "rows_inserted": 0,
+          "rows_updated": 0,
+          "rows_unchanged": 84,
+          "rows_failed": 0,
+          "duplicates_prevented": 0,
+          "started_at": "2026-10-31 06:00:23.746731+00:00"
+        },
+        {
+          "run_id": "load-20261031T060216Z-14515e0b",
+          "stage": "load",
+          "locations_processed": 84,
+          "rows_inserted": 0,
+          "rows_updated": 81,
+          "rows_unchanged": 3,
+          "rows_failed": 0,
+          "duplicates_prevented": 0,
+          "started_at": "2026-10-31 06:02:16.724189+00:00"
+        },
+        {
+          "run_id": "load-20261031T060218Z-c14ec7a5",
+          "stage": "load",
+          "locations_processed": 84,
+          "rows_inserted": 0,
+          "rows_updated": 0,
+          "rows_unchanged": 84,
+          "rows_failed": 0,
+          "duplicates_prevented": 0,
+          "started_at": "2026-10-31 06:02:18.030291+00:00"
+        },
+        {
+          "run_id": "load-20261031T061118Z-b8a25bd9",
+          "stage": "load",
+          "locations_processed": 84,
+          "rows_inserted": 0,
+          "rows_updated": 84,
+          "rows_unchanged": 0,
+          "rows_failed": 0,
+          "duplicates_prevented": 0,
+          "started_at": "2026-10-31 06:11:18.634011+00:00"
+        },
+        {
+          "run_id": "load-20261031T061206Z-4179aff8",
+          "stage": "load",
+          "locations_processed": 84,
+          "rows_inserted": 0,
+          "rows_updated": 0,
+          "rows_unchanged": 84,
+          "rows_failed": 0,
+          "duplicates_prevented": 0,
+          "started_at": "2026-10-31 06:12:06.315987+00:00"
+        },
+        {
+          "run_id": "load-20261031T061207Z-95d4d506",
+          "stage": "load",
+          "locations_processed": 84,
+          "rows_inserted": 0,
+          "rows_updated": 0,
+          "rows_unchanged": 84,
+          "rows_failed": 0,
+          "duplicates_prevented": 0,
+          "started_at": "2026-10-31 06:12:07.695330+00:00"
+        }
+      ]
+    }
+  ],
+  "schema_guard": {
+    "statements_checked": 14,
+    "write_statements_allowed": 0,
+    "violations": 0
+  }
+}
