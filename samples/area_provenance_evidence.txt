@@ -1,0 +1,22 @@
+TASK-CRE-41 — AREA PROVENANCE VALIDATION
+==============================================================
+raw Overpass cache : data/overpass_cache.sqlite (1374 distinct OSM features)
+three independent computations per row:
+  A  Shapely on the geometry rebuilt from the RAW OSM element
+  B  Shapely on the WKT read back from PostGIS
+  C  PostGIS ST_Area on the stored geometry
+
+rows with a building geometry       : 81
+re-derived from the raw OSM cache   : 81
+feature absent from the cache       : 0
+mismatches (> 0.1 m2 or bad SRID) : 0
+worst absolute delta across all     : 0.0485 m2
+
+VERDICT: PASS
+
+Interpretation: the stored areas are genuine ST_Area metrics of the
+matched source geometry in EPSG:25832 — not estimates, not fabricated.
+This does NOT show the matched building belongs to the operator; that
+is building_operator_attribution_status, and for 57 of 81 matches the
+evidence does not support attribution, so the operator-specific area
+column is NULL.

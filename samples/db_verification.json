@@ -1,7 +1,7 @@
 {
   "task_id": "TASK-CRE-41",
   "pipeline_version": "1.0.0",
-  "generated_at": "2026-10-31T18:29:34.671711+00:00",
+  "generated_at": "2026-10-31T19:42:26.464365+00:00",
   "queries": [
     {
       "name": "search_path",
@@ -141,21 +141,15 @@
       "sql": "SELECT poi_uid, building_footprint_area_sqm AS stored_sqm, round(ST_Area(building_geom)::numeric, 1) AS postgis_sqm, abs(building_footprint_area_sqm - round(ST_Area(building_geom)::numeric, 1)) AS delta FROM iris_staging.commercial_poi_staging WHERE building_geom IS NOT NULL ORDER BY delta DESC LIMIT 5",
       "rows": [
         {
-          "poi_uid": "cre41-4b7e51ba6e0ccb110c86",
-          "stored_sqm": "175.9",
-          "postgis_sqm": "175.9",
-          "delta": "0.0"
-        },
-        {
           "poi_uid": "cre41-e548c59b3b145f2e7c51",
           "stored_sqm": "232.7",
           "postgis_sqm": "232.7",
           "delta": "0.0"
         },
         {
-          "poi_uid": "cre41-86b259b6d3a52dee6140",
-          "stored_sqm": "117.9",
-          "postgis_sqm": "117.9",
+          "poi_uid": "cre41-5f4cad0ce86c713ae6d3",
+          "stored_sqm": "416.6",
+          "postgis_sqm": "416.6",
           "delta": "0.0"
         },
         {
@@ -165,9 +159,15 @@
           "delta": "0.0"
         },
         {
-          "poi_uid": "cre41-5f4cad0ce86c713ae6d3",
-          "stored_sqm": "416.6",
-          "postgis_sqm": "416.6",
+          "poi_uid": "cre41-c0e99b9673679b85e3d1",
+          "stored_sqm": "1216.2",
+          "postgis_sqm": "1216.2",
+          "delta": "0.0"
+        },
+        {
+          "poi_uid": "cre41-4b7e51ba6e0ccb110c86",
+          "stored_sqm": "175.9",
+          "postgis_sqm": "175.9",
           "delta": "0.0"
         }
       ]
@@ -457,6 +457,39 @@
           "rows_failed": 0,
           "duplicates_prevented": 0,
           "started_at": "2026-10-31 18:28:04.099804+00:00"
+        },
+        {
+          "run_id": "load-20261031T194144Z-4c2a4415",
+          "stage": "load",
+          "locations_processed": 84,
+          "rows_inserted": 0,
+          "rows_updated": 84,
+          "rows_unchanged": 0,
+          "rows_failed": 0,
+          "duplicates_prevented": 0,
+          "started_at": "2026-10-31 19:41:44.558278+00:00"
+        },
+        {
+          "run_id": "load-20261031T194147Z-d8eb234d",
+          "stage": "load",
+          "locations_processed": 84,
+          "rows_inserted": 0,
+          "rows_updated": 0,
+          "rows_unchanged": 84,
+          "rows_failed": 0,
+          "duplicates_prevented": 0,
+          "started_at": "2026-10-31 19:41:47.438448+00:00"
+        },
+        {
+          "run_id": "load-20261031T194151Z-5931a5d4",
+          "stage": "load",
+          "locations_processed": 84,
+          "rows_inserted": 0,
+          "rows_updated": 0,
+          "rows_unchanged": 84,
+          "rows_failed": 0,
+          "duplicates_prevented": 0,
+          "started_at": "2026-10-31 19:41:51.473378+00:00"
         }
       ]
     }

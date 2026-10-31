@@ -11,6 +11,8 @@ with `iris-cre41 samples` and `iris-cre41 verify`.
 | `duplicates_prevented.json` | Records collected from the official sites that resolved to an address already represented by another record of the same operator. Kept for provenance, not loaded as separate POIs. |
 | `db_verification.txt` / `.json` | Read-only SQL evidence: `search_path`, server versions, row counts, SRID checks, `geometry_columns` registration, invalid-geometry count, duplicate-key check, area recomputed by PostGIS vs the stored value, match-method distribution, objects inside/outside `iris_staging`, and the load-run log. |
 | `idempotency_evidence.txt` | The same input loaded twice, with the measured insert/update/unchanged counts from both runs. |
+| `role_isolation_evidence.txt` | Staging isolation proven at the **database** level: the restricted `iris_cre41_loader` role tested through a raw engine with the application guard removed. Regenerate with `make verify-role`. |
+| `area_provenance_evidence.txt` | Every stored building area recomputed three independent ways (rebuilt from the raw Overpass cache, Shapely on the stored WKT, PostGIS `ST_Area`). Regenerate with `make verify-areas`. |
 | `pipeline_stats.json` | Stage-by-stage counts and timings for the full run (copied from `data/pipeline_stats.json`). |
 
 Geometry and geocodes are derived from OpenStreetMap:

@@ -118,6 +118,8 @@ re-run or inspected on its own:
 | everything | `iris-cre41 run-all [--skip-load]` | `data/pipeline_stats.json` |
 | evidence | `iris-cre41 verify` | `samples/db_verification.{txt,json}` |
 | samples | `iris-cre41 samples` | `samples/*.csv`, `samples/*.json` |
+| area provenance | `make verify-areas` | `samples/area_provenance_evidence.txt` |
+| role isolation | `make verify-role` | `samples/role_isolation_evidence.txt` |
 | DDL | `iris-cre41 emit-ddl --out sql/001_init_staging.sql` | SQL |
 | smoke | `iris-cre41 smoke-test [--skip-load]` | offline run report |
 
@@ -332,8 +334,9 @@ All configuration is environment-driven; see [`.env.example`](.env.example).
 │   └── db/                    schema.py, guard.py, engine.py, loader.py
 ├── sql/                       001_init_staging.sql, 002_least_privilege_role.sql
 ├── tests/                     unit + integration + offline smoke; fixtures/
-├── tools/capture_fixtures.py     reproducible fixture capture with provenance
-├── tools/verify_role_isolation.py  database-level isolation evidence
+├── tools/capture_fixtures.py        reproducible fixture capture with provenance
+├── tools/verify_role_isolation.py   database-level isolation evidence
+├── tools/validate_area_provenance.py  areas re-derived from the raw OSM cache
 ├── samples/                   output samples and execution evidence
 ├── docs/                      SCHEMA_MAPPING.md, EXECUTION_EVIDENCE.md
 ├── Dockerfile  Dockerfile.py311  compose.yaml  .env.example  Makefile

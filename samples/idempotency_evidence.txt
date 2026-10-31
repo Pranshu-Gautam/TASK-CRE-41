@@ -35,6 +35,9 @@ Measured history, read back from iris_staging.commercial_poi_load_run
   12. load-20261031T182352Z-5cdd815c           | processed= 84 | inserted=  0 | updated=  0 | unchanged= 84 | failed=  0
   13. load-20261031T182802Z-957c6d0a           | processed= 84 | inserted=  0 | updated=  0 | unchanged= 84 | failed=  0
   14. load-20261031T182804Z-2a1daa4a           | processed= 84 | inserted=  0 | updated=  0 | unchanged= 84 | failed=  0
+  15. load-20261031T194144Z-4c2a4415           | processed= 84 | inserted=  0 | updated= 84 | unchanged=  0 | failed=  0
+  16. load-20261031T194147Z-d8eb234d           | processed= 84 | inserted=  0 | updated=  0 | unchanged= 84 | failed=  0
+  17. load-20261031T194151Z-5931a5d4           | processed= 84 | inserted=  0 | updated=  0 | unchanged= 84 | failed=  0
 
 Reading of the above
 --------------------
@@ -73,6 +76,20 @@ Reading of the above
                 ROLE iris_cre41_loader (see role_isolation_evidence.txt), not
                 as the database owner. Least privilege does not break the
                 load path.
+15. updated=84  FOURTH positive control, and the most important finding of the
+                audit. Runs 3-14 all re-loaded the *same* artefact file. A
+                full re-run of geocode+enrich produced fresh `queried_at` /
+                `geocoded_at` timestamps inside geometry_provenance, which is
+                a hashed JSONB column — so a genuine pipeline re-run reported
+                84 updates even when nothing upstream had changed. The hash
+                now strips any nested `*_at` key (db/loader.py::_strip_volatile);
+                this run is the one-time rewrite that change caused.
+16-17. unchanged=84  TRUE RE-RUN IDEMPOTENCY. Run 16 was preceded by
+                re-executing `enrich`, and run 17 by re-executing `geocode`
+                AND `enrich`, so in both cases the artefacts were re-derived
+                from scratch with brand-new provenance timestamps. The load
+                still reports zero inserts and zero updates: the hash now
+                reflects WHAT was observed, not WHEN it was observed.
 
 Note for operations: runs 5, 7 and 10 show that a change to the enrichment
 logic, the row_hash definition, or the schema causes a one-time full re-write.
@@ -83,7 +100,7 @@ Duplicate protection
 --------------------
 rows = 84   distinct poi_uid = 84   distinct source_uid = 84   distinct dedup_key = 84
 
-All four numbers are equal after fourteen load executions. The table also
+All four numbers are equal after seventeen load executions. The table also
 enforces UNIQUE(source_uid) and UNIQUE(dedup_key), so a duplicate address
 cannot be inserted even by a caller that bypasses the application-level
 deduplication — proven by
@@ -101,4 +118,9 @@ tests/test_db_integration.py
   test_first_seen_at_is_preserved_across_updates
   test_duplicate_dedup_key_cannot_be_inserted
   test_column_rename_migration_preserves_data
+  test_full_rerun_with_fresh_provenance_timestamps_is_a_no_op
   test_run_log_records_execution_evidence
+tests/test_loader_unit.py
+  test_row_hash_ignores_timestamps_nested_in_jsonb
+  test_row_hash_still_sees_substantive_provenance_changes
+  test_row_hash_ignores_run_ids_and_timestamps

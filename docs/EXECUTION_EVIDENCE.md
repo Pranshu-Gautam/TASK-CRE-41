@@ -226,13 +226,29 @@ Summary of the measured counts:
 | 6 — repeat | 0 | 0 | **84** | 0 |
 | 7 — `row_hash` definition changed | 0 | **84** | 0 | 0 |
 | 8, 9 — repeat | 0 | 0 | **84** | 0 |
-| 10 — attribution columns added | 0 | **84** | 0 | 0 |
+| 10 — attribution columns added (audit) | 0 | **84** | 0 | 0 |
 | 11, 12 — repeat | 0 | 0 | **84** | 0 |
 | 13, 14 — repeat **as the restricted role** | 0 | 0 | **84** | 0 |
+| 15 — volatile timestamps removed from the hash (audit) | 0 | **84** | 0 | 0 |
+| 16 — repeat **after re-running `enrich`** | 0 | 0 | **84** | 0 |
+| 17 — repeat **after re-running `geocode` + `enrich`** | 0 | 0 | **84** | 0 |
 
-Row count stayed at **84** throughout; `poi_uid`, `source_uid` and `dedup_key`
-are each distinct 84 times. Run 5 is the positive control for row-level change
-detection: exactly the 81 rows with a building match changed.
+Row count stayed at **84** throughout seventeen loads; `poi_uid`,
+`source_uid` and `dedup_key` are each distinct 84 times.
+
+Two results matter more than the rest:
+
+* **Run 5** is the positive control for *row-level* change detection: exactly
+  the 81 rows with a building match changed, the 3 without one did not.
+* **Runs 16 and 17 are true re-run idempotency, not just re-load
+  idempotency.** This distinction was a defect found by the audit: runs 3-14
+  all re-loaded the *same* artefact file. A genuine re-run of `geocode` and
+  `enrich` writes fresh `queried_at` / `geocoded_at` values into
+  `geometry_provenance`, a hashed JSONB column, so every row looked modified
+  on every run. The content hash now strips any nested `*_at` key
+  (`db/loader.py::_strip_volatile`), and runs 16 and 17 — each preceded by
+  re-deriving the artefacts from scratch — report zero inserts and zero
+  updates. The hash reflects *what* was observed, not *when*.
 
 ## 9. Database-level staging isolation
 
@@ -274,15 +290,16 @@ smoke-test --skip-load           -> "passed": true
 
 | Invocation | Result |
 |---|---|
-| `pytest -q -m "not integration"` | **248 passed**, 19 deselected |
-| `DB_URI=... LOADER_DB_URI=... pytest -q` | **276 passed, 0 failed, 0 skipped** |
-| `pytest -q -m integration` (no `DB_URI`) | **19 skipped**, "NOT executed" |
-| Docker (3.13) `pytest -q -m "not integration"` | **248 passed** |
-| Docker (3.11) `pytest -q -m "not integration"` | **248 passed** |
+| `pytest -q -m "not integration"` | **251 passed**, 29 deselected |
+| `DB_URI=... LOADER_DB_URI=... pytest -q` | **280 passed, 0 failed, 0 skipped** |
+| `DB_URI=...` only (no loader role) | 277 passed, **3 skipped** with "NOT executed" |
+| `pytest -q -m integration` (no `DB_URI`) | **29 skipped**, "NOT executed" |
+| Docker (3.13) `pytest -q -m "not integration"` | **251 passed** |
+| Docker (3.11.18) `pytest -q -m "not integration"` | **251 passed** |
 | `docker compose run --rm pipeline smoke-test --skip-load` | **`"passed": true`** |
-| Unit tests from the extracted submission ZIP | **248 passed** |
+| Clean-room: extract ZIP, documented commands only | see §12 |
 
-248 unit tests (no network, no database) cover both operators' parsing against
+251 unit tests (no network, no database) cover both operators' parsing against
 real captured fixtures including three Clean Car markup variants, address
 normalisation, stable ids, deduplication, CRS validation and projection,
 geometry assembly/repair/rejection, the spatial matching rules, **the operator
@@ -291,13 +308,38 @@ mode, HTTP retry/backoff/rate limiting, the staging write guard (31
 allow/block cases), row hashing, **JSONB NULL semantics**, and the offline
 end-to-end smoke test.
 
-28 integration tests against real PostgreSQL 16.4/PostGIS 3.4.3 add: version
+29 integration tests against real PostgreSQL 16.4/PostGIS 3.4.3 add: version
 assertions, restricted `search_path`, geometry-column registration, GiST
 indexes, insert→idempotent re-load, change detection, `first_seen_at`
 preservation, duplicate-key rejection, SRID and geometry-type assertions,
 stored-vs-PostGIS area agreement, NULL-metric handling, wrong-SRID and
 malformed-postcode rejection by CHECK constraints, **the four
 attribution constraints**, **SQL-NULL-not-JSON-null**, **the column-rename
-migration preserving data**, the run log, a canary table in a production-like
-schema, and **three database-level isolation tests using the restricted role
-through an unguarded engine**.
+migration preserving data**, **full-re-run idempotency with fresh provenance
+timestamps**, the run log, a canary table in a production-like schema, and
+**three database-level isolation tests using the restricted role through an
+unguarded engine**.
+
+## 12. Clean-room reproducibility
+
+The submission ZIP was extracted into an empty directory and only the
+documented README commands were run, against a **virgin PostGIS volume**:
+
+| Step | Command | Result |
+|---|---|---|
+| 1 | `cp .env.example .env` | ok (host port and container prefix changed so it can run beside the dev stack — both documented variables) |
+| 2 | `docker compose up -d db` | PostgreSQL 16.4 / PostGIS 3.4.3, healthy |
+| 3 | `docker compose build pipeline` | built |
+| 4 | `docker compose run --rm pipeline smoke-test --skip-load` | `"passed": true`, 8 fixture pages, 0 network calls |
+| 5 | `docker compose run --rm pipeline init-db` | schema created on a virgin DB, `search_path = iris_staging, public`, 0 guard violations |
+| 6 | `docker compose run --rm pipeline smoke-test` | 5 processed, **5 inserted** |
+| 7 | repeat step 6 | 0 inserted (idempotent) |
+| 8 | `collect --operator mrwash --limit 3` (live, cold cache) | 3 collected, 0 failures |
+| 9 | `normalize` → `geocode` → `enrich` | 3 canonical, 3 geocoded, 3 projected, 3 buildings, 3 parking, 1 operator-attributable |
+| 10 | `load` | 2 inserted, 1 updated (one site overlapped the smoke set) |
+| 11 | `load` again | **0 inserted, 0 updated, 3 unchanged** |
+
+Two defects were found by this exercise and fixed (hard-coded
+`container_name` blocking a second instance; a missing `data/` directory being
+created as root by the Docker daemon). Steps 1-11 above are the run **after**
+those fixes.

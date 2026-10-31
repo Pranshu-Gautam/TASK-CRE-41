@@ -47,6 +47,10 @@ verify-py311:  # prove the lock and the test suite work on Python 3.11
 	docker run --rm iris-cre41-py311 python -m pytest -q -m "not integration" -p no:cacheprovider
 	docker run --rm iris-cre41-py311 python -m iris_cre41.cli smoke-test --skip-load
 
+verify-areas:  # prove stored areas are real ST_Area metrics of the source geometry
+	DB_URI=$(DB_URI) AREA_EVIDENCE_OUT=samples/area_provenance_evidence.txt \
+	  .venv/bin/python tools/validate_area_provenance.py
+
 verify-role:   # database-level staging isolation evidence (needs LOADER_DB_URI)
 	LOADER_DB_URI=$(LOADER_DB_URI) ADMIN_DB_URI=$(DB_URI) \
 	ISOLATION_EVIDENCE_OUT=samples/role_isolation_evidence.txt \

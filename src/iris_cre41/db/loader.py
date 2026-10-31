@@ -82,9 +82,40 @@ def _json_safe(value: Any) -> Any:
     return value
 
 
+# Timestamp keys that appear *inside* JSONB payloads (notably
+# geometry_provenance, which records when each source was queried). They are
+# valuable provenance but change on every execution, so including them in the
+# content hash would make a full pipeline re-run report an update for every
+# row even when nothing upstream changed. Stripped recursively, by suffix, so
+# a new "<something>_at" key cannot silently reintroduce the problem.
+_VOLATILE_KEY_SUFFIXES = ("_at",)
+
+
+def _strip_volatile(value: Any) -> Any:
+    """Recursively drop volatile timestamp keys from a nested payload."""
+    if isinstance(value, dict):
+        return {
+            key: _strip_volatile(inner)
+            for key, inner in value.items()
+            if not (
+                isinstance(key, str)
+                and key.endswith(_VOLATILE_KEY_SUFFIXES)
+            )
+        }
+    if isinstance(value, list):
+        return [_strip_volatile(item) for item in value]
+    return value
+
+
 def compute_row_hash(row: dict[str, Any]) -> str:
+    """Content hash driving change detection on upsert.
+
+    Excludes the run-level columns in ``_HASH_EXCLUDED`` and any ``*_at`` key
+    nested inside a JSONB payload, so the hash reflects *what was observed*
+    rather than *when it was observed*.
+    """
     payload = {
-        key: _json_safe(value)
+        key: _strip_volatile(_json_safe(value))
         for key, value in sorted(row.items())
         if key not in _HASH_EXCLUDED
     }

@@ -64,7 +64,7 @@
         "returned_city": "Bad Oldesloe",
         "alternatives_rejected": 0,
         "error": null,
-        "geocoded_at": "2026-10-31T18:22:41.921587+00:00",
+        "geocoded_at": "2026-10-31T19:41:49.480406+00:00",
         "from_cache": false
       },
       "x_25832": 592444.273,
@@ -146,7 +146,7 @@
           "status": "ok",
           "source_epsg": 4326,
           "stored_epsg": 25832,
-          "geocoded_at": "2026-10-31T18:22:41.921587+00:00"
+          "geocoded_at": "2026-10-31T19:41:49.480406+00:00"
         },
         "osm_query": {
           "provider": "overpass-api.de",
@@ -157,7 +157,7 @@
           "building_candidates": 7,
           "parking_candidates": 1,
           "geometries_rejected": 0,
-          "queried_at": "2026-10-31T18:22:42.328545+00:00"
+          "queried_at": "2026-10-31T19:41:50.343317+00:00"
         },
         "building": {
           "kind": "osm_building_footprint",
@@ -254,7 +254,7 @@
         "returned_city": "Bad Oldesloe",
         "alternatives_rejected": 1,
         "error": null,
-        "geocoded_at": "2026-10-31T18:22:41.931876+00:00",
+        "geocoded_at": "2026-10-31T19:41:49.500116+00:00",
         "from_cache": false
       },
       "x_25832": 592567.086,
@@ -321,7 +321,7 @@
           "status": "ok",
           "source_epsg": 4326,
           "stored_epsg": 25832,
-          "geocoded_at": "2026-10-31T18:22:41.931876+00:00"
+          "geocoded_at": "2026-10-31T19:41:49.500116+00:00"
         },
         "osm_query": {
           "provider": "overpass-api.de",
@@ -332,7 +332,7 @@
           "building_candidates": 11,
           "parking_candidates": 1,
           "geometries_rejected": 0,
-          "queried_at": "2026-10-31T18:22:42.329503+00:00"
+          "queried_at": "2026-10-31T19:41:50.344999+00:00"
         },
         "building": {
           "kind": "osm_building_footprint",
@@ -432,7 +432,7 @@
         "returned_city": "Bad Segeberg",
         "alternatives_rejected": 0,
         "error": null,
-        "geocoded_at": "2026-10-31T18:22:41.932162+00:00",
+        "geocoded_at": "2026-10-31T19:41:49.500595+00:00",
         "from_cache": false
       },
       "x_25832": 585987.906,
@@ -510,7 +510,7 @@
           "status": "ok",
           "source_epsg": 4326,
           "stored_epsg": 25832,
-          "geocoded_at": "2026-10-31T18:22:41.932162+00:00"
+          "geocoded_at": "2026-10-31T19:41:49.500595+00:00"
         },
         "osm_query": {
           "provider": "overpass-api.de",
@@ -521,7 +521,7 @@
           "building_candidates": 6,
           "parking_candidates": 4,
           "geometries_rejected": 0,
-          "queried_at": "2026-10-31T18:22:42.330388+00:00"
+          "queried_at": "2026-10-31T19:41:50.347403+00:00"
         },
         "building": {
           "kind": "osm_building_footprint",
@@ -618,7 +618,7 @@
         "returned_city": "Bremen",
         "alternatives_rejected": 1,
         "error": null,
-        "geocoded_at": "2026-10-31T18:22:41.932375+00:00",
+        "geocoded_at": "2026-10-31T19:41:49.500963+00:00",
         "from_cache": false
       },
       "x_25832": 486420.367,
@@ -689,7 +689,7 @@
           "status": "ok",
           "source_epsg": 4326,
           "stored_epsg": 25832,
-          "geocoded_at": "2026-10-31T18:22:41.932375+00:00"
+          "geocoded_at": "2026-10-31T19:41:49.500963+00:00"
         },
         "osm_query": {
           "provider": "overpass-api.de",
@@ -700,7 +700,7 @@
           "building_candidates": 8,
           "parking_candidates": 1,
           "geometries_rejected": 0,
-          "queried_at": "2026-10-31T18:22:42.331084+00:00"
+          "queried_at": "2026-10-31T19:41:50.349401+00:00"
         },
         "building": {
           "kind": "osm_building_footprint",
@@ -800,7 +800,7 @@
         "returned_city": "Bremerhaven",
         "alternatives_rejected": 0,
         "error": null,
-        "geocoded_at": "2026-10-31T18:22:41.932545+00:00",
+        "geocoded_at": "2026-10-31T19:41:49.501265+00:00",
         "from_cache": false
       },
       "x_25832": 473267.347,
@@ -880,7 +880,7 @@
           "status": "ok",
           "source_epsg": 4326,
           "stored_epsg": 25832,
-          "geocoded_at": "2026-10-31T18:22:41.932545+00:00"
+          "geocoded_at": "2026-10-31T19:41:49.501265+00:00"
         },
         "osm_query": {
           "provider": "overpass-api.de",
@@ -891,7 +891,7 @@
           "building_candidates": 5,
           "parking_candidates": 4,
           "geometries_rejected": 0,
-          "queried_at": "2026-10-31T18:22:42.331802+00:00"
+          "queried_at": "2026-10-31T19:41:50.350681+00:00"
         },
         "building": {
           "kind": "osm_building_footprint",
@@ -990,7 +990,7 @@
         "returned_city": "Buchholz in der Nordheide",
         "alternatives_rejected": 1,
         "error": null,
-        "geocoded_at": "2026-10-31T18:22:41.932706+00:00",
+        "geocoded_at": "2026-10-31T19:41:49.501594+00:00",
         "from_cache": false
       },
       "x_25832": 557641.644,
@@ -1057,7 +1057,7 @@
           "status": "ok",
           "source_epsg": 4326,
           "stored_epsg": 25832,
-          "geocoded_at": "2026-10-31T18:22:41.932706+00:00"
+          "geocoded_at": "2026-10-31T19:41:49.501594+00:00"
         },
         "osm_query": {
           "provider": "overpass-api.de",
@@ -1068,7 +1068,7 @@
           "building_candidates": 11,
           "parking_candidates": 1,
           "geometries_rejected": 0,
-          "queried_at": "2026-10-31T18:22:42.332680+00:00"
+          "queried_at": "2026-10-31T19:41:50.352255+00:00"
         },
         "building": {
           "kind": "osm_building_footprint",

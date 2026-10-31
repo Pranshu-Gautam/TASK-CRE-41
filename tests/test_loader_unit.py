@@ -177,3 +177,54 @@ def test_jsonb_columns_use_sql_null_not_json_null():
         assert column.type.none_as_null is True, (
             f"{column.name} would store Python None as JSON null"
         )
+
+
+def test_row_hash_ignores_timestamps_nested_in_jsonb():
+    """A full pipeline re-run must not report a change just because it ran.
+
+    geometry_provenance records when each source was queried. That is valuable
+    provenance but changes every execution, so it must not enter the content
+    hash — otherwise every row looks modified on every run.
+    """
+    first = poi()
+    first.geometry_provenance = {
+        "osm_query": {"provider": "overpass-api.de", "elements_returned": 9,
+                      "queried_at": "2026-10-31T06:00:00+00:00"},
+        "point": {"provider": "nominatim", "geocoded_at": "2026-10-31T05:00:00+00:00"},
+    }
+    second = poi()
+    second.geometry_provenance = {
+        "osm_query": {"provider": "overpass-api.de", "elements_returned": 9,
+                      "queried_at": "2026-11-05T22:13:41+00:00"},
+        "point": {"provider": "nominatim", "geocoded_at": "2026-11-05T22:10:00+00:00"},
+    }
+    assert build_poi_row(first, "c", "l")["row_hash"] == (
+        build_poi_row(second, "c", "l")["row_hash"]
+    )
+
+
+def test_row_hash_still_sees_substantive_provenance_changes():
+    """Stripping timestamps must not blind the hash to real changes."""
+    baseline = poi()
+    baseline.geometry_provenance = {"osm_query": {"elements_returned": 9,
+                                                  "queried_at": "2026-10-31T06:00:00Z"}}
+    changed = poi()
+    changed.geometry_provenance = {"osm_query": {"elements_returned": 14,
+                                                 "queried_at": "2026-10-31T06:00:00Z"}}
+    assert build_poi_row(baseline, "c", "l")["row_hash"] != (
+        build_poi_row(changed, "c", "l")["row_hash"]
+    )
+
+
+def test_strip_volatile_handles_nested_lists_and_scalars():
+    from iris_cre41.db.loader import _strip_volatile
+
+    payload = {
+        "keep": 1,
+        "created_at": "x",
+        "nested": [{"queried_at": "x", "n": 2}, "plain", 3],
+    }
+    assert _strip_volatile(payload) == {
+        "keep": 1,
+        "nested": [{"n": 2}, "plain", 3],
+    }

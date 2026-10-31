@@ -637,3 +637,41 @@ def test_schema_creation_does_not_require_database_create_privilege(loader_uri):
     engine, _ = create_staging_engine(loader_uri, "iris_staging")
     assert ensure_schema(engine, "iris_staging") is False
     engine.dispose()
+
+
+def test_full_rerun_with_fresh_provenance_timestamps_is_a_no_op(staging):
+    """Re-deriving the artefacts must not report a change just because it ran.
+
+    This is stronger than re-loading the same artefact: the provenance
+    timestamps differ, as they would after a genuine re-run of geocode and
+    enrich.
+    """
+    engine, _, metadata, _ = staging
+    first = make_poi(7)
+    first.geometry_provenance = {
+        "point": {"provider": "nominatim", "geocoded_at": "2026-10-31T05:00:00+00:00"},
+        "osm_query": {"provider": "overpass-api.de", "elements_returned": 9,
+                      "queried_at": "2026-10-31T06:00:00+00:00"},
+    }
+    initial = load_pois(engine, metadata, [first], "collect-1", "load-1")
+    assert initial.inserted == 1
+
+    second = make_poi(7)
+    second.geometry_provenance = {
+        "point": {"provider": "nominatim", "geocoded_at": "2026-11-09T21:00:00+00:00"},
+        "osm_query": {"provider": "overpass-api.de", "elements_returned": 9,
+                      "queried_at": "2026-11-09T22:00:00+00:00"},
+    }
+    repeat = load_pois(engine, metadata, [second], "collect-2", "load-2")
+    assert (repeat.inserted, repeat.updated, repeat.unchanged) == (0, 0, 1)
+
+    # A substantive provenance change still registers.
+    third = make_poi(7)
+    third.geometry_provenance = {
+        "point": {"provider": "nominatim", "geocoded_at": "2026-11-09T21:00:00+00:00"},
+        "osm_query": {"provider": "overpass-api.de", "elements_returned": 14,
+                      "queried_at": "2026-11-09T22:00:00+00:00"},
+    }
+    changed = load_pois(engine, metadata, [third], "collect-3", "load-3")
+    assert (changed.inserted, changed.updated, changed.unchanged) == (0, 1, 0)
+    assert table_counts(engine, metadata)["commercial_poi_staging"] == 1
