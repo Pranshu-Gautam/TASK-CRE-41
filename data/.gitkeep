@@ -1,0 +1,9 @@
+Pipeline artefacts are written here (raw_locations.json, normalized_locations.json,
+geocoded_locations.json, enriched_pois.json, pipeline_stats.json) along with the
+SQLite response caches. The contents are reproducible outputs and are git-ignored;
+this file keeps the directory itself in the archive, because compose.yaml
+bind-mounts it and a host directory created by the Docker daemon would be owned
+by root and unwritable by the non-root container user.
+
+Offline smoke-test runs are isolated to data/smoke/ so they can never overwrite
+a real run's artefacts.

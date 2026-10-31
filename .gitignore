@@ -13,5 +13,9 @@ htmlcov/
 .env.*
 !.env.example
 
-# Pipeline artefacts and caches are reproducible outputs, not source.
-data/
+# Pipeline artefacts and caches are reproducible outputs, not source — but the
+# directory itself is shipped. Docker bind-mounts it, and a missing host
+# directory is created by the daemon as root, which the non-root container
+# user then cannot write to.
+data/*
+!data/.gitkeep
