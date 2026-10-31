@@ -282,7 +282,7 @@ consecutive loads reported `inserted=0 updated=0 unchanged=84 failed=0`.
 python 3.11.18
   shapely 2.0.7   pyproj 3.7.2   sqlalchemy 2.1.6
   geoalchemy2 0.20.0   psycopg 3.3.6   requests 2.34.2   lxml 6.1.3
-pytest -q -m "not integration"   -> 248 passed, 19 deselected
+pytest -q -m "not integration"   -> 251 passed, 29 deselected in 3.28s
 smoke-test --skip-load           -> "passed": true
 ```
 
