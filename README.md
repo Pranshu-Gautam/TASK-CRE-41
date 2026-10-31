@@ -307,6 +307,8 @@ All configuration is environment-driven; see [`.env.example`](.env.example).
 | `IRIS_PARKING_SEARCH_RADIUS_M` | `120` | Candidate search radius |
 | `IRIS_HTTP_TIMEOUT` / `IRIS_HTTP_MAX_RETRIES` | `30` / `3` | Per request |
 | `IRIS_LOG_LEVEL` / `IRIS_LOG_JSON` | `INFO` / `1` | Structured logging |
+| `APP_UID` / `APP_GID` | `1000` | Host user the pipeline container runs as, so bind-mounted `./data` and `./samples` stay writable (`id -u` / `id -g`) |
+| `IRIS_CONTAINER_PREFIX` | `iris-cre41` | Container name prefix. Change it (and `POSTGRES_HOST_PORT`) to run a second copy alongside an existing one |
 
 ---
 
