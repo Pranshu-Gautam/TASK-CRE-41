@@ -53,7 +53,7 @@ docker compose run --rm pipeline samples
 Python **3.11+**, as the task requires. `requirements.txt` uses environment
 markers so one lock works across interpreters: `pyproj` 3.8 / `shapely` 2.2
 declare `Requires-Python >= 3.12`, so 3.11 installs `pyproj` 3.7.2 /
-`shapely` 2.0.7 instead. Both configurations are verified (248 unit tests pass
+`shapely` 2.0.7 instead. Both configurations are verified (251 unit tests pass
 on 3.11.18 and on 3.13); the full live run was executed on 3.14.
 
 ```bash
@@ -71,11 +71,16 @@ iris-cre41 verify && iris-cre41 samples
 ### Tests
 
 ```bash
-pytest -q                                    # unit tests only; no network, no DB
+pytest -q                                    # 251 unit tests; no network, no DB
 DB_URI='postgresql+psycopg://iris:iris_local_dev_only@localhost:55432/iris' \
-  pytest -q                                  # adds the integration tests
+LOADER_DB_URI='postgresql+psycopg://iris_cre41_loader:loader_local_dev_only@localhost:55432/iris' \
+  pytest -q                                  # 280 tests (adds 29 integration)
 pytest -q -m "not integration"               # explicitly exclude them
 ```
+
+Expected counts: **251 unit**, **280 total** with both URIs set. With `DB_URI`
+only, 277 pass and the 3 database-level isolation tests skip. With neither,
+all 29 integration tests skip with an explicit "NOT executed" reason.
 
 Integration tests **skip with a stated reason** when `DB_URI` is missing or
 unreachable — an unexecuted integration test can never look like a pass. The

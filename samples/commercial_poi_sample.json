@@ -25,8 +25,8 @@
         "source_system": "clean-car.com",
         "source_record_id": "bad-oldesloe",
         "source_url": "https://www.clean-car.com/standorte/bad-oldesloe/",
-        "retrieved_at": "2026-10-31T18:18:27.272253+00:00",
-        "html_sha256": "6c07052246c40606f6bdd3820e7d2a499eacd76a12d0577ae14a78740ee6d304",
+        "retrieved_at": "2026-11-01T04:30:06.372055+00:00",
+        "html_sha256": "6c79591480c4177c6ae429eedab152c01cb1ff2ccd255b7bca7c2f0f92229a0a",
         "source_attributes": {
           "slug": "bad-oldesloe",
           "poi_category": "car_wash",
@@ -64,7 +64,7 @@
         "returned_city": "Bad Oldesloe",
         "alternatives_rejected": 0,
         "error": null,
-        "geocoded_at": "2026-10-31T19:41:49.480406+00:00",
+        "geocoded_at": "2026-11-01T04:31:49.991844+00:00",
         "from_cache": false
       },
       "x_25832": 592444.273,
@@ -146,7 +146,7 @@
           "status": "ok",
           "source_epsg": 4326,
           "stored_epsg": 25832,
-          "geocoded_at": "2026-10-31T19:41:49.480406+00:00"
+          "geocoded_at": "2026-11-01T04:31:49.991844+00:00"
         },
         "osm_query": {
           "provider": "overpass-api.de",
@@ -157,7 +157,7 @@
           "building_candidates": 7,
           "parking_candidates": 1,
           "geometries_rejected": 0,
-          "queried_at": "2026-10-31T19:41:50.343317+00:00"
+          "queried_at": "2026-11-01T04:31:50.048226+00:00"
         },
         "building": {
           "kind": "osm_building_footprint",
@@ -215,8 +215,8 @@
         "source_system": "clean-car.com",
         "source_record_id": "bad-oldesloe-2",
         "source_url": "https://www.clean-car.com/standorte/bad-oldesloe-2/",
-        "retrieved_at": "2026-10-31T18:18:30.355594+00:00",
-        "html_sha256": "2e026038e9cc60d5c5baaa04dbb25b416ea561e18f5191291ef3ef0fa01bd436",
+        "retrieved_at": "2026-11-01T04:30:10.037293+00:00",
+        "html_sha256": "4c04f0ceb152bc64bbaa6bf0f5aa122cfe2e62a252ced66908a30edd9ea52046",
         "source_attributes": {
           "slug": "bad-oldesloe-2",
           "poi_category": "car_wash",
@@ -254,7 +254,7 @@
         "returned_city": "Bad Oldesloe",
         "alternatives_rejected": 1,
         "error": null,
-        "geocoded_at": "2026-10-31T19:41:49.500116+00:00",
+        "geocoded_at": "2026-11-01T04:31:50.010737+00:00",
         "from_cache": false
       },
       "x_25832": 592567.086,
@@ -321,7 +321,7 @@
           "status": "ok",
           "source_epsg": 4326,
           "stored_epsg": 25832,
-          "geocoded_at": "2026-10-31T19:41:49.500116+00:00"
+          "geocoded_at": "2026-11-01T04:31:50.010737+00:00"
         },
         "osm_query": {
           "provider": "overpass-api.de",
@@ -332,7 +332,7 @@
           "building_candidates": 11,
           "parking_candidates": 1,
           "geometries_rejected": 0,
-          "queried_at": "2026-10-31T19:41:50.344999+00:00"
+          "queried_at": "2026-11-01T04:31:50.050039+00:00"
         },
         "building": {
           "kind": "osm_building_footprint",
@@ -393,8 +393,8 @@
         "source_system": "clean-car.com",
         "source_record_id": "bad-segeberg",
         "source_url": "https://www.clean-car.com/standorte/bad-segeberg/",
-        "retrieved_at": "2026-10-31T18:18:33.453913+00:00",
-        "html_sha256": "da791ba0c99592bfa555fce2f4239cb156e0fc6d44bb2d99d997fe52a6e4fdde",
+        "retrieved_at": "2026-11-01T04:30:13.386929+00:00",
+        "html_sha256": "d8cf5681d33fc1a0562458652bd9b4091b592d0a3fc9b5dbffc2cf082ae385a6",
         "source_attributes": {
           "slug": "bad-segeberg",
           "poi_category": "car_wash",
@@ -432,7 +432,7 @@
         "returned_city": "Bad Segeberg",
         "alternatives_rejected": 0,
         "error": null,
-        "geocoded_at": "2026-10-31T19:41:49.500595+00:00",
+        "geocoded_at": "2026-11-01T04:31:50.011222+00:00",
         "from_cache": false
       },
       "x_25832": 585987.906,
@@ -510,7 +510,7 @@
           "status": "ok",
           "source_epsg": 4326,
           "stored_epsg": 25832,
-          "geocoded_at": "2026-10-31T19:41:49.500595+00:00"
+          "geocoded_at": "2026-11-01T04:31:50.011222+00:00"
         },
         "osm_query": {
           "provider": "overpass-api.de",
@@ -521,7 +521,7 @@
           "building_candidates": 6,
           "parking_candidates": 4,
           "geometries_rejected": 0,
-          "queried_at": "2026-10-31T19:41:50.347403+00:00"
+          "queried_at": "2026-11-01T04:31:50.051844+00:00"
         },
         "building": {
           "kind": "osm_building_footprint",
@@ -579,8 +579,8 @@
         "source_system": "clean-car.com",
         "source_record_id": "bremen",
         "source_url": "https://www.clean-car.com/standorte/bremen/",
-        "retrieved_at": "2026-10-31T18:18:36.270397+00:00",
-        "html_sha256": "2af5c4332dfaeaf71db5ffe8f1e11a5bdd4b4488455a3f5b6c5ede6ebbcbc496",
+        "retrieved_at": "2026-11-01T04:30:16.404792+00:00",
+        "html_sha256": "354cd3c5a13e6942b370e6841f1cfd406dace1389cf48b545c9ea4b10f0bd6c6",
         "source_attributes": {
           "slug": "bremen",
           "poi_category": "car_wash",
@@ -618,7 +618,7 @@
         "returned_city": "Bremen",
         "alternatives_rejected": 1,
         "error": null,
-        "geocoded_at": "2026-10-31T19:41:49.500963+00:00",
+        "geocoded_at": "2026-11-01T04:31:50.011600+00:00",
         "from_cache": false
       },
       "x_25832": 486420.367,
@@ -689,7 +689,7 @@
           "status": "ok",
           "source_epsg": 4326,
           "stored_epsg": 25832,
-          "geocoded_at": "2026-10-31T19:41:49.500963+00:00"
+          "geocoded_at": "2026-11-01T04:31:50.011600+00:00"
         },
         "osm_query": {
           "provider": "overpass-api.de",
@@ -700,7 +700,7 @@
           "building_candidates": 8,
           "parking_candidates": 1,
           "geometries_rejected": 0,
-          "queried_at": "2026-10-31T19:41:50.349401+00:00"
+          "queried_at": "2026-11-01T04:31:50.053346+00:00"
         },
         "building": {
           "kind": "osm_building_footprint",
@@ -761,8 +761,8 @@
         "source_system": "clean-car.com",
         "source_record_id": "bremerhaven",
         "source_url": "https://www.clean-car.com/standorte/bremerhaven/",
-        "retrieved_at": "2026-10-31T18:18:39.599374+00:00",
-        "html_sha256": "6efc70fef5b9b89515c184454ac402037d6165d04d3206a1c2817a57b977d91f",
+        "retrieved_at": "2026-11-01T04:30:18.829484+00:00",
+        "html_sha256": "062c0397ea4f84a916d5606c01edd56f8ffadc68a50ad4c974e77cc0ce540ca6",
         "source_attributes": {
           "slug": "bremerhaven",
           "poi_category": "car_wash",
@@ -800,7 +800,7 @@
         "returned_city": "Bremerhaven",
         "alternatives_rejected": 0,
         "error": null,
-        "geocoded_at": "2026-10-31T19:41:49.501265+00:00",
+        "geocoded_at": "2026-11-01T04:31:50.011931+00:00",
         "from_cache": false
       },
       "x_25832": 473267.347,
@@ -880,7 +880,7 @@
           "status": "ok",
           "source_epsg": 4326,
           "stored_epsg": 25832,
-          "geocoded_at": "2026-10-31T19:41:49.501265+00:00"
+          "geocoded_at": "2026-11-01T04:31:50.011931+00:00"
         },
         "osm_query": {
           "provider": "overpass-api.de",
@@ -891,7 +891,7 @@
           "building_candidates": 5,
           "parking_candidates": 4,
           "geometries_rejected": 0,
-          "queried_at": "2026-10-31T19:41:50.350681+00:00"
+          "queried_at": "2026-11-01T04:31:50.054732+00:00"
         },
         "building": {
           "kind": "osm_building_footprint",
@@ -951,8 +951,8 @@
         "source_system": "clean-car.com",
         "source_record_id": "buchholz",
         "source_url": "https://www.clean-car.com/standorte/buchholz/",
-        "retrieved_at": "2026-10-31T18:18:42.984010+00:00",
-        "html_sha256": "e473af1cf1858f9602f72ae81f371d986428d4a3e26227d311ff13577d0ac19e",
+        "retrieved_at": "2026-11-01T04:30:20.995828+00:00",
+        "html_sha256": "e4e5eb3a72c9561c0baf39b9782f6b02cb3ada93c1e453e7773f538f19bbd580",
         "source_attributes": {
           "slug": "buchholz",
           "poi_category": "car_wash",
@@ -990,7 +990,7 @@
         "returned_city": "Buchholz in der Nordheide",
         "alternatives_rejected": 1,
         "error": null,
-        "geocoded_at": "2026-10-31T19:41:49.501594+00:00",
+        "geocoded_at": "2026-11-01T04:31:50.012276+00:00",
         "from_cache": false
       },
       "x_25832": 557641.644,
@@ -1057,7 +1057,7 @@
           "status": "ok",
           "source_epsg": 4326,
           "stored_epsg": 25832,
-          "geocoded_at": "2026-10-31T19:41:49.501594+00:00"
+          "geocoded_at": "2026-11-01T04:31:50.012276+00:00"
         },
         "osm_query": {
           "provider": "overpass-api.de",
@@ -1068,7 +1068,7 @@
           "building_candidates": 11,
           "parking_candidates": 1,
           "geometries_rejected": 0,
-          "queried_at": "2026-10-31T19:41:50.352255+00:00"
+          "queried_at": "2026-11-01T04:31:50.056320+00:00"
         },
         "building": {
           "kind": "osm_building_footprint",

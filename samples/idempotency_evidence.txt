@@ -38,6 +38,7 @@ Measured history, read back from iris_staging.commercial_poi_load_run
   15. load-20261031T194144Z-4c2a4415           | processed= 84 | inserted=  0 | updated= 84 | unchanged=  0 | failed=  0
   16. load-20261031T194147Z-d8eb234d           | processed= 84 | inserted=  0 | updated=  0 | unchanged= 84 | failed=  0
   17. load-20261031T194151Z-5931a5d4           | processed= 84 | inserted=  0 | updated=  0 | unchanged= 84 | failed=  0
+  18. load-20261101T043150Z-ec1756ab           | processed= 84 | inserted=  0 | updated=  0 | unchanged= 84 | failed=  0
 
 Reading of the above
 --------------------
@@ -90,6 +91,14 @@ Reading of the above
                 from scratch with brand-new provenance timestamps. The load
                 still reports zero inserts and zero updates: the hash now
                 reflects WHAT was observed, not WHEN it was observed.
+18. unchanged=84  THE STRONGEST FORM OF THE CLAIM. A complete `iris-cre41
+                run-all` on 2026-11-01: all 84 pages re-fetched LIVE from
+                mrwash.de and clean-car.com, re-normalised, re-geocoded,
+                re-enriched and re-loaded. Zero inserts, zero updates, 84
+                unchanged. Re-running the whole pipeline against the live
+                sources a day later changed nothing in the table, which is
+                what idempotency is supposed to mean. (Stage stats for this
+                run are the shipped samples/pipeline_stats.json.)
 
 Note for operations: runs 5, 7 and 10 show that a change to the enrichment
 logic, the row_hash definition, or the schema causes a one-time full re-write.
@@ -100,7 +109,7 @@ Duplicate protection
 --------------------
 rows = 84   distinct poi_uid = 84   distinct source_uid = 84   distinct dedup_key = 84
 
-All four numbers are equal after seventeen load executions. The table also
+All four numbers are equal after eighteen load executions. The table also
 enforces UNIQUE(source_uid) and UNIQUE(dedup_key), so a duplicate address
 cannot be inserted even by a caller that bypasses the application-level
 deduplication — proven by

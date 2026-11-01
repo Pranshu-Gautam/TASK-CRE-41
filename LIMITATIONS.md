@@ -267,6 +267,6 @@ is the cheapest way to raise confidence and is the first thing worth adding.
 * **The pinned lock is interpreter-aware.** `pyproj` 3.8 and `shapely` 2.2
   require Python ≥ 3.12, so `requirements.txt` uses environment markers to
   install `pyproj` 3.7.2 / `shapely` 2.0.7 on 3.11. Both configurations are
-  tested (248 unit tests pass on 3.11.18 and on 3.13), but the full live run
+  tested (251 unit tests pass on 3.11.18 and on 3.13), but the full live run
   documented in `docs/EXECUTION_EVIDENCE.md` was executed on 3.14 with the
   newer pair.

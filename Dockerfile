@@ -1,9 +1,10 @@
 # TASK-CRE-41 — reproducible execution image.
 #
-# The task requires Python 3.11+. This image uses 3.13 because the pinned
-# lock in requirements.txt contains pyproj 3.8.0, which declares
-# Requires-Python >= 3.12. The package itself supports 3.11 (see
-# pyproject.toml); pin pyproj==3.7.2 instead if a 3.11 runtime is mandatory.
+# The task requires Python 3.11+. This image uses 3.13; requirements.txt
+# carries environment markers, so the same lock installs on 3.11 through 3.14
+# with no edit (shapely 2.0.7 / pyproj 3.7.2 on 3.11, the newer pair above
+# it). Dockerfile.py311 builds the 3.11 verification image — see
+# `make verify-py311`.
 #
 # Dependencies come from the pinned requirements.txt so the image is
 # reproducible for a given lock.

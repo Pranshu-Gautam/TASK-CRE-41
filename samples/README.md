@@ -13,7 +13,41 @@ with `iris-cre41 samples` and `iris-cre41 verify`.
 | `idempotency_evidence.txt` | The same input loaded twice, with the measured insert/update/unchanged counts from both runs. |
 | `role_isolation_evidence.txt` | Staging isolation proven at the **database** level: the restricted `iris_cre41_loader` role tested through a raw engine with the application guard removed. Regenerate with `make verify-role`. |
 | `area_provenance_evidence.txt` | Every stored building area recomputed three independent ways (rebuilt from the raw Overpass cache, Shapely on the stored WKT, PostGIS `ST_Area`). Regenerate with `make verify-areas`. |
-| `pipeline_stats.json` | Stage-by-stage counts and timings for the full run (copied from `data/pipeline_stats.json`). |
+| `pipeline_stats.json` | Stage-by-stage counts and timings for the full run (copied from `data/pipeline_stats.json`). **Read the timings with the cache state in mind** — see the note below. |
+
+## How to read `pipeline_stats.json` timings
+
+Each stage records `duration_s`, and each of the `geocode` / `enrich` stages
+also records a `provider_stats` block with `requests` and `cache_hits`. Those
+two numbers are what make the duration interpretable:
+
+* `collect` always performs live HTTP (one request per page, >= 1 req/s), so
+  its duration is representative — but it depends on how fast the operators'
+  sites respond on the day. Two measured full runs: **151 s** and **326 s**
+  for the same 84 pages.
+* `geocode` and `enrich` read from the on-disk response caches
+  (`data/geocode_cache.sqlite`, `data/overpass_cache.sqlite`). When those are
+  warm, `requests` is 0, `cache_hits` equals the row count, and the durations
+  collapse to a fraction of a second. **A sub-second `enrich` duration is a
+  cache hit, not the cost of geocoding or querying Overpass.**
+
+The real cold-cache cost, measured on the first execution, was approximately:
+
+| stage | cold | warm (as shipped) |
+|---|---:|---:|
+| `collect` | 151-326 s (84 live pages at >= 1 req/s) | same — never cached |
+| `geocode` | ~152 s (84 Nominatim queries at >= 1.1 s) | ~0.03 s |
+| `enrich` | ~1 989 s (83 Overpass queries at 20-30 s each) | ~0.09 s |
+| `load` | ~0.6 s | ~0.6 s |
+
+So the end-to-end cold run is roughly **45 minutes**, dominated by deliberate
+rate limiting, and a warm re-run is **2.5-5.5 minutes** (collect only). Delete
+the two `*.sqlite` files under `data/` to reproduce the cold path.
+
+The shipped `pipeline_stats.json` is a warm re-run that still re-collected all
+84 pages live, and its `load` stage reports
+`inserted=0, updated=0, unchanged=84, failed=0` — full-pipeline idempotency
+measured across a genuine re-scrape, not a re-load of the same file.
 
 Geometry and geocodes are derived from OpenStreetMap:
 **© OpenStreetMap contributors, ODbL 1.0.**

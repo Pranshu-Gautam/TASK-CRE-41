@@ -37,9 +37,13 @@ make verify-py311 verify-role
 | **Parking area attributable to the operator** | — | — | **0** |
 | Rows in `iris_staging.commercial_poi_staging` | 36 | 48 | **84** |
 
-Full-pipeline wall clock: **327 s** with warm caches; the cold first run took
-~45 min, dominated by deliberate rate limiting (84 pages at 1 req/s, 83
-Overpass queries at 20–30 s each).
+Full-pipeline wall clock: **153 s** for the final run (84 pages re-fetched
+live, geocode/Overpass served from cache); an earlier warm run took 327 s —
+collect time depends on how fast the operators' sites respond. The cold first
+run took ~45 min, dominated by deliberate rate limiting (84 pages at ≥ 1 req/s,
+83 Overpass queries at 20–30 s each). `samples/README.md` breaks the cold and
+warm costs down per stage so a sub-second `enrich` duration is not misread as
+the cost of querying Overpass.
 
 ## 2. Collection
 
@@ -232,8 +236,9 @@ Summary of the measured counts:
 | 15 — volatile timestamps removed from the hash (audit) | 0 | **84** | 0 | 0 |
 | 16 — repeat **after re-running `enrich`** | 0 | 0 | **84** | 0 |
 | 17 — repeat **after re-running `geocode` + `enrich`** | 0 | 0 | **84** | 0 |
+| 18 — **full `run-all`, all 84 pages re-fetched live (2026-11-01)** | 0 | 0 | **84** | 0 |
 
-Row count stayed at **84** throughout seventeen loads; `poi_uid`,
+Row count stayed at **84** throughout eighteen loads; `poi_uid`,
 `source_uid` and `dedup_key` are each distinct 84 times.
 
 Two results matter more than the rest:
@@ -249,6 +254,11 @@ Two results matter more than the rest:
   (`db/loader.py::_strip_volatile`), and runs 16 and 17 — each preceded by
   re-deriving the artefacts from scratch — report zero inserts and zero
   updates. The hash reflects *what* was observed, not *when*.
+* **Run 18 is the strongest form of the claim.** A complete `iris-cre41
+  run-all` executed the next day re-fetched all 84 pages **live** from
+  mrwash.de and clean-car.com, re-normalised, re-geocoded, re-enriched and
+  re-loaded: 0 inserted, 0 updated, 84 unchanged. Its stage statistics are the
+  shipped `samples/pipeline_stats.json`.
 
 ## 9. Database-level staging isolation
 

@@ -1,15 +1,15 @@
 {
   "task_id": "TASK-CRE-41",
   "pipeline_version": "1.0.0",
-  "started_at": "2026-10-31T06:05:52.574505+00:00",
+  "started_at": "2026-11-01T04:29:18.621899+00:00",
   "stages": {
     "collect": {
       "stage": "collect",
-      "started_at": "2026-10-31T06:05:52.574519+00:00",
-      "finished_at": "2026-10-31T06:11:18.437258+00:00",
-      "duration_s": 325.86,
+      "started_at": "2026-11-01T04:29:18.621944+00:00",
+      "finished_at": "2026-11-01T04:31:49.971804+00:00",
+      "duration_s": 151.35,
       "artefact": "/home/pranshu/iris-cre41/data/raw_locations.json",
-      "collection_run_id": "collect-20261031T060552Z-25fed310",
+      "collection_run_id": "collect-20261101T042918Z-c75560ab",
       "locations_collected": 84,
       "per_operator": {
         "mrwash": 36,
@@ -20,8 +20,8 @@
     },
     "normalize": {
       "stage": "normalize",
-      "started_at": "2026-10-31T06:11:18.437277+00:00",
-      "finished_at": "2026-10-31T06:11:18.444847+00:00",
+      "started_at": "2026-11-01T04:31:49.973593+00:00",
+      "finished_at": "2026-11-01T04:31:49.988101+00:00",
       "duration_s": 0.01,
       "artefact": "/home/pranshu/iris-cre41/data/normalized_locations.json",
       "locations_input": 84,
@@ -38,9 +38,9 @@
     },
     "geocode": {
       "stage": "geocode",
-      "started_at": "2026-10-31T06:11:18.444952+00:00",
-      "finished_at": "2026-10-31T06:11:18.471500+00:00",
-      "duration_s": 0.03,
+      "started_at": "2026-11-01T04:31:49.988381+00:00",
+      "finished_at": "2026-11-01T04:31:50.041071+00:00",
+      "duration_s": 0.05,
       "artefact": "/home/pranshu/iris-cre41/data/geocoded_locations.json",
       "locations_input": 84,
       "geocoded_ok": 83,
@@ -77,9 +77,9 @@
     },
     "enrich": {
       "stage": "enrich",
-      "started_at": "2026-10-31T06:11:18.471649+00:00",
-      "finished_at": "2026-10-31T06:11:18.564418+00:00",
-      "duration_s": 0.09,
+      "started_at": "2026-11-01T04:31:50.041585+00:00",
+      "finished_at": "2026-11-01T04:31:50.273361+00:00",
+      "duration_s": 0.23,
       "artefact": "/home/pranshu/iris-cre41/data/enriched_pois.json",
       "pois_input": 84,
       "buildings_matched": 81,
@@ -91,17 +91,31 @@
         "point_only": 2,
         "partial": 9
       },
-      "building_confidence": {
+      "building_geometric_confidence": {
         "high": 64,
         "medium": 7,
         "low": 10
       },
+      "building_operator_attribution": {
+        "operator_tagged": 24,
+        "unverified": 42,
+        "car_wash_tagged": 3,
+        "third_party_named": 12
+      },
+      "parking_operator_attribution": {
+        "operator_tagged": 0,
+        "third_party_named": 15,
+        "unverified": 57
+      },
+      "operator_attributable_building_areas": 24,
+      "operator_attributable_parking_areas": 0,
       "osm_operator_tag_matches": 54,
       "building_area_outliers": 5,
       "buildings_attributed_to_other_occupant": 12,
       "overpass_errors": 0,
       "skipped_locality_precision": 2,
       "building_area_sqm_total": 229504.0,
+      "operator_attributable_building_area_sqm_total": 46387.3,
       "provider_stats": {
         "provider": "overpass-api.de",
         "requests": 0,
@@ -120,17 +134,17 @@
     },
     "load": {
       "stage": "load",
-      "started_at": "2026-10-31T06:11:18.634011+00:00",
-      "finished_at": "2026-10-31T06:11:19.269134+00:00",
-      "duration_s": 0.64,
-      "load_run_id": "load-20261031T061118Z-b8a25bd9",
-      "collection_run_id": "collect-20261031T060552Z-25fed310",
+      "started_at": "2026-11-01T04:31:50.425666+00:00",
+      "finished_at": "2026-11-01T04:31:52.113897+00:00",
+      "duration_s": 1.69,
+      "load_run_id": "load-20261101T043150Z-ec1756ab",
+      "collection_run_id": "collect-20261101T042918Z-c75560ab",
       "locations_processed": 84,
       "load": {
         "processed": 84,
         "inserted": 0,
-        "updated": 84,
-        "unchanged": 0,
+        "updated": 0,
+        "unchanged": 84,
         "failed": 0,
         "failures": []
       },
@@ -138,8 +152,8 @@
       "duplicates_prevented": 0,
       "table_counts": {
         "commercial_poi_staging": 84,
-        "commercial_poi_raw_staging": 168,
-        "commercial_poi_load_run": 6
+        "commercial_poi_raw_staging": 336,
+        "commercial_poi_load_run": 17
       },
       "database": {
         "postgis_version": "3.4.3",
@@ -147,12 +161,12 @@
         "postgis_full_version": "POSTGIS=\"3.4.3 e365945\" [EXTENSION] PGSQL=\"160\" GEOS=\"3.9.0-CAPI-1.16.2\" PROJ=\"7.2.1 NETWORK_ENABLED=OFF URL_ENDPOINT=https://cdn.proj.org USER_WRITABLE_DIRECTORY=/var/lib/postgresql/.local/share/proj DATABASE_PATH=/usr/share/proj/proj.db\" LIBXML=\"2.9.10\" LIBJSON=\"0.15\" LIBPROTOBUF=\"1.3.3\" WAGYU=\"0.5.0 (Internal)\" TOPOLOGY"
       },
       "schema_guard": {
-        "statements_checked": 182,
-        "write_statements_allowed": 168,
+        "statements_checked": 191,
+        "write_statements_allowed": 174,
         "violations": 0
       }
     }
   },
-  "finished_at": "2026-10-31T06:11:19.272680+00:00",
-  "duration_s": 326.7
+  "finished_at": "2026-11-01T04:31:52.121420+00:00",
+  "duration_s": 153.5
 }
